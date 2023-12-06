@@ -12,7 +12,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const productsRoutes = require('./routes/products');
+const productsRoutes = require('./src/routes/products');
 
 app.use('/api', productsRoutes);
 

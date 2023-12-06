@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import { useProductsContext } from '../context/ProductsContext';
+import { useNavigate, useParams } from 'react-router-dom'
 
 export default function SearchForm() {
+    const [search, setSearch] = useState('')
     const { handleSearch } = useProductsContext()
-    const [keyword, setKeyword] = useState('')
+    const navigate = useNavigate()
+    const { categoryName } = useParams()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        handleSearch(keyword)
-        setKeyword('')
+        navigate(`?q=${search}`)
+        setSearch('')
+        handleSearch(search, categoryName)
     }
 
     return (
@@ -20,7 +24,7 @@ export default function SearchForm() {
                     <div className='col-sm-6 mx-auto'>
                         <form onSubmit={handleSubmit}>
                             <div className='flex'>
-                                <input id='keyword' value={keyword} onChange={(e) => setKeyword(e.target.value)} className='form-control search-input' placeholder='Search by model or brand' />
+                                <input id='search' value={search} onChange={(e) => setSearch(e.target.value)} className='form-control search-input' placeholder='Search by model or brand' />
                                 <button className='btn btn-danger mt-2 px-4'><i className="bi bi-laptop"></i> Search</button>
                             </div>
                         </form>

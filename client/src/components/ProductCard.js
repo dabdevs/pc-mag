@@ -7,7 +7,7 @@ export default function ProductCard({ id, product }) {
     return (
         <div className="my-2 product-card">
             <div className="card h-100">
-                <img className="card-img-top" src={`${awsUrl}${product.image}`} alt={product.name} />
+                <img className="card-img-top" src={`${product.image}`} alt={product.name} />
 
                 <div className="card-body pt-2 pb-0 px-2">
                     <div className="h-100 d-flex align-content-between flex-wrap">
@@ -19,19 +19,19 @@ export default function ProductCard({ id, product }) {
                             <small>
                                 <i className="bi bi-cpu mr-1"></i> {product.ram}
                             </small>
-                            <small> <i className='bi bi-hdd mr-1'></i> {product.ssd ? product.ssd : product.hdd}</small>
-                            <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {product.display}</small>
+                            <small> <i className='bi bi-hdd mr-1'></i> {product.disk} {product.diskType}</small>
+                            <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {product.display}"</small>
                         </div>
 
                         <div className='text-center w-100'>
-                            <h4 className='text-danger font-weight-bold'>${product.price}</h4>
+                            <h4 className='text-danger font-weight-bold'>{product.price}</h4>
                         </div>
                     </div>
                 </div>
 
                 <div className="card-footer bg-transparent">
                     <div className="text-center">
-                        <Link to={`/${id}/${product.name.split(' ').join('-')}`} type='button' className='btn btn-sm btn-outline-dark px-4'>View specs</Link>
+                        <Link to={`/product/${id}/${product.name.split(' ').join('-')}`} type='button' className='btn btn-sm btn-outline-dark px-4'>View specs</Link>
                     </div>
                 </div>
             </div>

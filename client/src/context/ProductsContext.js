@@ -1,5 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
+import { createContext, useState, useContext } from "react";
 import { getProducts } from "../api/products";
 
 const ProductsContext = createContext({})
@@ -13,38 +12,39 @@ export const ProductsContextProvider = ({ children }) => {
     const [search, setSearch] = useState()
     const [filtered, setFiltered] = useState(false)
     const [filters, setFilters] = useState([])
-    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    const { category } = useParams() 
 
-    useEffect(() => {
-        setLoading(true)
-        getProducts(category)
-            .then(products => {
-                setProducts(products)
-                setLoading(false)
-            })
-            .catch(err => {
-                console.error(err)
-                setLoading(false)
-            });
-    }, [])
+    // useEffect(() => {
+    //     setLoading(true)
+    //     getProducts()
+    //         .then(products => {
+    //             setProducts(products)
+    //             setLoading(false)
+    //         })
+    //         .catch(err => {
+    //             console.error(err)
+    //             setLoading(false)
+    //         });
+    // }, [])
 
-    const handleSearch = async (search) => {
+    const handleSearch = async (search, category='') => {
         setSearch(search)
-        navigate(`/${category ? category : ''}?q=${search}`);
         setFiltered(true)
         setLoading(true)
 
-        let data = await getProducts(category)
-        data = data.filter(([key, value]) => value.name.toLowerCase().includes(search.toLowerCase()))
-
-        setProducts(data)
-        setLoading(false)
+        getProducts(category, search)
+        .then(data => {
+            setProducts(data)
+            setLoading(false)
+        })
+        .catch(err => {
+            console.error(err)
+            setLoading(false)
+        })
     }
 
     const handleSortBy = async (sort) => {
-        let data = await getProducts(category)
+        let data = await getProducts()
 
         if (sort) {
             data = data.sort((a, b) => sort === 'lowest-price' ? formatPrice(a[1].price) - formatPrice(b[1].price) : a[1].price - formatPrice(b[1].price))
@@ -62,61 +62,63 @@ export const ProductsContextProvider = ({ children }) => {
 
     const handleFilter = async (filters) => {
         try {
+            console.log(filters)
             setFilters(filters)
             setFiltered(true)
             setLoading(true)
 
-            let data = await getProducts(category)
+            let data = await getProducts()
 
-            if (Object.keys(filters).length > 0) {
-                Object.entries(filters).map(([column, values]) => {
-                    if (column === 'processor') {
-                        let processors = Object.keys(values).filter(key => values[key] === true)
+            // if (Object.keys(filters).length > 0) {
+            //     Object.entries(filters).map(([column, values]) => {
+            //         if (column === 'processor') {
+            //             let processors = Object.keys(values).filter(key => values[key] === true)
 
-                        if (processors.length > 0) {
-                            data = data.filter(([key, product]) => {
-                                for (const processor of processors) {
-                                    if (product.processor.includes(processor)) {
-                                        return true
-                                    }
-                                }
-                                return false
-                            })
-                        }
-                    }
+            //             if (processors.length > 0) {
+            //                 data = data.filter(([key, product]) => {
+            //                     for (const processor of processors) {
+            //                         if (product.processor.includes(processor)) {
+            //                             return true
+            //                         }
+            //                     }
+            //                     return false
+            //                 })
+            //             }
+            //         }
 
-                    if (column === 'formFactor') {
-                        let formFactors = Object.keys(values).filter(key => values[key] === true)
+            //         if (column === 'formFactor') {
+            //             let formFactors = Object.keys(values).filter(key => values[key] === true)
 
-                        console.log('form factor', formFactors)
-                        if (formFactors.length > 0) {
-                            data = data.filter(([key, value]) => formFactors.includes(value.form_factor))
-                        }
-                    }
+            //             console.log('form factor', formFactors)
+            //             if (formFactors.length > 0) {
+            //                 data = data.filter(([key, value]) => formFactors.includes(value.form_factor))
+            //             }
+            //         }
 
-                    if (column === 'ram') {
-                        let rams = Object.keys(values).filter(key => values[key] === true)
+            //         if (column === 'ram') {
+            //             let rams = Object.keys(values).filter(key => values[key] === true)
 
-                        if (rams.length > 0) {
-                            data = data.filter(([key, value]) => rams.includes(value.ram))
-                        }
-                    }
+            //             if (rams.length > 0) {
+            //                 data = data.filter(([key, value]) => rams.includes(value.ram))
+            //             }
+            //         }
 
-                    if(column === 'minPrice') {
-                        if (values !== '') {
-                            data = data.filter(([key, value]) => formatPrice(value.price) >= parseInt(values))
-                        }
-                    }
+            //         if(column === 'minPrice') {
+            //             if (values !== '') {
+            //                 data = data.filter(([key, value]) => formatPrice(value.price) >= parseInt(values))
+            //             }
+            //         }
 
-                    if (column === 'maxPrice') {
-                        if (values !== '') {
-                            data = data.filter(([key, value]) => formatPrice(value.price) <= parseInt(values))
-                        }
-                    }
-                });
-            }
+            //         if (column === 'maxPrice') {
+            //             if (values !== '') {
+            //                 data = data.filter(([key, value]) => formatPrice(value.price) <= parseInt(values))
+            //             }
+            //         }
+            //     });
+            // }
 
             setLoading(false)
+            console.log(data)
             setProducts(data)
         } catch (err) {
             setLoading(false)
@@ -125,7 +127,7 @@ export const ProductsContextProvider = ({ children }) => {
     }
 
     const clearFilters = () => {
-        navigate(`/${category ? category : ''}`)
+        // navigate(`/${category ? category : ''}`)
         setSearch('')
         setFiltered(false)
         setFilters()
@@ -138,7 +140,7 @@ export const ProductsContextProvider = ({ children }) => {
             }
         });
 
-        getProducts(category)
+        getProducts()
             .then(data => {
                 setProducts(data)
             })
@@ -160,7 +162,6 @@ export const ProductsContextProvider = ({ children }) => {
             clearFilters,
             filters,
             setFilters,
-            category,
             handleSortBy
         }}
         >

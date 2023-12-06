@@ -26,7 +26,6 @@ export default function Filter({ handleFilter }) {
     const [maxPrice, setMaxPrice] = useState('')
     const [error, setError] = useState('')
 
-
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError('')
