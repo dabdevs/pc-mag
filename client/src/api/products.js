@@ -11,7 +11,7 @@ export const getProducts = async (category='', search='', filters=[]) => {
         }
 
         const { data } = await axios.post(url, filters)
-        
+
         return data
     } catch (err) {
         console.error(err)

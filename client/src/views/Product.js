@@ -7,48 +7,27 @@ import { ShoppingCartProvider } from '../context/ShoppingCartContext';
 import { getById } from '../api/products';
 import Spinner from '../components/Spinner';
 import Layout from '../components/Layout';
-import { useProductsContext } from '../context/ProductsContext';
 
 export default function Product() {
-    const [product, setProduct] = useState({})
+    const [product, setProduct] = useState(null)
     const [similarProducts, setSimilarProducts] = useState([])
     const { productId } = useParams()
 
     useEffect(() => {
         getById(productId)
-            .then(product => setProduct(product))
-            .catch(err => console.error(err)) 
-        
-        
-        // const similarProducts = products.filter(function ([key, value]) {
-        //     console.log(key, value)
-        //     const pass = key !== productId && (product.name.toLowerCase().includes(value.ram.toLowerCase()) || product.name.toLowerCase().includes(value.hdd.toLowerCase()) || product.name.toLowerCase().includes(value.processor.toLowerCase()))
-
-        //     if (this.count <= 6 && pass) {
-        //         this.count++;
-        //         return true;
-        //     }
-
-        //     return false;
-        // }, { count: 0 });
-
-        // setProduct(product)
-        // setSimilarProducts(similarProducts)
-
-        // getProducts().then(products => {
-            
-        // })
-        //     .then(() => window.scrollTo({
-        //         top: 0,
-        //         behavior: 'smooth',
-        //     })).catch((err) => console.error(err))
-    }, []);
+            .then(data => {
+                setProduct(data.product)
+                setSimilarProducts(data.similarProducts)
+            }).then(() => window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            }))
+            .catch(err => console.error(err))
+    }, [productId]);
 
     return (
         <Layout>
-            {!product && <Spinner />}
-
-            {product && (<section className="container px-4 px-lg-5 my-5">
+            {product ? (<section className="container px-4 px-lg-5 my-5">
                 <div className="row gx-4 gx-lg-5 align-items-center">
                     <ProductCarousel product={product} />
                     <ShoppingCartProvider>
@@ -56,7 +35,9 @@ export default function Product() {
                     </ShoppingCartProvider>
                     <SimilarProducts similarProducts={similarProducts} />
                 </div>
-            </section>)}
+            </section>) :
+                <Spinner />
+            }
         </Layout>
     )
 }

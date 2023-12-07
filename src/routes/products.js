@@ -6,10 +6,18 @@ router.get('/product/:id', async (req, res) => {
     try {
         const DB = await connect();
         const products = DB.collection('products');
+        const data = [];
+        const product = await products.findOne({ _id: new ObjectId(req.params.id) })
+    
+        const similarProducts = await products.find({
+            "$or": [
+                { processor: product.processor },
+                { disk: product.disk },
+                { ram: product.ram }
+            ]
+        }).limit(6).toArray()
 
-        // Find all products or by category
-        const data = await products.find({ _id: new ObjectId(req.params.id) }).toArray()
-        return res.json(data)
+        return res.json({product, similarProducts})
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });

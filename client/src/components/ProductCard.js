@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default function ProductCard({ id, product }) {
+export default function ProductCard({ product }) {
     return (
         <div className="my-2 product-card">
             <div className="card h-100">
@@ -29,7 +29,7 @@ export default function ProductCard({ id, product }) {
 
                 <div className="card-footer bg-transparent">
                     <div className="text-center">
-                        <Link to={`/product/${id}/${product.name.split(' ').join('-')}`} type='button' className='btn btn-sm btn-outline-dark px-4'>View specs</Link>
+                        <Link to={`/product/${product._id}/${product.name.split(' ').join('-')}`} type='button' className='btn btn-sm btn-outline-dark px-4'>View specs</Link>
                     </div>
                 </div>
             </div>
