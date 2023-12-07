@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from 'react'
+import React, { useContext } from 'react'
 import ShoppingCartContext from '../context/ShoppingCartContext'
 
 export default function ProductInfo({ product }) {
@@ -8,7 +8,7 @@ export default function ProductInfo({ product }) {
         <div className="col-md-6">
             <h1 className="display-5 fw-bolder">{product.name}</h1>
             <div className="fs-5 mb-5">
-                <b className='display-4 text-danger'>${product.price}</b>
+                <b className='display-4 text-danger'>$ {product.price}</b>
             </div>
             <div className='text-center w-100 mb-3 justify-content-between d-flex gap-4'>
                 <small>
