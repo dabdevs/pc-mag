@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 const psw = 'xPzJjnxyn2vpeymk'
 const uri = `mongodb+srv://dabdevs:${psw}@cluster0.uoygnlu.mongodb.net/`;
@@ -9,9 +9,9 @@ async function connect() {
         await client.connect();
         console.log('Connected to MongoDB');
         return client.db('pc-mag');
-    } catch (error) {
-        console.error('Error connecting to MongoDB:', error);
+    } catch (err) {
+        console.error('Error connecting to MongoDB:', err);
     }
 }
 
-module.exports = { connect, client };
+module.exports = { connect, ObjectId };

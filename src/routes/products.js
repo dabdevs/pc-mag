@@ -1,6 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const { connect } = require('../db');
+const { connect, ObjectId } = require('../db');
+
+router.get('/product/:id', async (req, res) => {
+    try {
+        const DB = await connect();
+        const products = DB.collection('products');
+
+        // Find all products or by category
+        const data = await products.find({ _id: new ObjectId(req.params.id) }).toArray()
+        return res.json(data)
+    } catch (err) {
+        console.error('Error fetching data:', err);
+        res.status(500).json({ err: 'Internal Server Error' });
+    }
+})
 
 router.post('/products/:category?', async (req, res) => {
     try {
@@ -48,7 +62,7 @@ router.post('/products/:category?', async (req, res) => {
         if (minPrice && maxPrice) {
             conditions.price = { $gt: parseFloat(minPrice), $lt: parseFloat(maxPrice) }
         }
-        console.log(conditions)
+        
         // Get collection
         const products = DB.collection('products');
 

@@ -4,13 +4,13 @@ import Menu from './Menu'
 import LazyLoad from 'react-lazyload'
 
 
-export default function ListProducts({ products, category, loading }) {
-    const { search, clearFilters, filtered, handleSortBy } = useProductsContext()
+export default function ListProducts({ products, category }) {
+    const { search, clearFilters, filtered, loading } = useProductsContext()
 
     return (
         <div className="col-sm-9 col-lg-10 ms-sm-auto px-4" >
             <div className='row-cols-2 gx-4 gx-lg-5'>
-                <Menu category={category} handleSortBy={handleSortBy} />
+                <Menu category={category} />
 
                 {loading && (<b>Loading...</b>)}
 

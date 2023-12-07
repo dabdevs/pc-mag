@@ -1,8 +1,9 @@
 import axios from "axios"
 
+const baseUrl = 'http://localhost:3000';
+
 export const getProducts = async (category='', search='', filters=[]) => {
     try {
-        const baseUrl = 'http://localhost:3000';
         let url = `${baseUrl}/api/products/${category}`
 
         if (search) {
@@ -32,9 +33,19 @@ export const getProducts = async (category='', search='', filters=[]) => {
     }
 }
 
+export const getById = async (id) => {
+    try {
+        let url = `${baseUrl}/api/product/${id}`
+
+        const { data } = await axios.get(url)
+        return data
+    } catch (err) {
+        console.error(err)
+    }
+}
+
 export const searchProducts = async (search) => {
     try {
-        const baseUrl = 'http://localhost:3000';
         let url = `${baseUrl}/api/search/${search}`
 
         const { data } = await axios.get(url)

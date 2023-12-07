@@ -2,8 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function ProductCard({ id, product }) {
-    const awsUrl = 'https://s3-sa-east-1.amazonaws.com/api.sis/embedded/PE_LaCuracao/SRT/'
-
     return (
         <div className="my-2 product-card">
             <div className="card h-100">

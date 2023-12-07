@@ -1,7 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useProductsContext } from '../context/ProductsContext'
 
-export default function Menu({category, handleSortBy}) {
+export default function Menu({category}) {
+    const { handleSortBy, products, setProducts, setLoading, setError } = useProductsContext()
+
+    const handleChange = (sort) => {
+        setLoading(true)
+        handleSortBy(products, sort)
+        .then(data => {
+            setProducts(data)
+            setLoading(false)
+        })
+        .catch(err => {
+            setLoading(false)
+            console.error(err)
+        })
+    }
+
     return (
         <nav className="card bg-white navbar mb-4 navbar-expand-lg w-100 navbar-light bg-light mb-2">
             <div className="container-fluid">
@@ -10,7 +26,7 @@ export default function Menu({category, handleSortBy}) {
                         <li className="nav-item mx-3 p-0">
                             <Link className={!category ? 'text-danger nav-link text-decoration-underline' : 'nav-link'} aria-current="page" to="/"><i className="bi bi-pc-display-horizontal mr-2"></i> All Computers</Link>
                         </li>
-                        <li className="nav-item mx-3 p-0">
+                        <li className="nav-item mx-3 p-0 d-none">
                             <Link className={category === 'premium-computers' ? 'text-danger nav-link text-decoration-underline' : 'nav-link'} to="/category/premium-computers"><i className="bi bi-laptop-fill mr-2"></i> Premium Computers</Link>
                         </li>
                         <li className="nav-item mx-3 p-0">
@@ -34,7 +50,7 @@ export default function Menu({category, handleSortBy}) {
                 <div>
                     <form className='d-flex'>
                         <label htmlFor='sort' className='px-2 pt-2'>Sort:</label>
-                        <select id='sort' className='form-control ml-2' onChange={(e) => handleSortBy(e.target.value)}>
+                        <select id='sort' className='form-control ml-2' onChange={(e) => handleChange(e.target.value)}>
                             <option value={''}>best match</option>
                             <option value={'lowest-price'}>lowest price</option>
                             <option value={'highest-price'}>highest price</option>

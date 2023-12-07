@@ -14,19 +14,6 @@ export const ProductsContextProvider = ({ children }) => {
     const [filters, setFilters] = useState([])
     const [loading, setLoading] = useState(false)
 
-    // useEffect(() => {
-    //     setLoading(true)
-    //     getProducts()
-    //         .then(products => {
-    //             setProducts(products)
-    //             setLoading(false)
-    //         })
-    //         .catch(err => {
-    //             console.error(err)
-    //             setLoading(false)
-    //         });
-    // }, [])
-
     const handleSearch = async (search, category='') => {
         setSearch(search)
         setFiltered(true)
@@ -43,21 +30,18 @@ export const ProductsContextProvider = ({ children }) => {
         })
     }
 
-    const handleSortBy = async (sort) => {
-        let data = await getProducts()
+    const handleSortBy = async (data, sort) => {
+        if (sort === 'lowest-price') {
+            data = data.sort((a, b) => a.price - b.price)
+        }
 
-        if (sort) {
-            data = data.sort((a, b) => sort === 'lowest-price' ? formatPrice(a[1].price) - formatPrice(b[1].price) : a[1].price - formatPrice(b[1].price))
+        if (sort === 'highest-price') {
+            data = data.sort((a, b) => b.price - a.price)
         }
 
         console.log('Sorting by:', sort)
         console.log('Data:', data)
-        setProducts(data)
-        setLoading(false)
-    }
-
-    function formatPrice(strNumber) {
-        return parseInt(strNumber.replace(/,/g, '').replace('.', '')) / 100;
+        return data
     }
 
     const handleFilter = async (filters, category) => {
