@@ -9,8 +9,7 @@ import { useProductsContext } from '../context/ProductsContext'
 
 export default function Index() {
     const { categoryName } = useParams()
-    const {products, setProducts} = useProductsContext()
-    const { loading, setLoading } = useProductsContext()
+    const {products, setProducts, loading, setLoading} = useProductsContext()
 
     useEffect(() => {
         setLoading(true)

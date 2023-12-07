@@ -13,6 +13,8 @@ export default function Sidebar({ category }) {
     const [maxPrice, setMaxPrice] = useState('')
     const [error, setError] = useState('')
 
+    const disabled = formFactor.length === 0 && ram.length === 0 && processor.length === 0 && maxPrice === '' && minPrice === ''
+
     const setFormFilter = (e) => {
         const value = e.target.value
 
@@ -103,7 +105,7 @@ export default function Sidebar({ category }) {
                                     name='processor'
                                     onChange={setFormFilter}
                                     type='checkbox'
-                                    value={'i3'}
+                                    value={'Intel i3'}
                                     className='form-check-input' />
                                 <label htmlFor='i3'>&nbsp; Intel® Core™ i3</label>
                             </div>
@@ -113,7 +115,7 @@ export default function Sidebar({ category }) {
                                     name='processor'
                                     onChange={setFormFilter}
                                     type='checkbox'
-                                    value={'i5'}
+                                    value={'Intel i5'}
                                     className='form-check-input' />
                                 <label htmlFor='i5'>&nbsp; Intel® Core™ i5</label>
                             </div>
@@ -123,7 +125,7 @@ export default function Sidebar({ category }) {
                                     name='processor'
                                     onChange={setFormFilter}
                                     type='checkbox'
-                                    value={'i7'}
+                                    value={'Intel i7'}
                                     className='form-check-input' />
                                 <label htmlFor='i7'>&nbsp; Intel® Core™ i7</label>
                             </div>
@@ -135,7 +137,17 @@ export default function Sidebar({ category }) {
                                     type='checkbox'
                                     value={'amd'}
                                     className='form-check-input' />
-                                <label htmlFor='amd'>&nbsp; AMD Ryzen™</label>
+                                <label htmlFor='amd'>&nbsp; AMD Ryzen</label>
+                            </div>
+                            <div>
+                                <input
+                                    id='apple'
+                                    name='processor'
+                                    onChange={setFormFilter}
+                                    type='checkbox'
+                                    value={'Apple M1'}
+                                    className='form-check-input' />
+                                <label htmlFor='apple'>&nbsp; Apple M1</label>
                             </div>
                         </div>
                     </div>
@@ -182,7 +194,7 @@ export default function Sidebar({ category }) {
                     <div className="mb-3">
                         {error && (<small className='mt-2 text-danger'>{error}</small>)}
                     </div>
-                    <button type="submit" className="btn btn-dark w-100"><i className="bi bi-funnel"></i> Filter</button>
+                    <button disabled={disabled} type="submit" className="btn btn-dark w-100"><i className="bi bi-funnel"></i> Filter</button>
                 </form>
             </div>
         </div>

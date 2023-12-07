@@ -48,7 +48,7 @@ router.post('/products/:category?', async (req, res) => {
         }
 
         if (processor && processor.length > 0) {
-            conditions.processor = { '$regex': processor.toString(), '$options': 'i' }
+            conditions.processor = { '$in': processor } 
         }
 
         if (maxPrice) {

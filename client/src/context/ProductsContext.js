@@ -30,7 +30,11 @@ export const ProductsContextProvider = ({ children }) => {
         })
     }
 
-    const handleSortBy = async (data, sort) => {
+    const handleSortBy = async (data, sort, category='') => {
+        if (sort === '') {
+            data = await getProducts(category, search)
+        }
+
         if (sort === 'lowest-price') {
             data = data.sort((a, b) => a.price - b.price)
         }
@@ -38,9 +42,7 @@ export const ProductsContextProvider = ({ children }) => {
         if (sort === 'highest-price') {
             data = data.sort((a, b) => b.price - a.price)
         }
-
-        console.log('Sorting by:', sort)
-        console.log('Data:', data)
+        
         return data
     }
 
