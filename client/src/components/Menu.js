@@ -1,9 +1,9 @@
-import React from 'react'
-import { a } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
 import { useProductsContext } from '../context/ProductsContext'
 
 export default function Menu({category}) {
-    const { handleSortBy, products, setProducts, setLoading, setError } = useProductsContext()
+    const sortRef = useRef(null)
+    const { handleSortBy, products, setProducts, setLoading } = useProductsContext()
 
     const handleChange = (sort) => {
         setLoading(true)
@@ -50,7 +50,7 @@ export default function Menu({category}) {
                 <div>
                     <form className='d-flex'>
                         <label htmlFor='sort' className='px-2 pt-2'>Sort:</label>
-                        <select id='sort' className='form-control ml-2' onChange={(e) => handleChange(e.target.value)}>
+                        <select ref={sortRef} id='sort' className='form-control ml-2' onChange={(e) => handleChange(e.target.value)}>
                             <option value={''}>best match</option>
                             <option value={'lowest-price'}>lowest price</option>
                             <option value={'highest-price'}>highest price</option>

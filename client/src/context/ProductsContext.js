@@ -32,7 +32,7 @@ export const ProductsContextProvider = ({ children }) => {
 
     const handleSortBy = async (data, sort, category='') => {
         if (sort === '') {
-            data = await getProducts(category, search)
+            data = await getProducts(category, search, filters)
         }
 
         if (sort === 'lowest-price') {
@@ -42,7 +42,7 @@ export const ProductsContextProvider = ({ children }) => {
         if (sort === 'highest-price') {
             data = data.sort((a, b) => b.price - a.price)
         }
-        
+
         return data
     }
 
@@ -56,6 +56,7 @@ export const ProductsContextProvider = ({ children }) => {
 
             setLoading(false)
             setProducts(data)
+            document.getElementById('sort').value = ''
         } catch (err) {
             setLoading(false)
             console.log(err)
@@ -75,6 +76,8 @@ export const ProductsContextProvider = ({ children }) => {
                 input.checked = false;
             }
         });
+
+        document.getElementById('sort').value = ''
 
         getProducts()
             .then(data => {

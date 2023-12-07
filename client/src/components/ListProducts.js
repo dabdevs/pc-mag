@@ -16,9 +16,9 @@ export default function ListProducts({ products, category }) {
 
                 {!loading &&
                     (<div className='col'>
-                        {products.length > 0 && (<b className=''>{products.length} item{products.length > 1 ? 's' : ''} {search && (<span>for <b>{search}</b></span>)} </b>)}
+                        {products?.length > 0 && (<b className=''>{products?.length} item{products?.length > 1 ? 's' : ''} {search && (<span>for <b>{search}</b></span>)} </b>)}
 
-                        {(filtered || products.length === 0) && (
+                        {(filtered || products?.length === 0) && (
                             <button type='button' onClick={clearFilters} className='btn btn-sm border btn-danger mx-1'>
                                 Clear filters <i className="bi bi-x"></i>
                             </button>
@@ -34,7 +34,7 @@ export default function ListProducts({ products, category }) {
                 </LazyLoad>)
                 )}
 
-                {!loading && products.length === 0 && <p className='mx-auto lead my-5 text-center'>No products found <i className="bi bi-emoji-frown"></i></p>}
+                {!loading && products?.length === 0 && <p className='mx-auto lead my-5 text-center'>No products found <i className="bi bi-emoji-frown"></i></p>}
             </div>
         </div >
     )
