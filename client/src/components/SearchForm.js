@@ -7,6 +7,7 @@ export default function SearchForm() {
     const { handleSearch } = useProductsContext()
     const navigate = useNavigate()
     const { categoryName } = useParams()
+    const disabled = search === ''
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -25,7 +26,7 @@ export default function SearchForm() {
                         <form onSubmit={handleSubmit}>
                             <div className='flex'>
                                 <input id='search' value={search} onChange={(e) => setSearch(e.target.value)} className='form-control search-input' placeholder='Search by model or brand' />
-                                <button className='btn btn-danger mt-2 px-4'><i className="bi bi-laptop"></i> Search</button>
+                                <button disabled={disabled} className='btn btn-danger mt-2 px-4'><i className="bi bi-laptop"></i> Search</button>
                             </div>
                         </form>
                     </div>
