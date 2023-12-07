@@ -24,7 +24,7 @@ export default function ProductCard({ id, product }) {
                         </div>
 
                         <div className='text-center w-100'>
-                            <h4 className='text-danger font-weight-bold'>{product.price}</h4>
+                            <h4 className='text-danger font-weight-bold'>$ {parseFloat(product.price).toFixed(2)}</h4>
                         </div>
                     </div>
                 </div>

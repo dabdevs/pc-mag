@@ -60,65 +60,15 @@ export const ProductsContextProvider = ({ children }) => {
         return parseInt(strNumber.replace(/,/g, '').replace('.', '')) / 100;
     }
 
-    const handleFilter = async (filters) => {
+    const handleFilter = async (filters, category) => {
         try {
-            console.log(filters)
             setFilters(filters)
             setFiltered(true)
             setLoading(true)
 
-            let data = await getProducts()
-
-            // if (Object.keys(filters).length > 0) {
-            //     Object.entries(filters).map(([column, values]) => {
-            //         if (column === 'processor') {
-            //             let processors = Object.keys(values).filter(key => values[key] === true)
-
-            //             if (processors.length > 0) {
-            //                 data = data.filter(([key, product]) => {
-            //                     for (const processor of processors) {
-            //                         if (product.processor.includes(processor)) {
-            //                             return true
-            //                         }
-            //                     }
-            //                     return false
-            //                 })
-            //             }
-            //         }
-
-            //         if (column === 'formFactor') {
-            //             let formFactors = Object.keys(values).filter(key => values[key] === true)
-
-            //             console.log('form factor', formFactors)
-            //             if (formFactors.length > 0) {
-            //                 data = data.filter(([key, value]) => formFactors.includes(value.form_factor))
-            //             }
-            //         }
-
-            //         if (column === 'ram') {
-            //             let rams = Object.keys(values).filter(key => values[key] === true)
-
-            //             if (rams.length > 0) {
-            //                 data = data.filter(([key, value]) => rams.includes(value.ram))
-            //             }
-            //         }
-
-            //         if(column === 'minPrice') {
-            //             if (values !== '') {
-            //                 data = data.filter(([key, value]) => formatPrice(value.price) >= parseInt(values))
-            //             }
-            //         }
-
-            //         if (column === 'maxPrice') {
-            //             if (values !== '') {
-            //                 data = data.filter(([key, value]) => formatPrice(value.price) <= parseInt(values))
-            //             }
-            //         }
-            //     });
-            // }
+            let data = await getProducts(category, search, filters)
 
             setLoading(false)
-            console.log(data)
             setProducts(data)
         } catch (err) {
             setLoading(false)

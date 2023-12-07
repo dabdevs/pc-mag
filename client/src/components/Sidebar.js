@@ -6,31 +6,38 @@ export default function Sidebar({ category }) {
     const { handleFilter } = useProductsContext()
     const navigate = useNavigate()
 
-    const [formFactor, setFormFactor] = useState({
-        "notebook": false,
-        "desktop": false,
-    });
-
-    const [ram, setRam] = useState({
-        "4GB": false,
-        "8GB": false,
-        "16GB": false
-    });
-
-    const [processor, setProcessor] = useState({
-        "i3": false,
-        "i5": false,
-        "i7": false,
-        "amd": false
-    });
-
+    const [formFactor, setFormFactor] = useState([]);
+    const [ram, setRam] = useState([]);
+    const [processor, setProcessor] = useState([]);
     const [minPrice, setMinPrice] = useState('')
     const [maxPrice, setMaxPrice] = useState('')
     const [error, setError] = useState('')
 
+    const setFormFilter = (e) => {
+        const value = e.target.value
+
+        switch (e.target.name) {
+            case 'formFactor':
+                e.target.checked ? setFormFactor([...formFactor, value]) : setFormFactor(formFactor.filter(item => item !== value))
+                break;
+
+            case 'ram':
+                e.target.checked ? setRam([...ram, value]) : setRam(ram.filter(item => item !== value))
+                break;
+
+            case 'processor':
+                e.target.checked ? setProcessor([...processor, value]) : setProcessor(processor.filter(item => item !== value))
+                break;
+        
+            default:
+                break;
+        }
+
+        
+    }
+    
     const handleSubmit = async (e) => {
         e.preventDefault()
-        navigate('/search?q=hello')
         setError('')
 
         if (parseInt(minPrice) >= parseInt(maxPrice)) {
@@ -38,7 +45,7 @@ export default function Sidebar({ category }) {
             return
         }
 
-        handleFilter({ formFactor, ram, processor, minPrice, maxPrice })
+        handleFilter({ formFactor, ram, processor, minPrice, maxPrice }, category)
     };
 
     return (
@@ -68,7 +75,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='notebook'
                                     name='formFactor'
-                                    onChange={(e) => setFormFactor({ ...formFactor, "notebook": !formFactor["notebook"] })}
+                                    onChange={setFormFilter}
                                     type='checkbox'
                                     value={'notebook'}
                                     className='form-check-input' />
@@ -78,7 +85,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='desktop'
                                     name='formFactor'
-                                    onChange={(e) => setFormFactor({ ...formFactor, "desktop": !formFactor["desktop"] })}
+                                    onChange={setFormFilter}
                                     type='checkbox'
                                     value={'desktop'}
                                     className='form-check-input' />
@@ -94,7 +101,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='i3'
                                     name='processor'
-                                    onChange={(e) => setProcessor({ ...processor, "i3": !processor["i3"] })}
+                                    onChange={setFormFilter}
                                     type='checkbox'
                                     value={'i3'}
                                     className='form-check-input' />
@@ -104,7 +111,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='i5'
                                     name='processor'
-                                    onChange={(e) => setProcessor({ ...processor, "i5": !processor["i5"] })}
+                                    onChange={setFormFilter}
                                     type='checkbox'
                                     value={'i5'}
                                     className='form-check-input' />
@@ -114,7 +121,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='i7'
                                     name='processor'
-                                    onChange={(e) => setProcessor({ ...processor, "i7": !processor["i7"] })}
+                                    onChange={setFormFilter}
                                     type='checkbox'
                                     value={'i7'}
                                     className='form-check-input' />
@@ -124,7 +131,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='amd'
                                     name='processor'
-                                    onChange={(e) => setProcessor({ ...processor, "amd": !processor["amd"] })}
+                                    onChange={setFormFilter}
                                     type='checkbox'
                                     value={'amd'}
                                     className='form-check-input' />
@@ -140,7 +147,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='4GB'
                                     name='ram'
-                                    onChange={(e) => setRam({ ...ram, "4GB": !ram["4GB"] })}
+                                    onChange={setFormFilter}
                                     type='checkbox'
                                     value={'4GB'}
                                     className='form-check-input'
@@ -151,7 +158,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='8GB'
                                     name='ram'
-                                    onChange={(e) => setRam({ ...ram, "8GB": !ram["8GB"] })}
+                                    onChange={setFormFilter}
                                     type='checkbox'
                                     value={'8GB'}
                                     className='form-check-input'
@@ -162,7 +169,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='16GB'
                                     name='ram'
-                                    onChange={(e) => setRam({ ...ram, "16GB": !ram["16GB"] })}
+                                    onChange={setFormFilter}
                                     type='checkbox'
                                     value={'16GB'}
                                     className='form-check-input'

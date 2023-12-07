@@ -10,11 +10,13 @@ import { useProductsContext } from '../context/ProductsContext'
 export default function Index() {
     const { categoryName } = useParams()
     const {products, setProducts} = useProductsContext()
-    const [loading, setLoading] = useState([])
+    const { loading, setLoading } = useProductsContext()
 
     useEffect(() => {
-        getProducts(categoryName).then(products => {
-            setProducts(products)
+        setLoading(true)
+
+        getProducts(categoryName).then(data => {
+            setProducts(data)
             setLoading(false)
         })
         .catch(err => {

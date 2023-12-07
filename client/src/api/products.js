@@ -9,7 +9,12 @@ export const getProducts = async (category='', search='', filters=[]) => {
             url += `?q=${search}`
         }
 
-        const { data } = await axios.get(url)
+        if (filters) {
+            console.log('Filtrando...', filters)
+            //await axios.post(url, filters)
+        }
+
+        const { data } = await axios.post(url, filters)
         //localStorage.setItem('products', JSON.stringify(data))
 
         //const cachedProducts = localStorage.getItem('products')
