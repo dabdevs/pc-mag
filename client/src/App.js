@@ -2,7 +2,7 @@ import { ProductsContextProvider } from './context/ProductsContext';
 import { createBrowserRouter, RouterProvider, useParams } from "react-router-dom";
 import Index from './views/Index';
 import Product from './views/Product';
-import Category from './views/Category';
+import { ShoppingCartProvider } from './context/ShoppingCartContext';
 
 function App() {
   const router = createBrowserRouter([
@@ -30,7 +30,9 @@ function App() {
   return (
     <div className="App">
       <ProductsContextProvider>
-        <RouterProvider router={router} />
+        <ShoppingCartProvider>
+          <RouterProvider router={router} />
+        </ShoppingCartProvider>
       </ProductsContextProvider>
     </div>
   );

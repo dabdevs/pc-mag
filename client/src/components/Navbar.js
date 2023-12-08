@@ -1,8 +1,5 @@
 import React from "react";
 import ShoppingCart from "./ShoppingCart";
-import { ShoppingCartProvider } from "../context/ShoppingCartContext";
-import { Link } from "react-router-dom";
-
 
 export default function Navbar() {
   return (
@@ -29,9 +26,7 @@ export default function Navbar() {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
             </ul> 
 
-            <ShoppingCartProvider>
-              <ShoppingCart />
-            </ShoppingCartProvider>
+            <ShoppingCart />
           </div>
         </div>
       </nav>

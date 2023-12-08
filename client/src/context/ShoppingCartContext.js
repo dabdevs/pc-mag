@@ -6,29 +6,17 @@ export const useShoppingCartContext = () => useContext(ShoppingCartContext)
 
 export const ShoppingCartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
-    const [quantity, setQuantity] = useState(0);
-    const [isItemInCart, setIsItemInCart] = useState(false);
 
-    const addToCart = async (item) => {
-        setCartItems((cartItems) => ({...cartItems, ...item}))
-
-        setQuantity((prevQuantity) => prevQuantity + 1)
-        const inCart = cartItems.find((cartItem) => cartItem.name === item.name); // check if the item is already in the cart
-        
-        if (!inCart) {
-            setIsItemInCart(true)
-        }
+    const addToCart = (item) => {
+        console.log('Adding to cart:', item)
+        setCartItems([...cartItems, item])
     }
 
     return (
         <ShoppingCartContext.Provider value={{
             addToCart,
             cartItems,
-            setCartItems,
-            quantity,
-            setQuantity,
-            isItemInCart,
-            setIsItemInCart
+            setCartItems
         }}
         >
             {children}
