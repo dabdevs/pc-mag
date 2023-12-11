@@ -1,34 +1,53 @@
 import { createContext, useState, useEffect, useContext } from "react";
+import React, { useReducer } from 'react';
+
+// Action Types
+const ADD_TO_CART = 'ADD_TO_CART';
+const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
+
+// Reducer Function
+const cartReducer = (state, action) => {
+    switch (action.type) {
+        case ADD_TO_CART:
+            const updatedCart = [...state, action.product]
+            localStorage.setItem('cartItems', JSON.stringify(updatedCart))
+            return updatedCart;
+        case REMOVE_FROM_CART:
+            const newCart = state.filter(item => item._id !== action.productId)
+            localStorage.setItem('cartItems', JSON.stringify(newCart))
+            return state.filter(item => item._id !== action.productId);
+        default:
+            return state;
+    }
+};
 
 const ShoppingCartContext = createContext({})
 
 export const useShoppingCartContext = () => useContext(ShoppingCartContext)
 
 export const ShoppingCartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([]);
-    const [quantity, setQuantity] = useState(0);
-    const [isItemInCart, setIsItemInCart] = useState(false);
+    const [showCart, setShowCart] = useState(false)
 
-    const addToCart = async (item) => {
-        setCartItems((cartItems) => ({...cartItems, ...item}))
+    // Initial state for the shopping cart
+    const initialState = JSON.parse(localStorage.getItem('cartItems')) || [];
 
-        setQuantity((prevQuantity) => prevQuantity + 1)
-        const inCart = cartItems.find((cartItem) => cartItem.name === item.name); // check if the item is already in the cart
-        
-        if (!inCart) {
-            setIsItemInCart(true)
-        }
-    }
+    const [cartItems, dispatch] = useReducer(cartReducer, initialState);
+
+    const addToCart = product => {
+        dispatch({ type: ADD_TO_CART, product });
+    };
+
+    const removeFromCart = productId => {
+        dispatch({ type: REMOVE_FROM_CART, productId });
+    };
 
     return (
         <ShoppingCartContext.Provider value={{
             addToCart,
+            removeFromCart,
             cartItems,
-            setCartItems,
-            quantity,
-            setQuantity,
-            isItemInCart,
-            setIsItemInCart
+            showCart,
+            setShowCart
         }}
         >
             {children}

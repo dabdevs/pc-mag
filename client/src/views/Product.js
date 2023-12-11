@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import ProductCarousel from '../components/ProductCarousel';
 import ProductInfo from '../components/ProductInfo';
 import SimilarProducts from '../components/SimilarProducts';
-import { ShoppingCartProvider } from '../context/ShoppingCartContext';
 import { getById } from '../api/products';
 import Spinner from '../components/Spinner';
 import Layout from '../components/Layout';
@@ -11,7 +10,7 @@ import Layout from '../components/Layout';
 export default function Product() {
     const [product, setProduct] = useState(null)
     const [similarProducts, setSimilarProducts] = useState([])
-    const { productId } = useParams()
+    const { productId} = useParams()
 
     useEffect(() => {
         getById(productId)
@@ -30,9 +29,7 @@ export default function Product() {
             {product ? (<section className="container px-4 px-lg-5 my-5">
                 <div className="row gx-4 gx-lg-5 align-items-center">
                     <ProductCarousel product={product} />
-                    <ShoppingCartProvider>
-                        <ProductInfo product={product} />
-                    </ShoppingCartProvider>
+                    <ProductInfo product={product} />
                     <SimilarProducts similarProducts={similarProducts} />
                 </div>
             </section>) :

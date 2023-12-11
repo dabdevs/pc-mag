@@ -1,0 +1,25 @@
+.cart-items {
+    max-width: 850px;
+    position: absolute;
+    z-index: 100;
+    right: -850px;
+    padding: 20px;
+    transition: right 0.3s ease;
+}
+
+.cart-items.toggled {
+    right: 0;
+}
+
+.item-xs {
+    border-bottom: 1px solid #b1b1b1;
+}
+
+thead, tr {
+    border: 1px solid #b1b1b1;
+    border-left: none;
+}
+
+td {
+    padding: 10px;
+}

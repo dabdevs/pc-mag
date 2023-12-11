@@ -2,8 +2,13 @@ import React, { useContext } from 'react'
 import ShoppingCartContext from '../context/ShoppingCartContext'
 
 export default function ProductInfo({ product }) {
-    const { addToCart, isItemInCart } = useContext(ShoppingCartContext)
+    const { addToCart, cartItems } = useContext(ShoppingCartContext)
+    let inCart = false
 
+    cartItems.map(item => {
+        if (item._id === product._id) inCart = true
+    })
+    
     return (
         <div className="col-md-6">
             <h1 className="display-5 fw-bolder">{product.name}</h1>
@@ -27,7 +32,11 @@ export default function ProductInfo({ product }) {
                     <i className="bi-cash-coin me-1"></i>
                     Buy now
                 </button>
-                {!isItemInCart &&
+                {inCart
+                    ?   (<button className="btn btn-white text-success">
+                            Added to cart <i className="bi-check"></i>
+                        </button>) 
+                    :
                     (<button className="btn btn-outline-dark flex-shrink-0" onClick={() => addToCart(product)} type="button">
                         <i className="bi-cart-fill me-1"></i>
                         Add to cart
