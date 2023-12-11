@@ -1,14 +1,15 @@
 import React from 'react'
 import Navbar from './Navbar'
+import CartItems from './CartItems/CartItems'
 
-export default function Layout({children}) {
+export default function Layout({ children }) {
   return (
     <>
-        <Navbar />
-        
-        <main>
-            {children}
-        </main>
+      <Navbar />
+      <CartItems />
+      <main>
+        {children}
+      </main>
     </>
   )
 }

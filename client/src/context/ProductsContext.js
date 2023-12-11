@@ -63,8 +63,7 @@ export const ProductsContextProvider = ({ children }) => {
         }
     }
 
-    const clearFilters = () => {
-        // navigate(`/${category ? category : ''}`)
+    const clearFilters = (category) => {
         setSearch('')
         setFiltered(false)
         setFilters()
@@ -79,7 +78,7 @@ export const ProductsContextProvider = ({ children }) => {
 
         document.getElementById('sort').value = ''
 
-        getProducts()
+        getProducts(category)
             .then(data => {
                 setProducts(data)
             })
