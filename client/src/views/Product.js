@@ -10,7 +10,7 @@ import Layout from '../components/Layout';
 export default function Product() {
     const [product, setProduct] = useState(null)
     const [similarProducts, setSimilarProducts] = useState([])
-    const { productId } = useParams()
+    const { productId} = useParams()
 
     useEffect(() => {
         getById(productId)

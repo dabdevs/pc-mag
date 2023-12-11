@@ -19,7 +19,7 @@ function App() {
       element: <Index />
     },
     {
-      path: "/product/:productId/:slug",
+      path: "/products/:productId/:productName",
       element: <Product />
     }, {
       path: "*",

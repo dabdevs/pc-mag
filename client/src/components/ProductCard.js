@@ -27,7 +27,7 @@ export default function ProductCard({ product }) {
 
                 <div className="card-footer bg-transparent">
                     <div className="text-center">
-                        <Link to={`/product/${product._id}/${product.name.split(' ').join('-')}`} type='button' className='btn btn-sm btn-outline-dark px-4'>View specs</Link>
+                        <Link to={`/products/${product._id}/${product.name.split(' ').join('-')}`} type='button' className='btn btn-sm btn-outline-dark px-4'>View specs</Link>
                     </div>
                 </div>
             </div>

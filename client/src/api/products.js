@@ -29,6 +29,16 @@ export const getById = async (id) => {
     }
 }
 
+export const getByName = async (products, name) => {
+    try {
+        const product = products.filter(product => product.name === name.split('-').join(' '))
+  
+        return product[0]
+    } catch (err) {
+        console.error(err)
+    }
+}
+
 export const searchProducts = async (search) => {
     try {
         let url = `${baseUrl}/api/search/${search}`
