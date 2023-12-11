@@ -25,10 +25,9 @@ export default function ListProducts({ products, category }) {
 
             {!loading && products?.length > 0 &&
                 (
-                    <div className="row gx-3 gx-lg-4 row-cols-1 row-cols-md-2 row-cols-lg-4">
-
-                        {products?.map((product) =>
-                        (<LazyLoad key={`ll-${product._id}`} offset={100} className='col'>
+                    <div className="row gx-3 gx-lg-4 row-cols-xs-1 row-cols-md-2 row-cols-lg-4">
+                        {products?.map(product =>
+                        (<LazyLoad key={`ll-${product._id}`} offset={100}>
                             <ProductCard key={`pc-${product._id}`} id={product._id} product={product} />
                         </LazyLoad>)
                         )}

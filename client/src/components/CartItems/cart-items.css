@@ -11,8 +11,13 @@
     right: 0;
 }
 
-thead, tr {
+.item-xs {
     border-bottom: 1px solid #b1b1b1;
+}
+
+thead, tr {
+    border: 1px solid #b1b1b1;
+    border-left: none;
 }
 
 td {
