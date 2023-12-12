@@ -4,6 +4,7 @@ import React, { useReducer } from 'react';
 // Action Types
 const ADD_TO_CART = 'ADD_TO_CART';
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
+const CLEAR_CART = 'CLEAR_CART';
 
 // Reducer Function
 const cartReducer = (state, action) => {
@@ -16,6 +17,9 @@ const cartReducer = (state, action) => {
             const newCart = state.filter(item => item._id !== action.productId)
             localStorage.setItem('cartItems', JSON.stringify(newCart))
             return state.filter(item => item._id !== action.productId);
+        case CLEAR_CART:
+            localStorage.removeItem('cartItems')
+            return [];
         default:
             return state;
     }
@@ -41,10 +45,15 @@ export const ShoppingCartProvider = ({ children }) => {
         dispatch({ type: REMOVE_FROM_CART, productId });
     };
 
+    const clearCart = () => {
+        dispatch({ type: CLEAR_CART });
+    };
+
     return (
         <ShoppingCartContext.Provider value={{
             addToCart,
             removeFromCart,
+            clearCart,
             cartItems,
             showCart,
             setShowCart

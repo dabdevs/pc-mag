@@ -9,8 +9,6 @@ const stripe = new Stripe(SKYPE_SECRET)
 
 router.post('/create-checkout-session', async (req, res) => {
     try {
-        console.log('CART ITEMS',req.body.items.length)
-
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             mode: 'payment',
@@ -27,9 +25,9 @@ router.post('/create-checkout-session', async (req, res) => {
                 }
             }),
             success_url: `${process.env.FRONTEND_ORIGIN}/checkout/success`,
-            cancel_url: `${process.env.FRONTEND_ORIGIN}/checkout/cancel`
+            cancel_url: `${process.env.FRONTEND_ORIGIN}/checkout/failure`
         })
-
+        console.log(session)
         return res.json({url: session.url})
     } catch (err) {
         console.error('Error fetching data:', err);

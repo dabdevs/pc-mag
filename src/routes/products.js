@@ -7,11 +7,13 @@ const { connect, ObjectId } = require('../db');
 router.get('/product/:id', async (req, res) => {
     try {
         const DB = await connect();
+        const productId = req.params.id
         const products = DB.collection('products');
-        const product = await products.findOne({ _id: new ObjectId(req.params.id) })
+        const product = await products.findOne({ _id: new ObjectId(productId) })
     
         const similarProducts = await products.find({
-            "$or": [
+            _id: {$ne: productId},
+            $or: [
                 { processor: product.processor },
                 { disk: product.disk },
                 { ram: product.ram }

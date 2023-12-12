@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useShoppingCartContext } from '../../context/ShoppingCartContext'
 import './cart-items.css'
 import Checkout from '../../api/checkout'
-import { loadStripe } from '@stripe/stripe-js';
 
 export default function CartItems() {
+    const [checkingOut, setCheckingOut] = useState(false)
     const { cartItems, showCart, setShowCart, removeFromCart } = useShoppingCartContext()
-    const stripePromise = loadStripe('pk_test_OuZ8cLcVIComhgzhYcf5lJCb003adCDm5F');
     let total = 0; 
 
     async function handleCheckout() {
         try {
-            Checkout(cartItems).then(url => window.location.href = url).catch(err => console.log(err))
+            setCheckingOut(true)
+            await Checkout(cartItems).then(url => window.location.href = url).catch(err => console.log(err))
+            setCheckingOut(true)
         } catch (err) {
+            setCheckingOut(false)
             console.error(err)
         }
     }
@@ -48,7 +50,7 @@ export default function CartItems() {
                         <tr>
                             <td colSpan={3}><h5>Total: $ {total.toFixed(2)}</h5></td>
                             <td>
-                                <button className='btn btn-dark' onClick={handleCheckout}><i className="bi-bag-check me-1"></i> Checkout</button>
+                                <button className='btn btn-dark' onClick={handleCheckout}> {checkingOut? 'Loading...' : 'Checkout' } </button>
                             </td>
                         </tr>
                     </tbody>
@@ -69,7 +71,7 @@ export default function CartItems() {
                     <div className='py-2 d-flex justify-content-between'>
                         <h5 className='m-0'>Total: $ {total.toFixed(2)}</h5>
                         
-                        <button className='btn btn-dark pull-right' onClick={handleCheckout}><i className="bi-bag-check me-1"></i> Checkout</button>
+                        <button className='btn btn-dark pull-right' onClick={handleCheckout}> {checkingOut ? 'Loading...' : 'Checkout' } </button>
                     </div>
                 </div>
             </div>
