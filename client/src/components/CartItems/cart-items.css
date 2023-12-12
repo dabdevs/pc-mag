@@ -17,9 +17,8 @@
 
 thead, tr {
     border: 1px solid #b1b1b1;
-    border-left: none;
 }
 
-td {
+td, th {
     padding: 10px;
 }

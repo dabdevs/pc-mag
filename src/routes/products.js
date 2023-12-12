@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+require('dotenv').config()
+
 const { connect, ObjectId } = require('../db');
 
 router.get('/product/:id', async (req, res) => {
     try {
         const DB = await connect();
         const products = DB.collection('products');
-        const data = [];
         const product = await products.findOne({ _id: new ObjectId(req.params.id) })
     
         const similarProducts = await products.find({

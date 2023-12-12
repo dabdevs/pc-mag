@@ -1,8 +1,10 @@
 import { ProductsContextProvider } from './context/ProductsContext';
-import { createBrowserRouter, RouterProvider, useParams } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Index from './views/Index';
 import Product from './views/Product';
 import { ShoppingCartProvider } from './context/ShoppingCartContext';
+import CheckoutForm from './components/Checkout/CheckoutForm';
+import CheckoutResponse from './components/Checkout/CheckoutResponse';
 
 function App() {
   const router = createBrowserRouter([
@@ -21,7 +23,16 @@ function App() {
     {
       path: "/products/:productId/:productName",
       element: <Product />
-    }, {
+    }, 
+    {
+      path: "/checkout",
+      element: <CheckoutForm />
+    }, 
+    {
+      path: "/checkout/:response",
+      element: <CheckoutResponse />
+    }, 
+    {
       path: "*",
       element: <p>404 page not found</p>
     }
