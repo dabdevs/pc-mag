@@ -12,7 +12,7 @@ router.get('/product/:id', async (req, res) => {
         const product = await products.findOne({ _id: new ObjectId(productId) })
     
         const similarProducts = await products.find({
-            _id: {$ne: productId},
+            _id: { $ne: new ObjectId(productId)},
             $or: [
                 { processor: product.processor },
                 { disk: product.disk },
