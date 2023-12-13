@@ -11,10 +11,15 @@ export default function CartItems() {
     async function handleCheckout() {
         try {
             setCheckingOut(true)
-            await Checkout(cartItems).then(url => window.location.href = url).catch(err => console.log(err))
-            setCheckingOut(true)
+            Checkout(cartItems)
+                .then(url => {
+                    setCheckingOut(false)
+                    window.location.href = url
+                }).catch(err => {
+                    setCheckingOut(false)
+                console.log(err)
+            })
         } catch (err) {
-            setCheckingOut(false)
             console.error(err)
         }
     }

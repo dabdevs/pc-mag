@@ -1,13 +1,33 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import ShoppingCartContext from '../context/ShoppingCartContext'
+import Checkout from '../api/checkout'
+import { useState } from 'react'
 
 export default function ProductInfo({ product }) {
     const { addToCart, cartItems } = useContext(ShoppingCartContext)
+    const [buying, setBuying] = useState(false) 
     let inCart = false
 
     cartItems.map(item => {
         if (item._id === product._id) inCart = true
     })
+
+    const handleBuy = async () => {
+        try {
+            setBuying(true)
+            Checkout(cartItems)
+                .then(url => {
+                    setBuying(false)
+                    window.location.href = url
+                }).catch(err => {
+                    setBuying(false)
+                    console.log(err)
+                })
+        } catch (error) {
+            setBuying(false)
+            console.log(error)
+        }
+    }
     
     return (
         <div className="col-md-6">
@@ -28,9 +48,9 @@ export default function ProductInfo({ product }) {
                 </small>
             </div>
             <div className="d-flex gap-2">
-                <button className="btn btn-dark flex-shrink-0" type="button">
+                <button className="btn btn-dark flex-shrink-0" type="button" onClick={handleBuy}>
                     <i className="bi-cash-coin me-1"></i>
-                    Buy now
+                    {buying? 'Loading...' : 'Buy now'}
                 </button>
                 {inCart
                     ?   (<button className="btn btn-white text-success">
