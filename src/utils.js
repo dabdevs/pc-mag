@@ -2,6 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
+require('dotenv').config()
 
 // Set storage engine
 const storage = multer.diskStorage({
@@ -14,7 +15,7 @@ const storage = multer.diskStorage({
 });
 
 // Init upload
-const upload = multer({
+export const upload = multer({
     storage: storage,
     limits: { fileSize: 1000000 }, // 1 MB
 }).array('images', 5); 
@@ -31,4 +32,3 @@ const uploadImages = () => {
     }
 }
 
-module.exports = { upload };

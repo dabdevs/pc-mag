@@ -50,7 +50,7 @@ export default function ProductInfo({ product }) {
             <div className="d-flex gap-2">
                 <button className="btn btn-dark flex-shrink-0" type="button" onClick={handleBuy}>
                     <i className="bi-cash-coin me-1"></i>
-                    {buying? 'Loading...' : 'Buy now'}
+                    {buying? 'Buy now...' : 'Buy now'}
                 </button>
                 {inCart
                     ?   (<button className="btn btn-white text-success">

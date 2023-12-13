@@ -35,7 +35,7 @@ export default function ListProducts({ products, category }) {
                 )
             }
 
-            {loading ? (<b>Loading...</b>) : products.length === 0 && <p className='mx-auto lead my-5 text-center'>No products found <i className="bi bi-emoji-frown"></i></p>}
+            {loading ? (<b>Loading...</b>) : products?.length === 0 && <p className='mx-auto lead my-5 text-center'>No products found <i className="bi bi-emoji-frown"></i></p>}
         </div >
     )
 }

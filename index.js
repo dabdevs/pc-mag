@@ -20,8 +20,9 @@ app.use(session({
 
 app.use(flash());
 
+// app.use('/bull-board', require('bull-board').UI);
+
 app.get('/api/flash-messages', (req, res) => {
-    
     const allFlashMessages = {
         success: req.flash('success'),
         info: req.flash('info'),

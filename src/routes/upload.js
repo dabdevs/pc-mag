@@ -6,7 +6,7 @@ const path = require('path');
 
 // Multer Configuration
 const storage = multer.memoryStorage(); 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
