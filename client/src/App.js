@@ -5,6 +5,7 @@ import Product from './views/Product';
 import { ShoppingCartProvider } from './context/ShoppingCartContext';
 import CheckoutForm from './components/Checkout/CheckoutForm';
 import CheckoutResponse from './components/Checkout/CheckoutResponse';
+import ImageUploader from './components/ImageUploader';
 
 function App() {
   const router = createBrowserRouter([
@@ -31,6 +32,10 @@ function App() {
     {
       path: "/checkout/:response",
       element: <CheckoutResponse />
+    }, 
+    {
+      path: "/upload",
+      element: <ImageUploader />
     }, 
     {
       path: "*",
