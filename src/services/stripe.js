@@ -37,7 +37,7 @@ class StripeService {
                             product_data: {
                                 name: item.name
                             },
-                            unit_amount: Math.round(item.price * 100)
+                            unit_amount: item.price
                         },
                         quantity: 1,
                     }
@@ -88,7 +88,7 @@ class StripeService {
                     },
                 ],
                 success_url: `${process.env.SERVER_URL}/api/checkout/success?id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${process.env.SERVER_URL}/api/checkout/failure`
+                cancel_url: `${process.env.FRONTEND_ORIGIN}/checkout/failure`
             })
 
             return session

@@ -43,19 +43,19 @@ export default function CartItems() {
                     </thead>
                     <tbody>
                         {cartItems.map(item => {
-                            total = total + item.price
+                            total = total + item.price / 100
 
                             return (<tr key={item._id}>
                                 <td><img src={item.image} height={50}></img> {item.name}</td>
                                 <td className='hidden-xs'>{item.os} | {item.processor}</td>
-                                <td>$ {item.price.toFixed(2)}</td>
+                                <td>$ {(item.price / 100).toFixed(2)}</td>
                                 <td><button className='btn btn-sm btn-danger' onClick={() => removeFromCart(item._id)}>Remove</button></td>
                             </tr>)
                         })}
                         <tr>
-                            <td colSpan={3}><h5>Total: $ {total.toFixed(2)}</h5></td>
+                            <td colSpan={3}><h5>Total: $ {total}</h5></td>
                             <td>
-                                <button className='btn btn-dark' onClick={handleCheckout}> {checkingOut? 'Loading...' : 'Checkout' } </button>
+                                <button className='btn btn-dark' onClick={handleCheckout}> {checkingOut? 'Checkout...' : 'Checkout' } </button>
                             </td>
                         </tr>
                     </tbody>
@@ -76,7 +76,7 @@ export default function CartItems() {
                     <div className='py-2 d-flex justify-content-between'>
                         <h5 className='m-0'>Total: $ {total.toFixed(2)}</h5>
                         
-                        <button className='btn btn-dark pull-right' onClick={handleCheckout}> {checkingOut ? 'Loading...' : 'Checkout' } </button>
+                        <button className='btn btn-dark pull-right' onClick={handleCheckout}> {checkingOut ? 'Checkout...' : 'Checkout' } </button>
                     </div>
                 </div>
             </div>
