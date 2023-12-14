@@ -51,7 +51,6 @@ export const ProductsContextProvider = ({ children }) => {
             setFilters(filters)
             setFiltered(true)
             setLoading(true)
-
             let data = await getProducts(category, search, filters)
 
             setLoading(false)
