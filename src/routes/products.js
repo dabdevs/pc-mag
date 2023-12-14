@@ -2,23 +2,21 @@ const express = require('express');
 const router = express.Router();
 require('dotenv').config()
 const {ObjectId} = require('mongodb');
-const database = require('../../database')
+const Product = require('../models/Product')
 
 router.get('/product/:id', async (req, res) => {
     try {
         const productId = req.params.id
-        const db = await database.connect();
-        const products = db.collection('products');
-        const product = await products.findOne({ _id: new ObjectId(productId) })
+        const product = await Product.findOne({ _id: new ObjectId(productId) })
     
-        const similarProducts = await products.find({
+        const similarProducts = await Product.find({
             _id: { $ne: new ObjectId(productId)},
             $or: [
                 { processor: product.processor },
                 { disk: product.disk },
                 { ram: product.ram }
             ]
-        }).limit(6).toArray()
+        }).limit(6)
 
         return res.json({product, similarProducts})
     } catch (err) {
@@ -73,17 +71,32 @@ router.post('/products/:category?', async (req, res) => {
             conditions.price = { $gt: parseFloat(minPrice), $lt: parseFloat(maxPrice) }
         }
 
-        const db = await database.connect();
-        
         // Get collection
-        const products = db.collection('products');
-
-        // Find all products or by category
-        const data = await products.find(conditions).toArray()
-        return res.json(data)
+        const products = await Product.find(conditions) 
+        
+        return res.json(products)
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
+    }
+})
+
+router.post('/products', async (req, res) => {
+    try {
+        await Product.create({
+            name: 'My product',
+            images: ['image1', 'image2'],
+            price: 200000,
+            os: 'Windows 10',
+            processor: 'Intel i9',
+            ram: '8GB',
+            disk: '256GB',
+            diskType: 'ssd',
+            display: '22"',
+            formFactor: 'desktop'
+        })
+    } catch (error) {
+        console.log(error)
     }
 })
 

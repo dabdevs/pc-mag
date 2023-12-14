@@ -3,9 +3,9 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const session = require('express-session');
-const database = require('./database')
 const flash = require('connect-flash');
 const crypto = require('crypto');
+const mongoose = require('mongoose')
 const secretKey = crypto.randomBytes(64).toString('hex');
 require('dotenv').config()
 const PORT = process.env.PORT
@@ -33,10 +33,12 @@ app.get('/api/flash-messages', (req, res) => {
     res.json(allFlashMessages);
 });
 
+const authRoutes = require('./src/routes/auth');
 const productsRoutes = require('./src/routes/products');
 const checkoutRoutes = require('./src/routes/checkout');
 const uploadRoutes = require('./src/routes/upload');
 
+app.use('/api', authRoutes);
 app.use('/api', productsRoutes);
 app.use('/api', checkoutRoutes);
 app.use('/api', uploadRoutes);
@@ -44,7 +46,25 @@ app.use('/api', uploadRoutes);
 app.use(ErrorMiddleware);
 app.use(NotFoundMiddleware);
 
-database.connect().catch(err => console.log(err));
+mongoose.connect(process.env.MONGO_DB_URI);
+
+const DB = mongoose.connection;
+
+DB.on('connecting', function () {
+    console.log('connecting to Database...');
+}).on('error', function (error) {
+    console.error('Error in Database connection: ' + error);
+    mongoose.disconnect();
+}).on('connected', function () {
+    console.log('Database connected!');
+}).once('open', function () {
+    console.log('Database connection opened!');
+}).on('reconnected', function () {
+    console.log('Database reconnected!');
+}).on('disconnected', function () {
+    console.log('Database disconnected!');
+    mongoose.connect(process.env.MONGO_DB_URI, { server: { auto_reconnect: true } });
+});
 
 app.listen(PORT, async () => {
     console.log(`Server is running on port ${PORT}`);
