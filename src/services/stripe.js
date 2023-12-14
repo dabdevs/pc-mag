@@ -13,6 +13,11 @@ class StripeService {
         return await stripe.checkout.sessions.retrieve(sessionId)
     }
 
+    async getLineItems(sessionId) {
+        const {data} = await stripe.checkout.sessions.listLineItems(sessionId)
+        return data
+    }
+
     async getCustomerByEmail(email) {
         return await stripe.customers.retrieve(email)
     }

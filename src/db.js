@@ -6,8 +6,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function connect() {
     try {
-        await client.connect();
-        console.log('Connected to MongoDB');
+        client.connect()
+
         return client.db('pc-mag');
     } catch (err) {
         console.error('Error connecting to MongoDB:', err);

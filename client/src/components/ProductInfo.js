@@ -15,7 +15,7 @@ export default function ProductInfo({ product }) {
     const handleBuy = async () => {
         try {
             setBuying(true)
-            Checkout(cartItems)
+            Checkout([product])
                 .then(url => {
                     setBuying(false)
                     window.location.href = url

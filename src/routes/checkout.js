@@ -13,11 +13,13 @@ router.get('/checkout/:state', async (req, res) => {
 
     try {
         const { customer_details, payment_status } = await stripe.getSession(id);
+        const lineItems = await stripe.getLineItems(id)
         
-        if (payment_status === 'paid') {
+        if (state === 'success' && payment_status === 'paid') {
             // Send email
             const payload = {
-                to: customer_details.email
+                to: customer_details.email,
+                items: lineItems
             }
 
             Mail.sendPurchaseEmail(payload)
