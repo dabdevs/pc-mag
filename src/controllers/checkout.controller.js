@@ -1,4 +1,4 @@
-const Mail = require('../utils/Mail')
+const { sendPurchaseEmail } = require('../utils/Mail')
 require('dotenv').config()
 const StripeService = require('../services/stripe');
 const stripe = new StripeService()
@@ -32,12 +32,24 @@ module.exports.checkoutResponse = async (req, res) => {
                 items: lineItems
             }
 
-            Mail.sendPurchaseEmail(payload)
+            sendPurchaseEmail(payload)
         }
 
         return res.redirect(`${process.env.FRONTEND_ORIGIN}/checkout/${state}`);
     } catch (error) {
         console.error('Error retrieving PaymentIntent:', error);
         res.status(500);
+    }
+}
+
+module.exports.webhook = async (req, res) => {
+    req.body.signature = req.headers['stripe-signature'];
+
+    try {
+        await stripe.webhook(req.body)
+        
+    } catch (err) {
+        console.error('Webhook error', err.message);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 }

@@ -110,6 +110,33 @@ class StripeService {
             throw error;
         }
     }
+
+    async webhook(data) {
+        try {
+            const endpointSecret = 'your_stripe_webhook_secret'; 
+
+            let event;
+            event = stripe.webhooks.constructEvent(data, data.signature, endpointSecret);
+            console.log(event)
+
+            // Handle the event
+            switch (event.type) {
+                case 'payment_intent.succeeded':
+                    const paymentIntent = event.data.object;
+                    // Handle successful payment
+                    console.log('PaymentIntent was successful!');
+                    break;
+                // Handle other events as needed
+
+                default:
+                    console.log(`Unhandled event type: ${event.type}`);
+            }
+
+            return true;
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 module.exports = StripeService;
