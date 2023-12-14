@@ -9,15 +9,22 @@ const stripe = new StripeService()
 
 router.get('/checkout/:state', async (req, res) => {
     const { id } = req.query;
+
+    if (!id) {
+        return res.json(404)
+    }
+
     const state = req.params.state
 
     try {
         const { customer_details, payment_status } = await stripe.getSession(id);
+        const lineItems = await stripe.getLineItems(id)
         
-        if (payment_status === 'paid') {
+        if (state === 'success' && payment_status === 'paid') {
             // Send email
             const payload = {
-                to: customer_details.email
+                to: customer_details.email,
+                items: lineItems
             }
 
             Mail.sendPurchaseEmail(payload)
@@ -26,7 +33,7 @@ router.get('/checkout/:state', async (req, res) => {
         return res.redirect(`${process.env.FRONTEND_ORIGIN}/checkout/${state}`);
     } catch (error) {
         console.error('Error retrieving PaymentIntent:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500);
     }
 })
 

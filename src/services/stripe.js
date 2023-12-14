@@ -13,13 +13,17 @@ class StripeService {
         return await stripe.checkout.sessions.retrieve(sessionId)
     }
 
+    async getLineItems(sessionId) {
+        const {data} = await stripe.checkout.sessions.listLineItems(sessionId)
+        return data
+    }
+
     async getCustomerByEmail(email) {
         return await stripe.customers.retrieve(email)
     }
     
     async createSession(data) {
-        console.log('checkout stripe session', data)
-        const { items, customerEmail } = data;
+        const { customerEmail } = data;
 
         try {
             const session = await stripe.checkout.sessions.create({

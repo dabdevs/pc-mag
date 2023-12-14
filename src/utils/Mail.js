@@ -1,6 +1,11 @@
 const Queue = require('bull');
 const { setQueues, BullAdapter } = require('bull-board');
 const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const fs = require('fs');
+const { promisify } = require('util');
+
+const readFile = promisify(fs.readFile);
 require('dotenv').config()
 
 const emailQueue = new Queue('emails');
@@ -16,6 +21,17 @@ const transport = nodemailer.createTransport({
         pass: process.env.APP_EMAIL_PSW
     }
 })
+
+const readHTMLFile = function (path, callback) {
+    fs.readFile(path, { encoding: 'utf-8' }, function (err, html) {
+        if (err) {
+            callback(err);
+        }
+        else {
+            callback(null, html);
+        }
+    });
+};
 
 // const worker = new Worker('emailQueue', async (job) => {
 //     const { to, subject, body } = job
@@ -33,9 +49,10 @@ const transport = nodemailer.createTransport({
 
 Mail.sendPurchaseEmail = async (payload) => {
     try {
-        const { to, data } = payload
-        subject = 'Thank you for your purchase!',
-        body = '<h1>Thank you for trusting us.</h1> <p>In this email you will find all the details about the shipping...</p>'
+        const { to, items } = payload
+        subject = 'Thank you for your purchase!'
+        const templatePath = process.cwd() + '/src/mail/templates/purchaseSuccessful.ejs'
+        const emailTemplate = fs.readFileSync(templatePath, 'utf-8');
         
         /*    
         await emailQueue.add({ payload });
@@ -56,12 +73,25 @@ Mail.sendPurchaseEmail = async (payload) => {
         });
 
         */
+        
+        let htmlItems = ''
+        let total = 0
 
+        for (let item of items) {
+            price = item.amount_total / 100
+            total += price
+            htmlItems += `<li>${item.description} - $ ${price.toFixed(2)}</li>`
+        }
+
+        payload.items = htmlItems
+        payload.total = total
+
+        const renderedTemplate = ejs.render(emailTemplate, payload);
         const mailOptions = {
             from: process.env.APP_EMAIL,
             to,
             subject,
-            html: body
+            html: renderedTemplate
         };
 
         await transport.sendMail(mailOptions);
