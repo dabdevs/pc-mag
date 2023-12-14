@@ -1,7 +1,6 @@
 const User = require('../models/User')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const authenticateToken = require('../middlewares/auth.middleware');
 require('dotenv').config()
 
 module.exports.signupGet = (req, res) => {
@@ -13,9 +12,7 @@ module.exports.signupPost = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        console.log(hashedPassword)
-        const user = await User.create({ email, password: hashedPassword, name, role})
-        console.log(user)
+        await User.create({ email, password: hashedPassword, name, role})
         res.status(201).send('User registered successfully.');
     } catch (err) {
         console.log(err)
@@ -32,12 +29,13 @@ module.exports.loginPost = async (req, res) => {
 
     try {
         const user = await User.findOne({ email });
-
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        const matched = await bcrypt.compare(password, user.password)
+        
+        if (!user || !matched) {
             return res.status(401).send('Invalid email or password.');
         }
-
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY, { expiresIn: '5m' });
+        
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
         console.error('Error logging in:', error);

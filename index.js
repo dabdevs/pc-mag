@@ -6,7 +6,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const crypto = require('crypto');
 const mongoose = require('mongoose')
-const secretKey = crypto.randomBytes(64).toString('hex');
+const sessionSecretKey = crypto.randomBytes(64).toString('hex');
 require('dotenv').config()
 const PORT = process.env.PORT
 
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.use(session({
-    secret: secretKey,
+    secret: sessionSecretKey,
     resave: true,
     saveUninitialized: true
 }));
@@ -34,9 +34,6 @@ app.get('/api/flash-messages', (req, res) => {
 });
 
 const routes = require('./src/routes/index');
-// const productsRoutes = require('./src/routes/product');
-// const checkoutRoutes = require('./src/routes/checkout');
-// const uploadRoutes = require('./src/routes/upload');
 
 app.use('/api', routes);
 
