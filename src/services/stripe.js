@@ -23,8 +23,7 @@ class StripeService {
     }
     
     async createSession(data) {
-        console.log('checkout stripe session', data)
-        const { items, customerEmail } = data;
+        const { customerEmail } = data;
 
         try {
             const session = await stripe.checkout.sessions.create({

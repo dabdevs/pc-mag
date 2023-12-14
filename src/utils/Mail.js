@@ -78,8 +78,9 @@ Mail.sendPurchaseEmail = async (payload) => {
         let total = 0
 
         for (let item of items) {
-            total += item.amount_total / 100
-            htmlItems += `<li>${item.description} - $ ${item.amount_total}</li>`
+            price = item.amount_total / 100
+            total += price
+            htmlItems += `<li>${item.description} - $ ${price.toFixed(2)}</li>`
         }
 
         payload.items = htmlItems

@@ -9,6 +9,11 @@ const stripe = new StripeService()
 
 router.get('/checkout/:state', async (req, res) => {
     const { id } = req.query;
+
+    if (!id) {
+        return res.json(404)
+    }
+
     const state = req.params.state
 
     try {
@@ -28,7 +33,7 @@ router.get('/checkout/:state', async (req, res) => {
         return res.redirect(`${process.env.FRONTEND_ORIGIN}/checkout/${state}`);
     } catch (error) {
         console.error('Error retrieving PaymentIntent:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500);
     }
 })
 
