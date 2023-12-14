@@ -16,6 +16,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         maxLength: 100
+    },
+    role: {
+        type: Array,
+        default: ['USER']
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 })
 

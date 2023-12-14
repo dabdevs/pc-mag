@@ -3,8 +3,8 @@ const router = express.Router();
 require('dotenv').config()
 const { getProducts, getOne, store } = require('../controllers/products.controller')
 
-router.post('/products/:category?', getProducts)
-router.get('/product/:id', getOne)
-router.post('/products', store)
+router.post('/:category?', getProducts)
+router.get('/:id', getOne)
+router.post('', store)
 
 module.exports = router;

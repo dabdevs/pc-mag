@@ -33,15 +33,12 @@ app.get('/api/flash-messages', (req, res) => {
     res.json(allFlashMessages);
 });
 
-const authRoutes = require('./src/routes/auth');
-const productsRoutes = require('./src/routes/products');
-const checkoutRoutes = require('./src/routes/checkout');
-const uploadRoutes = require('./src/routes/upload');
+const routes = require('./src/routes/index');
+// const productsRoutes = require('./src/routes/product');
+// const checkoutRoutes = require('./src/routes/checkout');
+// const uploadRoutes = require('./src/routes/upload');
 
-app.use('/api', authRoutes);
-app.use('/api', productsRoutes);
-app.use('/api', checkoutRoutes);
-app.use('/api', uploadRoutes);
+app.use('/api', routes);
 
 app.use(ErrorMiddleware);
 app.use(NotFoundMiddleware);

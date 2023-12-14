@@ -49,7 +49,7 @@ export default function ImageUploader() {
 
     return (
         <section className='card p-5 m-5 mx-auto w-50'>
-            {success && <div className='mt-3 alert alert-success'>Images uploaded successfuly!</div>}
+            {success && <div className='mt-3 alert alert-success'>Images uploaded successfully!</div>}
             {error && <div className='mt-3 alert alert-danger'>An error ocurred while uploading the files!</div>}
 
             <form id='uploadImagesForm' encType="multipart/form-data" className='d-flex gap-3'>

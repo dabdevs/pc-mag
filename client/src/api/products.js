@@ -20,7 +20,7 @@ export const getProducts = async (category='', search='', filters=[]) => {
 
 export const getById = async (id) => {
     try {
-        let url = `${baseUrl}/api/product/${id}`
+        let url = `${baseUrl}/api/products/${id}`
 
         const { data } = await axios.get(url)
         return data
