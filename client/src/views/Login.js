@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useJwt } from "react-jwt";
 import { login } from '../api/auth'
 import Layout from '../components/Layout'
 import { Navigate } from 'react-router-dom'

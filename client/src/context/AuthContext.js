@@ -1,6 +1,6 @@
 import { useJwt } from "react-jwt";
 
-const { createContext, useContext, useState, useEffect } = require("react");
+const { createContext, useContext, useState } = require("react");
 
 const AuthContext = createContext(undefined)
 export const useAuthContext = () => useContext(AuthContext)
