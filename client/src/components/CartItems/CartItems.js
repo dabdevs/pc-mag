@@ -53,7 +53,7 @@ export default function CartItems() {
                             </tr>)
                         })}
                         <tr>
-                            <td colSpan={3}><h5>Total: $ {total}</h5></td>
+                            <td colSpan={3}><h5>Total: $ {total.toFixed(2)}</h5></td>
                             <td>
                                 <button className='btn btn-dark' onClick={handleCheckout}> {checkingOut? 'Checkout...' : 'Checkout' } </button>
                             </td>
