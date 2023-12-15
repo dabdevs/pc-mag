@@ -22,16 +22,16 @@ const transport = nodemailer.createTransport({
     }
 })
 
-const readHTMLFile = function (path, callback) {
-    fs.readFile(path, { encoding: 'utf-8' }, function (err, html) {
-        if (err) {
-            callback(err);
-        }
-        else {
-            callback(null, html);
-        }
-    });
-};
+// const readHTMLFile = function (path, callback) {
+//     fs.readFile(path, { encoding: 'utf-8' }, function (err, html) {
+//         if (err) {
+//             callback(err);
+//         }
+//         else {
+//             callback(null, html);
+//         }
+//     });
+// };
 
 // const worker = new Worker('emailQueue', async (job) => {
 //     const { to, subject, body } = job
@@ -47,9 +47,28 @@ const readHTMLFile = function (path, callback) {
 //     await transport.sendMail(mailOptions);
 // });
 
+Mail.registrationEmail = async (payload) => {
+    try {
+        const subject = 'Welcome to the family!'
+        const templatePath = process.cwd() + '/src/mail/templates/registration.ejs'
+        const emailTemplate = fs.readFileSync(templatePath, 'utf-8');
+
+        const renderedTemplate = ejs.render(emailTemplate, payload);
+        const mailOptions = {
+            from: process.env.APP_EMAIL,
+            to: payload.email,
+            subject,
+            html: renderedTemplate
+        };
+
+        await transport.sendMail(mailOptions);
+    } catch (error) {
+        throw error
+    }
+}
+
 Mail.sendPurchaseEmail = async (payload) => {
     try {
-        const { to, items } = payload
         subject = 'Thank you for your purchase!'
         const templatePath = process.cwd() + '/src/mail/templates/purchaseSuccessful.ejs'
         const emailTemplate = fs.readFileSync(templatePath, 'utf-8');
@@ -73,18 +92,6 @@ Mail.sendPurchaseEmail = async (payload) => {
         });
 
         */
-        
-        let htmlItems = ''
-        let total = 0
-
-        for (let item of items) {
-            price = item.amount_total / 100
-            total += price
-            htmlItems += `<li>${item.description} - $ ${price.toFixed(2)}</li>`
-        }
-
-        payload.items = htmlItems
-        payload.total = total
 
         const renderedTemplate = ejs.render(emailTemplate, payload);
         const mailOptions = {

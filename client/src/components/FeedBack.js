@@ -12,7 +12,7 @@ export default function FeedBack({type, message}) {
                 </div>
 
                 <div className='card-footer bg-white'>
-                    <a href='/' className='btn btn-danger'>Continue shopping</a>
+                    <a href='/' className='btn btn-dark'>Continue shopping</a>
                 </div>
           </section>
       </Layout>

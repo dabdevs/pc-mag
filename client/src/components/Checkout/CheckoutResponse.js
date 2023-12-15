@@ -54,7 +54,7 @@ const CheckoutResponse = () => {
             clearCart()
         } else {
             setType('danger')
-            setMessage('Checkout failed!')
+            setMessage('Checkout canceled!')
         }
     }, [])
     

@@ -1,33 +1,8 @@
-const express = require('express');
-const router = express.Router();
 require('dotenv').config()
-const {ObjectId} = require('mongodb');
-const database = require('../../database')
+const { ObjectId } = require('mongodb')
+const Product = require('../models/Product')
 
-router.get('/product/:id', async (req, res) => {
-    try {
-        const productId = req.params.id
-        const db = await database.connect();
-        const products = db.collection('products');
-        const product = await products.findOne({ _id: new ObjectId(productId) })
-    
-        const similarProducts = await products.find({
-            _id: { $ne: new ObjectId(productId)},
-            $or: [
-                { processor: product.processor },
-                { disk: product.disk },
-                { ram: product.ram }
-            ]
-        }).limit(6).toArray()
-
-        return res.json({product, similarProducts})
-    } catch (err) {
-        console.error('Error fetching data:', err);
-        res.status(500).json({ err: 'Internal Server Error' });
-    }
-})
-
-router.post('/products/:category?', async (req, res) => {
+module.exports.getProducts = async (req, res) => {
     try {
         const category = req.params.category
         const query = req.query.q
@@ -58,7 +33,7 @@ router.post('/products/:category?', async (req, res) => {
         }
 
         if (processor && processor.length > 0) {
-            conditions.processor = { '$in': processor } 
+            conditions.processor = { '$in': processor }
         }
 
         if (maxPrice) {
@@ -73,19 +48,43 @@ router.post('/products/:category?', async (req, res) => {
             conditions.price = { $gt: parseFloat(minPrice), $lt: parseFloat(maxPrice) }
         }
 
-        const db = await database.connect();
-        
         // Get collection
-        const products = db.collection('products');
+        const products = await Product.find(conditions)
 
-        // Find all products or by category
-        const data = await products.find(conditions).toArray()
-        return res.json(data)
+        return res.json(products)
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
     }
-})
+}
 
+module.exports.getOne = async (req, res) => {
+    try {
+        const productId = req.params.id
+        const product = await Product.findOne({ _id: new ObjectId(productId) })
 
-module.exports = router;
+        const similarProducts = await Product.find({
+            _id: { $ne: new ObjectId(productId) },
+            $or: [
+                { processor: product.processor },
+                { disk: product.disk },
+                { ram: product.ram }
+            ]
+        }).limit(6)
+
+        return res.json({ product, similarProducts })
+    } catch (err) {
+        console.error('Error fetching data:', err);
+        res.status(500).json({ err: 'Internal Server Error' });
+    }
+}
+
+module.exports.store = async (req, res) => {
+    try {
+        const Product = await Product.create({ email, password, name })
+        console.log(Product)
+        res.json({ Product })
+    } catch (err) {
+        console.log(err)
+    }
+}

@@ -37,7 +37,7 @@ class StripeService {
                             product_data: {
                                 name: item.name
                             },
-                            unit_amount: Math.round(item.price * 100)
+                            unit_amount: item.price.toFixed(0)
                         },
                         quantity: 1,
                     }
@@ -88,7 +88,7 @@ class StripeService {
                     },
                 ],
                 success_url: `${process.env.SERVER_URL}/api/checkout/success?id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${process.env.SERVER_URL}/api/checkout/failure`
+                cancel_url: `${process.env.FRONTEND_ORIGIN}/checkout/failure`
             })
 
             return session
@@ -108,6 +108,33 @@ class StripeService {
         } catch (error) {
             console.error('Error creating PaymentIntent:', error);
             throw error;
+        }
+    }
+
+    async webhook(data) {
+        try {
+            const endpointSecret = 'your_stripe_webhook_secret'; 
+
+            let event;
+            event = stripe.webhooks.constructEvent(data, data.signature, endpointSecret);
+            console.log(event)
+
+            // Handle the event
+            switch (event.type) {
+                case 'payment_intent.succeeded':
+                    const paymentIntent = event.data.object;
+                    // Handle successful payment
+                    console.log('PaymentIntent was successful!');
+                    break;
+                // Handle other events as needed
+
+                default:
+                    console.log(`Unhandled event type: ${event.type}`);
+            }
+
+            return true;
+        } catch (error) {
+            throw error
         }
     }
 }

@@ -11,9 +11,16 @@
     <h1>Thank you for your purchase <%= to %>.</h1>
     <h4>Your order details:</h4>
     <ol>
-        <%- items %>
+        <% 
+        let total = 0
+        for (let item of items) { 
+            price = item.amount_total / 100
+            total += price  
+        %>
+        <li><%= item.description %> - $ <%= price.toFixed(2) %></li>
+        <% } %>
     </ol>
-    <p><b>Total: $ <%= total %></b></p>
+    <p><b>Total: $ <%= total.toFixed(2) %></b></p>
 </body>
 
 </html>

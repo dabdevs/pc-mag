@@ -1,15 +1,12 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useProductsContext } from '../context/ProductsContext';
 
 export default function Sidebar({ category }) {
     const { handleFilter } = useProductsContext()
-    const navigate = useNavigate()
-
     const [formFactor, setFormFactor] = useState([]);
     const [ram, setRam] = useState([]);
     const [processor, setProcessor] = useState([]);
-    const [minPrice, setMinPrice] = useState('')
+    const [minPrice, setMinPrice] = useState(null)
     const [maxPrice, setMaxPrice] = useState('')
     const [error, setError] = useState('')
 
