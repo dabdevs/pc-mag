@@ -37,7 +37,7 @@ module.exports.login = async (req, res) => {
             return res.status(401).send('Invalid email or password.');
         }
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
         console.error('Error logging in:', error);
@@ -46,5 +46,5 @@ module.exports.login = async (req, res) => {
 }
 
 module.exports.logout = (req, res) => {
-    res.send('logout')
+    res.json('logged out')
 }

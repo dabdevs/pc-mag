@@ -1,15 +1,27 @@
-const { createContext, useContext, useState } = require("react");
+import { useJwt } from "react-jwt";
+
+const { createContext, useContext, useState, useEffect } = require("react");
 
 const AuthContext = createContext(undefined)
 export const useAuthContext = () => useContext(AuthContext)
 
 export const AuthContextProvider = ({children}) => {
-    const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')) || undefined)
+    const [user, setUser] = useState(null)
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('token')) || null)
+    const { decodedToken, isExpired } = useJwt(token || '')
+    const tokendIsExpired = isExpired
 
+    const authUser = decodedToken ? decodedToken.user : null
+    console.log('Authenticated user:', authUser)
+ 
     return (
         <AuthContext.Provider value={{
-            auth,
-            setAuth
+            token,
+            setToken,
+            user, 
+            setUser,
+            authUser, 
+            tokendIsExpired, 
         }}
         >
             {children}

@@ -10,10 +10,11 @@ const authenticateToken = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
-        req.user = await User.findById(decoded.userId).exec()
+        req.user = await User.findById(decoded.user._id)
         next();
     } catch (error) {
-        res.status(403).send('Invalid token.');
+        console.log(error.message)
+        res.status(403).send(error.message);
     }
 };
 

@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import ShoppingCart from "./ShoppingCart";
 import { useAuthContext } from "../context/AuthContext";
 import { logout } from '../api/auth'
+import { Navigate } from 'react-router-dom'
 
 export default function Navbar() {
-  const {auth, setAuth} = useAuthContext()
+  const { authUser } = useAuthContext()
 
-  const handleClick = () => {
+  const handleLogout = () => {
     logout().then(() => {
-      localStorage.removeItem('auth')
-      setAuth(undefined)
-    }).catch(err => console.log(err))
+      localStorage.removeItem('token')
+      window.location.href = '/login'
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   return (
@@ -21,9 +24,11 @@ export default function Navbar() {
             <h3><strong>PC Mag</strong></h3>
           </a>
 
-          <ShoppingCart />
-
-          {auth && <button onClick={handleClick} className="btn btn-danger" type="button">Logout</button>}
+          <div className="d-flex gap-2">
+            <ShoppingCart />
+            <b>{authUser?.name}</b>
+            {authUser && <button onClick={handleLogout} className="btn btn-danger" type="button">Logout</button>}
+          </div>
         </div>
       </nav>
     </div>
