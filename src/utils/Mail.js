@@ -47,6 +47,26 @@ const readHTMLFile = function (path, callback) {
 //     await transport.sendMail(mailOptions);
 // });
 
+Mail.registrationEmail = async (payload) => {
+    try {
+        const subject = 'Welcome to the family!'
+        const templatePath = process.cwd() + '/src/mail/templates/registration.ejs'
+        const emailTemplate = fs.readFileSync(templatePath, 'utf-8');
+
+        const renderedTemplate = ejs.render(emailTemplate, payload);
+        const mailOptions = {
+            from: process.env.APP_EMAIL,
+            to: payload.email,
+            subject,
+            html: renderedTemplate
+        };
+
+        await transport.sendMail(mailOptions);
+    } catch (error) {
+        throw error
+    }
+}
+
 Mail.sendPurchaseEmail = async (payload) => {
     try {
         const { to, items } = payload

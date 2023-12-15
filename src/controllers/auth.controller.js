@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const { validationResult } = require('express-validator');
+const { eventEmitter, userCreated } = require('../events/index')
 
 module.exports.register = async (req, res) => {
     // Check for validation errors
@@ -15,7 +16,9 @@ module.exports.register = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        await User.create({ email, password: hashedPassword, name, role })
+        const user = await User.create({ email, password: hashedPassword, name, role })
+        eventEmitter.emit(userCreated, user)
+        
         res.status(201).send('User registered successfully.');
     } catch (err) {
         console.log(err)

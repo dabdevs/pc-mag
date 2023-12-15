@@ -1,11 +1,12 @@
-const { sendPurchaseEmail } = require('../utils/Mail')
 require('dotenv').config()
 const StripeService = require('../services/stripe');
+const { eventEmitter, checkoutSuccessful } = require('../events/index')
 const stripe = new StripeService()
 
 module.exports.createCheckout = async (req, res) => {
     try {
         const session = await stripe.createSession(req.body)
+        console.log(session)
         return res.json({ url: session.url })
     } catch (err) {
         console.error('Error fetching data:', err);
@@ -32,7 +33,7 @@ module.exports.checkoutResponse = async (req, res) => {
                 items: lineItems
             }
 
-            sendPurchaseEmail(payload)
+            eventEmitter.emit(checkoutSuccessful, payload)
         }
 
         return res.redirect(`${process.env.FRONTEND_ORIGIN}/checkout/${state}`);
