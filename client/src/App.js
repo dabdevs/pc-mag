@@ -8,6 +8,7 @@ import ImageUploader from './components/ImageUploader';
 import Login from './views/Login';
 import { AuthContextProvider } from './context/AuthContext';
 import Dashboard from './views/Dashboard';
+import Products from './views/Products';
 
 function App() {
   const router = createBrowserRouter([
@@ -42,6 +43,10 @@ function App() {
     {
       path: "/dashboard",
       element: <Dashboard />
+    },
+    {
+      path: "/products",
+      element: <Products />
     },
     {
       path: "*",

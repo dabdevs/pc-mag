@@ -2,11 +2,20 @@ import React, { useState } from "react";
 import ShoppingCart from "./ShoppingCart";
 import { useAuthContext } from "../context/AuthContext";
 import { FaUserCircle } from "react-icons/fa";
-import ProfileMenu from "./ProfileMenu";
+import { logout } from "../api/auth";
+import DropdownList from "./Shared/Dropdown";
 
 export default function Navbar() {
   const { authUser } = useAuthContext()
-  const [profileMenuToggled, setProfileMenuToggled] = useState(false)
+
+  const handleLogout = () => {
+    logout().then(() => {
+      localStorage.removeItem('token')
+      window.location.href = '/login'
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
   return (
     <div className="row">
@@ -19,11 +28,11 @@ export default function Navbar() {
           <div className="d-flex gap-2">
             <ShoppingCart />
 
-            <button className="btn btn-transparent">
-              <FaUserCircle style={{ fontSize: '30px' }} onClick={() => setProfileMenuToggled(!profileMenuToggled)} />
-            </button>
-
-            {profileMenuToggled ? <ProfileMenu toggled={profileMenuToggled} user={authUser} /> : null}
+            <DropdownList
+              btnName={authUser? <FaUserCircle style={{ fontSize: '25px' }} /> : null}
+              listItems={[{ name: authUser?.name, href: '/profile' }, { name: 'Dashboard', href: '/dashboard' }]}
+              dividerItems={[{ name: <button onClick={handleLogout} className="btn btn-danger w-100">Logout</button> }]}
+            />
           </div>
         </div>
       </nav>
