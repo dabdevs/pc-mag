@@ -11,7 +11,7 @@ export default function Dashboard() {
     <Layout classes={'p-3'}>
       <section className='col-sm-8 mx-auto my-5 p-3'>
         <div className='row'>
-            <div onClick={() => window.location.href = '/products'} className='card col-sm-3 p-4 d-flex flex-column align-items-center' role='button'>
+            <div onClick={() => window.location.href = '/products'} className='card col-sm-2 p-2 d-flex flex-column align-items-center' role='button'>
               <SiProducthunt style={{ fontSize: '100px' }} />
               
               <h6 className='mt-3'>Products</h6>

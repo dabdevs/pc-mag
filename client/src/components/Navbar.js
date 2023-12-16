@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import ShoppingCart from "./ShoppingCart";
 import { useAuthContext } from "../context/AuthContext";
-import { logout } from '../api/auth'
-import { Navigate } from 'react-router-dom'
+import { FaUserCircle } from "react-icons/fa";
+import ProfileMenu from "./ProfileMenu";
 
 export default function Navbar() {
   const { authUser } = useAuthContext()
-
-  const handleLogout = () => {
-    logout().then(() => {
-      localStorage.removeItem('token')
-      window.location.href = '/login'
-    }).catch(err => {
-      console.log(err)
-    })
-  }
+  const [profileMenuToggled, setProfileMenuToggled] = useState(false)
 
   return (
     <div className="row">
@@ -26,8 +18,12 @@ export default function Navbar() {
 
           <div className="d-flex gap-2">
             <ShoppingCart />
-            <b>{authUser?.name}</b>
-            {authUser && <button onClick={handleLogout} className="btn btn-danger" type="button">Logout</button>}
+
+            <button className="btn btn-transparent">
+              <FaUserCircle style={{ fontSize: '30px' }} onClick={() => setProfileMenuToggled(!profileMenuToggled)} />
+            </button>
+
+            {profileMenuToggled ? <ProfileMenu toggled={profileMenuToggled} user={authUser} /> : null}
           </div>
         </div>
       </nav>

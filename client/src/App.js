@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Index from './views/Index';
 import Product from './views/Product';
 import { ShoppingCartProvider } from './context/ShoppingCartContext';
-import CheckoutForm from './components/Checkout/CheckoutForm';
 import CheckoutResponse from './components/Checkout/CheckoutResponse';
 import ImageUploader from './components/ImageUploader';
 import Login from './views/Login';
@@ -27,10 +26,6 @@ function App() {
     {
       path: "/products/:productId/:productName",
       element: <Product />
-    },
-    {
-      path: "/checkout",
-      element: <CheckoutForm />
     },
     {
       path: "/checkout/:response",

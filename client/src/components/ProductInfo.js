@@ -1,7 +1,8 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import ShoppingCartContext from '../context/ShoppingCartContext'
 import Checkout from '../api/checkout'
 import { useState } from 'react'
+import { FaCartArrowDown } from "react-icons/fa"
 
 export default function ProductInfo({ product }) {
     const { addToCart, cartItems } = useContext(ShoppingCartContext)
@@ -40,25 +41,25 @@ export default function ProductInfo({ product }) {
                     <i className="bi bi-cpu mr-1"></i> {product.ram}
                 </small>
                 <small> <i className='bi bi-hdd mr-1'></i> {product.disk}</small>
-                <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {product.display}</small>
+                <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {product.display}"</small>
                 <small>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-windows" viewBox="0 0 16 16">
                         <path d="M6.555 1.375 0 2.237v5.45h6.555V1.375zM0 13.795l6.555.933V8.313H0v5.482zm7.278-5.4.026 6.378L16 16V8.395H7.278zM16 0 7.33 1.244v6.414H16V0z" />
                     </svg> {product.os} | {product.processor}
                 </small>
             </div>
-            <div className="d-flex gap-2">
-                <button className="btn btn-dark flex-shrink-0" type="button" onClick={handleBuy}>
-                    <i className="bi-cash-coin me-1"></i>
-                    {buying? 'Buy now...' : 'Buy now'}
+            <div className="d-xs-grid d-flex gap-3">
+                <button className="btn btn-dark" type="button" onClick={handleBuy}>
+                    {buying ? <span><span class="spinner-border spinner-border-sm"></span> Buy now...</span> : <span><i className="bi-cash-coin me-1"></i>  Buy now</span>}
                 </button>
+
                 {inCart
-                    ?   (<button className="btn btn-white text-success">
+                    ? (<button className="btn btn-white text-success">
                             Added to cart <i className="bi-check"></i>
                         </button>) 
                     :
-                    (<button className="btn btn-outline-dark flex-shrink-0" onClick={() => addToCart(product)} type="button">
-                        <i className="bi-cart-fill me-1"></i>
+                    (<button className="btn btn-outline-dark" onClick={() => addToCart(product)} type="button">
+                        <FaCartArrowDown className='mr-1'/>
                         Add to cart
                     </button>)
                 }

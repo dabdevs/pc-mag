@@ -17,7 +17,7 @@ export default function ProductCard({ product }) {
                                 <i className="bi bi-cpu mr-1"></i> {product.ram}
                             </small>
                             <small> <i className='bi bi-hdd mr-1'></i> {product.disk} {product.diskType}</small>
-                            <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {product.display}</small>
+                            <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {product.display}"</small>
                         </div>
 
                         <div className='text-center w-100'>
