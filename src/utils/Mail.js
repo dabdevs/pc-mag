@@ -96,7 +96,7 @@ Mail.sendPurchaseEmail = async (payload) => {
         const renderedTemplate = ejs.render(emailTemplate, payload);
         const mailOptions = {
             from: process.env.APP_EMAIL,
-            to,
+            to: payload.to,
             subject,
             html: renderedTemplate
         };
