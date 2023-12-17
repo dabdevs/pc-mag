@@ -1,10 +1,10 @@
 {
-  "name": "prueba.fullstack",
+  "name": "PC MAG",
   "version": "1.0.0",
-  "description": "Prueba técnica Full Stack",
+  "description": "Ecommerce",
   "main": "index.js",
   "repository": "",
-  "author": "Portinos",
+  "author": "Alain Jean",
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
