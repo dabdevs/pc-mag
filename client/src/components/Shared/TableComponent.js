@@ -13,7 +13,7 @@ export default function TableComponent({data}) {
                 {tBody.map((body, i) => 
                     <tr key={i}>
                         {
-                            body.tData.map((td, i) => <td key={i}>{td}</td>)
+                            body.map((td, i) => <td key={i}>{td}</td>)
                         }
                     </tr>
                 )}
