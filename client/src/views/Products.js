@@ -1,5 +1,5 @@
 import React from 'react'
-import Layout from '../components/Layout'
+import Dashboard from '../views/Dashboard'
 import TableComponent from '../components/Shared/TableComponent'
 
 export default function Products() {
@@ -30,12 +30,12 @@ export default function Products() {
     }
 
     return (
-        <Layout>
-            <section className='card col-sm-8 mx-auto my-5 px-2' style={{ height: '80vh' }}>
+        <Dashboard>
+            <section className='card my-2 col-sm-12' style={{ height: '80vh' }}>
                 <h1 className="display-3 fw-bolder">Products</h1>
 
                 <TableComponent data={tableData} />
             </section>
-        </Layout>
+        </Dashboard>
     )
 }

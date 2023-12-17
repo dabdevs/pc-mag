@@ -41,11 +41,11 @@ function App() {
       element: <Login />
     },
     {
-      path: "/dashboard",
+      path: "/admin",
       element: <Dashboard />
     },
     {
-      path: "/products",
+      path: "/admin/products",
       element: <Products />
     },
     {

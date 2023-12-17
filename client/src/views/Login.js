@@ -11,6 +11,8 @@ export default function Login() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+
+    const disabled = email === '' || password === ''
     
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -27,7 +29,7 @@ export default function Login() {
         })
     }
     
-    return token ? <Navigate to={'/dashboard'} /> : (
+    return token ? <Navigate to={'/admin'} /> : (
         <Layout>
             <section className='login'>
                 <form onSubmit={handleSubmit} className='card col-sm-3 mx-auto my-5'>
@@ -60,7 +62,7 @@ export default function Login() {
                         </div>
                     </div>
                     <div className='card-footer'>
-                        <button className='btn btn-dark w-100'>{loading ? 'Login...' : 'Login'}</button>
+                        <button disabled={disabled} className='btn btn-dark w-100'>{loading ? 'Login...' : 'Login'}</button>
                     </div>
                 </form>
             </section>

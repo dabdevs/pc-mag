@@ -30,7 +30,7 @@ export default function Navbar() {
 
             <DropdownList
               btnName={authUser? <FaUserCircle style={{ fontSize: '25px' }} /> : null}
-              listItems={[{ name: authUser?.name, href: '/profile' }, { name: 'Dashboard', href: '/dashboard' }]}
+              linkList={[{ name: authUser?.name, href: '/profile' }, { name: 'Dashboard', href: '/admin' }]}
               dividerItems={[{ name: <button onClick={handleLogout} className="btn btn-danger w-100">Logout</button> }]}
             />
           </div>
