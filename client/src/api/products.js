@@ -2,7 +2,7 @@ import axios from "axios"
 
 const baseUrl = 'http://localhost:3000';
 
-export const getProducts = async (category='', search='', filters=[]) => {
+export const getProducts = async (category='', search='', urlQuery='') => {
     try {
         let url = `${baseUrl}/api/products/${category}`
 
@@ -10,7 +10,22 @@ export const getProducts = async (category='', search='', filters=[]) => {
             url += `?q=${search}`
         }
 
-        const { data } = await axios.post(url, filters)
+        const { data } = await axios.get(url + urlQuery)
+
+        return data
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+export const create = async (payload) => {
+    try {
+        const id = payload.get('_id')
+        const url = `${baseUrl}/api/products/${id}`
+
+        const jsonData = JSON.stringify(Object.fromEntries(payload))
+
+        const { data } = await axios.post(url, { data: jsonData })
 
         return data
     } catch (err) {

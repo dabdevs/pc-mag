@@ -6,7 +6,7 @@ export default function Sidebar({ category }) {
     const [formFactor, setFormFactor] = useState([]);
     const [ram, setRam] = useState([]);
     const [processor, setProcessor] = useState([]);
-    const [minPrice, setMinPrice] = useState(null)
+    const [minPrice, setMinPrice] = useState('')
     const [maxPrice, setMaxPrice] = useState('')
     const [error, setError] = useState('')
 

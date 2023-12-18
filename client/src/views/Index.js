@@ -8,13 +8,16 @@ import SearchForm from '../components/SearchForm'
 import { useProductsContext } from '../context/ProductsContext'
 
 export default function Index() {
-    const { categoryName } = useParams()
+    const {category} = useParams()
+
+    console.log(useParams)
+
     const {products, setProducts, loading, setLoading} = useProductsContext()
 
     useEffect(() => {
         setLoading(true)
 
-        getProducts(categoryName).then(data => {
+        getProducts(category).then(data => {
             setProducts(data)
             setLoading(false)
         })
@@ -22,7 +25,7 @@ export default function Index() {
             console.error(err)
             setLoading(false)
         });
-    }, [categoryName])
+    }, [category])
 
     return (
         <div>
@@ -31,8 +34,8 @@ export default function Index() {
                 <SearchForm />
 
                 <div className='row py-lg-4'>
-                    <Sidebar category={categoryName} />
-                    <ListProducts category={categoryName} products={products} loading={loading} />
+                    <Sidebar category={category} />
+                    <ListProducts category={category} products={products} loading={loading} />
                 </div>    
             </Layout>
         </div>

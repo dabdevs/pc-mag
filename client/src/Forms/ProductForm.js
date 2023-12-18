@@ -44,6 +44,7 @@ export default function ProductForm({ product }) {
                             value={form?.formFactor}
                             onChange={(e) => setForm({ ...form, formFactor: e.target.value })}
                         >
+                            <option value=''>Select an option</option>
                             <option value='notebook'>Notebook</option>
                             <option value='desktop'>Desktop</option>
                             <option value='all-in-one'>All-In-One</option>
@@ -70,6 +71,7 @@ export default function ProductForm({ product }) {
                         value={form?.ram}
                         onChange={(e) => setForm({ ...form, ram: e.target.value })}
                     >
+                        <option value=''>Select an option</option>
                         <option value={'4GB'}>4 GB</option>
                         <option value={'8GB'}>8 GB</option>
                         <option value={'16GB'}>16 GB</option>
@@ -88,6 +90,7 @@ export default function ProductForm({ product }) {
                             value={form?.diskType}
                             onChange={(e) => setForm({ ...form, diskType: e.target.value })}
                         >
+                            <option value=''>Select an option</option>
                             <option value={'SSD'}>SSD</option>
                             <option value={'HDD'}>HDD</option>
                         </Form.Select>
@@ -102,6 +105,7 @@ export default function ProductForm({ product }) {
                             value={form?.disk}
                             onChange={(e) => setForm({ ...form, disk: e.target.value })}
                         >
+                            <option value=''>Select an option</option>
                             <option value={'128GB'}>128 GB</option>
                             <option value={'256GB'}>256 GB</option>
                             <option value={'500GB'}>500 GB</option>

@@ -51,7 +51,19 @@ export const ProductsContextProvider = ({ children }) => {
             setFilters(filters)
             setFiltered(true)
             setLoading(true)
-            let data = await getProducts(category, search, filters)
+
+            let urlQuery = '?'
+            // urlQuery += Object.entries(filters)?.map(filter => {
+            //     console.log(filter[1])
+            //     if (filter[1] === '') return '%'
+            //     return urlQuery === '?' ? `${filter[0]}=${filter[1]}` : `&${filter[0]}=${filter[1]}`
+            // })
+
+            // setSearchParams(filters)
+
+            // console.log('Search params:', searchParams)
+            
+            let data = await getProducts(category, search, urlQuery)
 
             setLoading(false)
             setProducts(data)

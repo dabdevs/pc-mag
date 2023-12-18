@@ -21,7 +21,7 @@ function App() {
       element: <Index />
     },
     {
-      path: "/category/:categoryName",
+      path: "/category/:category",
       element: <Index />
     },
     {

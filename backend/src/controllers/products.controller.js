@@ -2,18 +2,20 @@ require('dotenv').config()
 const { ObjectId } = require('mongodb')
 const Product = require('../models/Product')
 
-module.exports.getProducts = async (req, res) => {
+module.exports.getAll = async (req, res) => {
     try {
+        console.log('quwey', req.query)
         const category = req.params.category
         const query = req.query.q
         const conditions = {}
 
         // Filters
-        const formFactor = req.body.formFactor
-        const ram = req.body.ram
-        const processor = req.body.processor
-        const minPrice = req.body.minPrice
-        const maxPrice = req.body.maxPrice
+        const {formFactor, ram, processor, minPrice, maxPrice} = req.query
+        // const formFactor = req.body.formFactor
+        // const ram = req.body.ram
+        // const processor = req.body.processor
+        // const minPrice = req.body.minPrice
+        // const maxPrice = req.body.maxPrice
 
         if (category) {
             conditions.formFactor = category
@@ -25,6 +27,7 @@ module.exports.getProducts = async (req, res) => {
 
         // Filters
         if (formFactor && formFactor.length > 0) {
+            console.log('Form factor',formFactor.split(','))
             conditions.formFactor = { '$in': formFactor }
         }
 
@@ -60,11 +63,11 @@ module.exports.getProducts = async (req, res) => {
 
 module.exports.getOne = async (req, res) => {
     try {
-        const productId = req.params.id
-        const product = await Product.findOne({ _id: new ObjectId(productId) })
+        const id = req.params.id
+        const product = await Product.findOne({ _id: new ObjectId(id) })
 
         const similarProducts = await Product.find({
-            _id: { $ne: new ObjectId(productId) },
+            _id: { $ne: new ObjectId(id) },
             $or: [
                 { processor: product.processor },
                 { disk: product.disk },
@@ -72,7 +75,7 @@ module.exports.getOne = async (req, res) => {
             ]
         }).limit(6)
 
-        return res.json({ product, similarProducts })
+        res.json({ product, similarProducts })
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
