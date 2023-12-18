@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { upload } from '../api/uploader'
-import {getFlashMessages} from '../api/utils'
+import {getFlashMessages} from '../utils'
 
 export default function ImageUploader() {
     const [flashMessages, setFlashMessages] = useState({});

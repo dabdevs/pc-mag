@@ -88,3 +88,15 @@ module.exports.store = async (req, res) => {
         console.log(err)
     }
 }
+
+module.exports.update = async (req, res) => {
+    try {
+        const data = JSON.parse(req.body.data)
+        delete data._id
+        const productId = req.params.id
+        const product = await Product.findByIdAndUpdate(productId, data, {new: true})
+        res.json(product)
+    } catch (err) {
+        console.log(err)
+    }
+}

@@ -9,3 +9,9 @@ export const getFlashMessages = async () => {
         console.error(err)
     }
 }
+
+export const formatPrice = (priceInCents) => {
+    const dollars = Math.floor(priceInCents / 100);
+    const cents = priceInCents % 100;
+    return `${dollars}.${cents.toString().padStart(2, '0')}`;
+};

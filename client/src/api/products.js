@@ -18,6 +18,21 @@ export const getProducts = async (category='', search='', filters=[]) => {
     }
 }
 
+export const update = async (payload) => {
+    try {
+        const id = payload.get('_id')
+        const url = `${baseUrl}/api/products/${id}`
+        
+        const jsonData = JSON.stringify(Object.fromEntries(payload))
+
+        const { data } = await axios.put(url, { data: jsonData })
+
+        return data
+    } catch (err) {
+        console.error(err)
+    }
+}
+
 export const getById = async (id) => {
     try {
         let url = `${baseUrl}/api/products/${id}`
