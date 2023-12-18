@@ -81,9 +81,9 @@ module.exports.getOne = async (req, res) => {
 
 module.exports.store = async (req, res) => {
     try {
-        const Product = await Product.create({ email, password, name })
-        console.log(Product)
-        res.json({ Product })
+        const product = await Product.create(JSON.parse(req.body.data))
+        console.log(product)
+        res.json(product)
     } catch (err) {
         console.log(err)
         res.status(500).json({ err: 'Internal Server Error' });
