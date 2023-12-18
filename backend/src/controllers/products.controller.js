@@ -86,6 +86,7 @@ module.exports.store = async (req, res) => {
         res.json({ Product })
     } catch (err) {
         console.log(err)
+        res.status(500).json({ err: 'Internal Server Error' });
     }
 }
 
@@ -98,5 +99,18 @@ module.exports.update = async (req, res) => {
         res.json(product)
     } catch (err) {
         console.log(err)
+        res.status(500).json({ err: 'Internal Server Error' });
+    }
+}
+
+module.exports.destroy = async (req, res) => {
+    try {
+        const productId = req.params.id
+        //return res.send('OK!')
+        const response = await Product.deleteOne({_id: productId})
+        res.json({ _id: productId, success: response.deletedCount })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ err: 'Internal Server Error' });
     }
 }

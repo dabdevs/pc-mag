@@ -73,7 +73,7 @@ export default function ProductForm({ product }) {
                         <option value={'4GB'}>4 GB</option>
                         <option value={'8GB'}>8 GB</option>
                         <option value={'16GB'}>16 GB</option>
-                        <option value={'32GB'}>32 GB</option>                    
+                        <option value={'32GB'}>32 GB</option>
                     </Form.Select>
                 </Col>
             </Row>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-export default function ModalComponent({title, children, setOpenModal, handleConfirm}) {
+export default function ModalComponent({title, action, children, setOpenModal, handleConfirm}) {
     return (
         <Modal 
             size="lg"
@@ -21,7 +21,7 @@ export default function ModalComponent({title, children, setOpenModal, handleCon
                     Close
                 </Button>
                 <Button variant="primary" onClick={handleConfirm}>
-                    Save Changes
+                    {action === 'delete' ? 'Confirm Delete' : 'Save Changes'}
                 </Button>
             </Modal.Footer>
         </Modal>

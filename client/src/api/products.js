@@ -33,6 +33,18 @@ export const update = async (payload) => {
     }
 }
 
+export const destroy = async (id) => {
+    try {
+        const url = `${baseUrl}/api/products/${id}`
+
+        const { data } = await axios.delete(url)
+
+        return data
+    } catch (err) {
+        console.error(err)
+    }
+}
+
 export const getById = async (id) => {
     try {
         let url = `${baseUrl}/api/products/${id}`
