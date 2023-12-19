@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 });
 
 // Init upload
-export const upload = multer({
+module.exports.upload = multer({
     storage: storage,
     limits: { fileSize: 1000000 }, // 1 MB
 }).array('images', 5); 
@@ -31,5 +31,11 @@ const uploadImages = () => {
         console.error(err)
     }
 }
+
+module.exports.formatPrice = (priceInCents) => {
+    const dollars = Math.floor(priceInCents / 100);
+    const cents = priceInCents % 100;
+    return `${dollars}.${cents.toString().padStart(2, '0')}`;
+};
 
 

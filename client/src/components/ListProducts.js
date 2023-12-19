@@ -2,10 +2,12 @@ import { useProductsContext } from '../context/ProductsContext'
 import ProductCard from './ProductCard'
 import Menu from './Menu'
 import LazyLoad from 'react-lazyload'
+import { useSearchParams } from 'react-router-dom';
 
 
 export default function ListProducts({ products, category }) {
-    const { search, clearFilters, filtered, loading } = useProductsContext()
+    const [searchParams, setSearchParams] = useSearchParams()
+    const { search, filtered, setFiltered, loading } = useProductsContext()
     
     return (
         <div className="col-sm-9 col-lg-10 ms-sm-auto p-4" >
@@ -14,9 +16,9 @@ export default function ListProducts({ products, category }) {
             <div className='row-cols-2 gx-4 gx-lg-5'>
                 <div className='col'>
                     {products?.length > 0 && (<b className=''>{products?.length} item{products?.length > 1 ? 's' : ''} {search && (<span>for <b>{search}</b></span>)} </b>)}
-
+                    {filtered}
                     {filtered && (
-                        <button type='button' onClick={() => clearFilters(category)} className='btn btn-sm border btn-danger mx-1'>
+                        <button type='button' onClick={() => {setSearchParams({}); setFiltered(false)}} className='btn btn-sm border btn-danger mx-1'>
                             Clear filters <i className="bi bi-x"></i>
                         </button>
                     )}

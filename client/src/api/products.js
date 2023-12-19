@@ -2,19 +2,18 @@ import axios from "axios"
 
 const baseUrl = 'http://localhost:3000';
 
-export const getProducts = async (category='', search='', urlQuery='') => {
+export const getProducts = async (category='', search='') => {
     try {
         let url = `${baseUrl}/api/products/${category}`
 
-        if (search) {
-            url += `?q=${search}`
-        }
+        if (search) url += search
 
-        const { data } = await axios.get(url + urlQuery)
+        const { data } = await axios.get(url)
 
         return data
     } catch (err) {
         console.error(err)
+        throw err
     }
 }
 
@@ -30,6 +29,7 @@ export const create = async (payload) => {
         return data
     } catch (err) {
         console.error(err)
+        throw err
     }
 }
 
@@ -45,6 +45,7 @@ export const update = async (payload) => {
         return data
     } catch (err) {
         console.error(err)
+        throw err
     }
 }
 
@@ -57,6 +58,7 @@ export const destroy = async (id) => {
         return data
     } catch (err) {
         console.error(err)
+        throw err
     }
 }
 
@@ -68,6 +70,7 @@ export const getById = async (id) => {
         return data
     } catch (err) {
         console.error(err)
+        throw err
     }
 }
 
@@ -78,6 +81,7 @@ export const getByName = async (products, name) => {
         return product[0]
     } catch (err) {
         console.error(err)
+        throw err
     }
 }
 
@@ -100,5 +104,6 @@ export const searchProducts = async (search) => {
         return data
     } catch (err) {
         console.error(err)
+        throw err
     }
 }

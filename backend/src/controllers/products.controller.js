@@ -1,21 +1,16 @@
 require('dotenv').config()
 const { ObjectId } = require('mongodb')
 const Product = require('../models/Product')
+const {formatPrice} = require('../utils')
 
 module.exports.getAll = async (req, res) => {
     try {
-        console.log('quwey', req.query)
         const category = req.params.category
         const query = req.query.q
         const conditions = {}
 
         // Filters
         const {formFactor, ram, processor, minPrice, maxPrice} = req.query
-        // const formFactor = req.body.formFactor
-        // const ram = req.body.ram
-        // const processor = req.body.processor
-        // const minPrice = req.body.minPrice
-        // const maxPrice = req.body.maxPrice
 
         if (category) {
             conditions.formFactor = category
@@ -27,7 +22,6 @@ module.exports.getAll = async (req, res) => {
 
         // Filters
         if (formFactor && formFactor.length > 0) {
-            console.log('Form factor',formFactor.split(','))
             conditions.formFactor = { '$in': formFactor }
         }
 
@@ -40,15 +34,15 @@ module.exports.getAll = async (req, res) => {
         }
 
         if (maxPrice) {
-            conditions.price = { $lt: parseFloat(maxPrice) }
+            conditions.price = { $lte: parseInt(maxPrice) * 100 }
         }
 
         if (minPrice) {
-            conditions.price = { $gt: parseFloat(minPrice) }
+            conditions.price = { $gte: parseInt(minPrice) * 100 }
         }
 
         if (minPrice && maxPrice) {
-            conditions.price = { $gt: parseFloat(minPrice), $lt: parseFloat(maxPrice) }
+            conditions.price = { $gte: parseInt(minPrice) * 100, $lte: parseInt(maxPrice) * 100 }
         }
 
         // Get collection

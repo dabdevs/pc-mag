@@ -13,6 +13,7 @@ export const ProductsContextProvider = ({ children }) => {
     const [filtered, setFiltered] = useState(false)
     const [filters, setFilters] = useState([])
     const [loading, setLoading] = useState(false)
+    const [filtersCleared, setFiltersCleared] = useState(false)
 
     const handleSearch = async (search, category='') => {
         setSearch(search)
@@ -46,55 +47,27 @@ export const ProductsContextProvider = ({ children }) => {
         return data
     }
 
-    const handleFilter = async (filters, category) => {
-        try {
-            setFilters(filters)
-            setFiltered(true)
-            setLoading(true)
+    // const clearFilters = (category) => {
+    //     setSearch('')
+    //     setFiltered(false)
+    //     setFilters()
 
-            let urlQuery = '?'
-            // urlQuery += Object.entries(filters)?.map(filter => {
-            //     console.log(filter[1])
-            //     if (filter[1] === '') return '%'
-            //     return urlQuery === '?' ? `${filter[0]}=${filter[1]}` : `&${filter[0]}=${filter[1]}`
-            // })
+    //     const inputs = document.querySelectorAll('input');
 
-            // setSearchParams(filters)
+    //     inputs.forEach(input => {
+    //         if (input.type === 'checkbox') {
+    //             input.checked = false;
+    //         }
 
-            // console.log('Search params:', searchParams)
-            
-            let data = await getProducts(category, search, urlQuery)
+    //         if (input.type === 'text') input.value = ''
+    //     });
 
-            setLoading(false)
-            setProducts(data)
-            document.getElementById('sort').value = ''
-        } catch (err) {
-            setLoading(false)
-            console.log(err)
-        }
-    }
+    //     document.getElementById('sort').value = ''
 
-    const clearFilters = (category) => {
-        setSearch('')
-        setFiltered(false)
-        setFilters()
-
-        const inputs = document.querySelectorAll('.form-check-input');
-
-        inputs.forEach(input => {
-            if (input.type === 'checkbox') {
-                input.checked = false;
-            }
-        });
-
-        document.getElementById('sort').value = ''
-
-        getProducts(category)
-            .then(data => {
-                setProducts(data)
-            })
-            .catch(err => console.error(err));
-    }
+    //     getProducts(category)
+    //         .then(data => setProducts(data))
+    //         .catch(err => console.error(err));
+    // }
 
     return (
         <ProductsContext.Provider value={{
@@ -106,9 +79,9 @@ export const ProductsContextProvider = ({ children }) => {
             setFiltered,
             loading,
             setLoading,
-            handleFilter,
             handleSearch,
-            clearFilters,
+            filtersCleared,
+            setFiltersCleared,
             filters,
             setFilters,
             handleSortBy
