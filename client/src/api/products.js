@@ -4,7 +4,7 @@ const baseUrl = 'http://localhost:3000';
 
 export const getProducts = async (category='', search='') => {
     try {
-        let url = `${baseUrl}/api/products/${category ?? ''}`
+        let url = `${baseUrl}/api/products`
 
         if (search) url += search
 

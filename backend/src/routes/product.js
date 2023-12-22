@@ -5,6 +5,7 @@ const { getAll, getOne, store, update, destroy } = require('../controllers/produ
 
 router.get('', getAll)
 router.get('/:id', getOne)
+// router.get('/search', search)
 router.post('', store)
 router.put('/:id', update)
 router.delete('/:id', destroy)

@@ -4,7 +4,6 @@ const Product = require('../models/Product')
 const {formatPrice} = require('../utils')
 
 module.exports.getAll = async (req, res) => {
-    console.log('get all')
     try {
         const query = req.query.q
         const conditions = {}
@@ -59,6 +58,10 @@ module.exports.getOne = async (req, res) => {
     try {
         const id = req.params.id
         const product = await Product.findOne({ _id: new ObjectId(id) })
+
+        if (!product) {
+            res.status(404).json({message: "Product not found!"})
+        }
 
         const similarProducts = await Product.find({
             _id: { $ne: new ObjectId(id) },
