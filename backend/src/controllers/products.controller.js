@@ -4,13 +4,13 @@ const Product = require('../models/Product')
 const {formatPrice} = require('../utils')
 
 module.exports.getAll = async (req, res) => {
+    console.log('get all')
     try {
-        const category = req.params.category
         const query = req.query.q
         const conditions = {}
 
         // Filters
-        const {formFactor, ram, processor, minPrice, maxPrice} = req.query
+        const {category, formFactor, ram, processor, minPrice, maxPrice} = req.query
 
         if (category) {
             conditions.formFactor = category

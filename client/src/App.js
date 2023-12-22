@@ -21,10 +21,6 @@ function App() {
       element: <Index />
     },
     {
-      path: "/category/:category",
-      element: <Index />
-    },
-    {
       path: "/products/:productId/:productName",
       element: <Product />
     },
