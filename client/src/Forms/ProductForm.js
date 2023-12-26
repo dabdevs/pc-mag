@@ -78,12 +78,12 @@ export default function ProductForm({ product, setProducts, closeForm }) {
         data._id = form._id
         update(data).then(({product}) => {
             console.log('Updated product',product)
+            alert('Product updated successfully')
             setProducts(prevProducts => {
                 return prevProducts.map(prod => prod._id === product._id ? product : prod);
             });
             setFeedback({})
             closeForm()
-            alert('Product updated successfully')
         }).catch(err => console.log(err))
     }
 
@@ -95,7 +95,7 @@ export default function ProductForm({ product, setProducts, closeForm }) {
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                         name='name'
-                        value={form?.name}
+                        defaultValue={form?.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
                         type="text"
                         placeholder="ex: Macbook Pro 2022 Retina Display"
@@ -110,7 +110,7 @@ export default function ProductForm({ product, setProducts, closeForm }) {
                         className='form-control'
                         id='description'
                         name='description'
-                        value={form?.description}
+                        defaultValue={form?.description}
                         onChange={(e) => setForm({ ...form, description: e.target.value })}
                      
                         rows={3}
