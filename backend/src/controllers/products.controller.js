@@ -1,7 +1,8 @@
 require('dotenv').config()
 const { ObjectId } = require('mongodb')
 const Product = require('../models/Product')
-const {formatPrice} = require('../utils')
+const { formatPrice } = require('../utils')
+const { validationResult } = require('express-validator');
 
 module.exports.getAll = async (req, res) => {
     try {
@@ -81,25 +82,29 @@ module.exports.getOne = async (req, res) => {
 
 module.exports.store = async (req, res) => {
     try {
-        const product = await Product.create(JSON.parse(req.body.data))
-        console.log(product)
-        res.json(product)
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({ err: 'Internal Server Error' });
+        const product = await Product.create(req.body)
+        return res.status(201).json({message: "Product created successfully", product})
+    } catch ({errors}) {
+        if (errors) {
+            console.log(errors)
+            return res.status(422).json({ errors, message: "Unprocessable Entity"});
+        }
+        return res.status(500).send("Internal server error")
     }
 }
 
 module.exports.update = async (req, res) => {
     try {
-        const data = JSON.parse(req.body.data)
-        delete data._id
+        delete req.body._id
         const productId = req.params.id
-        const product = await Product.findByIdAndUpdate(productId, data, {new: true})
-        res.json(product)
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({ err: 'Internal Server Error' });
+        const product = await Product.findByIdAndUpdate(productId, req.body, {new: true})
+        res.json({product, message: "Product updated successfully."})
+    } catch ({ errors }) {
+        if (errors) {
+            console.log(errors)
+            res.status(422).json({ errors, message: "Unprocessable Entity" });
+        }
+        res.status(500).send("Internal server error")
     }
 }
 

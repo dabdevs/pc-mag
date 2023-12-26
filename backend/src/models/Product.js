@@ -4,6 +4,7 @@ const productSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
         maxLength: 150
     },
     description: {
@@ -50,10 +51,18 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    createdBy: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User' 
-    }
+    // createdBy: { 
+    //     type: mongoose.Schema.Types.ObjectId, 
+    //     ref: 'User' 
+    // },
+    // createdOn: {
+    //     type: Date,
+    //     required: true
+    // },
+    // modifiedAt: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User'
+    // }
 })
 
 const Product = mongoose.model('product', productSchema)

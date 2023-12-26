@@ -17,14 +17,11 @@ export const getProducts = async (category='', search='') => {
     }
 }
 
-export const create = async (payload) => {
+export const create = async (product) => {
     try {
-        const id = payload.get('_id')
-        const url = `${baseUrl}/api/products/${id}`
-
-        const jsonData = JSON.stringify(Object.fromEntries(payload))
-
-        const { data } = await axios.post(url, { data: jsonData })
+        console.log(product)
+        const url = `${baseUrl}/api/products`
+        const { data } = await axios.post(url, product)
 
         return data
     } catch (err) {
@@ -33,14 +30,11 @@ export const create = async (payload) => {
     }
 }
 
-export const update = async (payload) => {
+export const update = async (product) => {
+    console.log('UPATING FROM API', product)
     try {
-        const id = payload.get('_id')
-        const url = `${baseUrl}/api/products/${id}`
-        
-        const jsonData = JSON.stringify(Object.fromEntries(payload))
-
-        const { data } = await axios.put(url, { data: jsonData })
+        const url = `${baseUrl}/api/products/${product._id}`
+        const { data } = await axios.put(url, product)
 
         return data
     } catch (err) {
