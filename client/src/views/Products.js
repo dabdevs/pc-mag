@@ -4,10 +4,10 @@ import TableComponent from '../components/Shared/TableComponent'
 import { getProducts, create, update, destroy } from '../api/products'
 import ModalComponent from '../components/Shared/ModalComponent'
 import ProductForm from '../Forms/ProductForm'
+import { FaPlus } from "react-icons/fa";
 import { formatPrice } from '../utils'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { FaPlus, FaTimes } from "react-icons/fa";
 
 export default function Products() {
     const [products, setProducts] = useState([])
@@ -15,7 +15,7 @@ export default function Products() {
     const [openModal, setOpenModal] = useState(false)
     const [modalTitle, setModalTitle] = useState('')
     const [tableData, setTableTada] = useState(undefined)
-    const [action, setAction] = useState(null)
+    const [action, setAction] = useState('')
 
     useEffect(() => {
         getProducts().then(products => {
@@ -50,8 +50,6 @@ export default function Products() {
         setSelectedProduct(product)
     }
 
-
-
     const deleteProduct = () => {
         destroy(selectedProduct._id).then(({ _id }) => {
             setOpenModal(false)
@@ -64,6 +62,11 @@ export default function Products() {
         }).catch(err => console.log(err))
     }
 
+    const closeForm = () => {
+        setSelectedProduct(null)
+        setAction('')
+    }
+
     return products.length > 0 ? (
         <Dashboard>
             <section className='card my-2 col-sm-12' style={{ minHeight: '80vh' }}>
@@ -72,15 +75,21 @@ export default function Products() {
                         <h1 className="display-3 fw-bolder">Products</h1>
                     </Col>
                     <Col xs={3} className='d-flex align-items-center'>
-                        {selectedProduct ? <button className='btn btn-danger ms-auto' onClick={() => setSelectedProduct(null)}><FaTimes /> Cancel</button> : <button className='btn btn-success ms-auto' onClick={createItem}><FaPlus /> New Product</button>}
+                        <button className='btn btn-success ms-auto' onClick={createItem}><FaPlus /> New Product</button>
                     </Col>
                 </Row>
 
-                {selectedProduct && <ProductForm setProducts={setProducts} product={selectedProduct} />}
+                {
+                    selectedProduct
+                    && action !== 'delete'
+                    && <ProductForm closeForm={closeForm} setProducts={setProducts} product={selectedProduct} />
+                }
 
-                <TableComponent data={tableData} />
+                {
+                    !['create', 'edit'].includes(action) && <TableComponent data={tableData} />
+                }
 
-                {openModal && <ModalComponent action={action} title={modalTitle} setOpenModal={setOpenModal}>
+                {openModal && <ModalComponent handleConfirm={deleteProduct} action={action} title={modalTitle} setOpenModal={setOpenModal}>
                     {action === 'delete' ? <p>Are you sure you want to confirm this action?</p> : <ProductForm product={selectedProduct} />}
                 </ModalComponent>}
             </section>

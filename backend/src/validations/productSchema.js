@@ -7,12 +7,12 @@ const productSchema = yup.object({
     images: yup.array(),
     formFactor: yup.string().required(),
     os: yup.string().required(),
-    ram: yup.number().integer().required(),
+    ram: yup.string().required(),
     processor: yup.string().required(),
     display: yup.number().integer().required(),
     quantity: yup.number().integer().required(),
     diskType: yup.string().required(), 
-    disk: yup.number().integer().required(),
+    disk: yup.string().required(),
     createdOn: yup.date().default(() => new Date())
 });
 

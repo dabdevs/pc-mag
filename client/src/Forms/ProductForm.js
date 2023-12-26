@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { FaTimes } from "react-icons/fa";
 import { create, update } from '../api/products';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -16,22 +17,17 @@ const schema = yup
         images: yup.array(),
         formFactor: yup.string().required(),
         os: yup.string().required(),
-        ram: yup.number().integer().required(),
+        ram: yup.string().required(),
         processor: yup.string().required(),
         display: yup.number().integer().required(),
         quantity: yup.number().integer().required(),
         diskType: yup.string().required(),
-        disk: yup.number().integer().required(),
+        disk: yup.string().required(),
     })
     .required()
 
-export default function ProductForm({ product, setProducts }) {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm({resolver: yupResolver(schema)})
-
+export default function ProductForm({ product, setProducts, closeForm }) {
+    console.log('Loading form')
     const initialState = {
         _id: '',
         name: '',
@@ -47,13 +43,19 @@ export default function ProductForm({ product, setProducts }) {
         quantity: ''
     }
 
-    const [form, setForm] = useState(initialState)
+    const [form, setForm] = useState(product || initialState)
     const [feedback, setFeedback] = useState({})
-
 
     useEffect(() => {
         setForm(product)
+        setFeedback({})
     }, [product])
+
+    const {
+        register,
+        handleSubmit,
+        formState: {errors}
+    } = useForm({ resolver: yupResolver(schema) })
 
     const handleCreate = (data) => {
         console.log('Creating', data)
@@ -62,6 +64,7 @@ export default function ProductForm({ product, setProducts }) {
             setProducts(prevProducts => [...prevProducts, product]);
             setForm(initialState)
             setFeedback({})
+            closeForm()
             alert('Product created successfully')
         }).catch(({response}) => {
             if (response?.data) {
@@ -79,6 +82,7 @@ export default function ProductForm({ product, setProducts }) {
                 return prevProducts.map(prod => prod._id === product._id ? product : prod);
             });
             setFeedback({})
+            closeForm()
             alert('Product updated successfully')
         }).catch(err => console.log(err))
     }
@@ -101,12 +105,14 @@ export default function ProductForm({ product, setProducts }) {
                     <small className='text-danger'>{errors.name?.message} {feedback.name?.message}</small>
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control
+                    <label htmlFor='description'>Description</label>
+                    <textarea
+                        className='form-control'
+                        id='description'
                         name='description'
                         value={form?.description}
                         onChange={(e) => setForm({ ...form, description: e.target.value })}
-                        as="textarea"
+                     
                         rows={3}
                         placeholder="ex: The Macbook Pro 2022 Retina Display is the one of the best computers you can buy..."
                         {...register("description")}
@@ -158,10 +164,10 @@ export default function ProductForm({ product, setProducts }) {
                         onChange={(e) => setForm({ ...form, ram: e.target.value })}
                     >
                         <option value=''>Select an option</option>
-                        <option value={4}>4 GB</option>
-                        <option value={8}>8 GB</option>
-                        <option value={16}>16 GB</option>
-                        <option value={32}>32 GB</option>
+                        <option value={'4GB'}>4GB</option>
+                        <option value={'8GB'}>8GB</option>
+                        <option value={'16GB'}>16GB</option>
+                        <option value={'32GB'}>32GB</option>
                     </Form.Select>
                     <small className='text-danger'>{errors.ram?.message} {feedback.ram?.message}</small>
                 </Col>
@@ -196,10 +202,10 @@ export default function ProductForm({ product, setProducts }) {
                             onChange={(e) => setForm({ ...form, disk: e.target.value })}
                         >
                             <option value=''>Select an option</option>
-                            <option value={128}>128 GB</option>
-                            <option value={256}>256 GB</option>
-                            <option value={500}>500 GB</option>
-                            <option value={1}>1 TB</option>
+                            <option value={'128GB'}>128GB</option>
+                            <option value={'256GB'}>256GB</option>
+                            <option value={'500GB'}>500GB</option>
+                            <option value={'1TB'}>1TB</option>
                         </Form.Select>
                         <small className='text-danger'>{errors.disk?.message} {feedback.disk?.message}</small>
                     </Form.Group>
@@ -267,8 +273,11 @@ export default function ProductForm({ product, setProducts }) {
                 </Col>
             </Row>
 
-            <Row className='mb-3 border-bottom py-4'>
-                <Col xs={2}>
+            <Row className='my-2 border-bottom py-2'>
+                <Col xs={3} className='d-flex gap-2'>
+                    <Button onClick={closeForm} type='button' variant="secondary">
+                        Cancel
+                    </Button>
                     <Button onClick={product?._id ? handleSubmit(handleEdit) : handleSubmit(handleCreate)} type='button' variant="primary">
                         Save Changes
                     </Button>
