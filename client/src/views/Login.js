@@ -21,11 +21,11 @@ export default function Login() {
             setLoading(false)
             setToken(token)
             localStorage.setItem('token', JSON.stringify(token))
-        }).catch(err => {
-            setError(err.response.data)
+        }).catch(({response}) => {
+            setError(response.data)
             setLoading(false)
             localStorage.removeItem('token')
-            console.log(err)
+            console.log(response.data)
         })
     }
     
@@ -35,7 +35,7 @@ export default function Login() {
                 <form onSubmit={handleSubmit} className='card col-sm-3 mx-auto my-5'>
                     <div className='card-header'>
                         <h1>Admin</h1>
-                        {error && <Alert type={'danger'} message={error} />}
+                        {error && <Alert type={'danger'} messages={error} />}
                     </div>
                     <div className='card-body'>
                         <div className='row p-2'>

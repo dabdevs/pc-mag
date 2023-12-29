@@ -3,7 +3,6 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { FaTimes } from "react-icons/fa";
 import { create, update } from '../api/products';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"

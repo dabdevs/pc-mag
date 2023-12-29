@@ -1,9 +1,10 @@
 import React from 'react'
 
-export default function Alert({type, errors}) {
+export default function Alert({type, messages}) {
+  console.log(messages)
   return (
-    <ul className={`alert alert-${type}`}>
-      {errors?.map(error => <li>{error}</li>)}
-    </ul>
+    <div className='alert alert-danger'>
+      {typeof messages === 'string' ? `${messages}` : <ul>{messages?.map(message => <li>{message}</li>)}</ul>}
+    </div>
   )
 }
