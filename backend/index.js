@@ -2,6 +2,7 @@ const { NotFoundMiddleware, ErrorMiddleware } = require('./src/middlewares');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 const session = require('express-session');
 const flash = require('connect-flash');
 const crypto = require('crypto');
@@ -35,6 +36,7 @@ app.get('/api/flash-messages', (req, res) => {
 });
 
 const routes = require('./src/routes/index');
+const User = require('./src/models/User');
 
 app.use('/api', routes);
 
@@ -50,8 +52,23 @@ DB.on('connecting', function () {
 }).on('error', function (error) {
     console.error('Error in Database connection: ' + error);
     mongoose.disconnect();
-}).on('connected', function () {
+}).on('connected', async function () {
     console.log('Database connected!');
+
+    const adminDetails = {
+        email: 'admin@pcmag.com',
+        password: await bcrypt.hash('admin', 10),
+        name: 'Admin Admin',
+        role: 'admin'
+    }
+
+    User.findOne({ email: adminDetails.email }).then(user => {
+        if (!user) {
+            User.create(adminDetails).then(admin => console.log('Admin user created', admin)).catch(err => console.log('Error creating admin user', err))
+        }
+    }).catch(error => {
+        console.error('Error finding user:', error);
+    });
 }).once('open', function () {
     console.log('Database connection opened!');
 }).on('reconnected', function () {

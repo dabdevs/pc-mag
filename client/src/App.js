@@ -8,7 +8,7 @@ import ImageUploader from './components/ImageUploader';
 import Login from './views/Login';
 import { AuthContextProvider } from './context/AuthContext';
 import Dashboard from './views/Dashboard';
-import Products from './views/Products';
+import Products from './views/admin/Products';
 
 function App() {
   const router = createBrowserRouter([
