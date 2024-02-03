@@ -185,10 +185,10 @@ export default function Sidebar({ category }) {
                                     name='ram'
                                     onChange={setFormFilters}
                                     type='checkbox'
-                                    value={'4GB'}
+                                    value={'4 GB'}
                                     className='form-check-input'
                                 />
-                                <label htmlFor='4GB'>&nbsp; 4GB</label>
+                                <label htmlFor='4GB'>&nbsp; 4 GB</label>
                             </div>
                             <div>
                                 <input
@@ -196,10 +196,10 @@ export default function Sidebar({ category }) {
                                     name='ram'
                                     onChange={setFormFilters}
                                     type='checkbox'
-                                    value={'8GB'}
+                                    value={'8 GB'}
                                     className='form-check-input'
                                 />
-                                <label htmlFor='8GB'>&nbsp; 8GB</label>
+                                <label htmlFor='8GB'>&nbsp; 8 GB</label>
                             </div>
                             <div>
                                 <input
@@ -207,10 +207,21 @@ export default function Sidebar({ category }) {
                                     name='ram'
                                     onChange={setFormFilters}
                                     type='checkbox'
-                                    value={'16GB'}
+                                    value={'16 GB'}
                                     className='form-check-input'
                                 />
-                                <label htmlFor='16GB'>&nbsp; 16GB</label>
+                                <label htmlFor='16GB'>&nbsp; 16 GB</label>
+                            </div>
+                            <div>
+                                <input
+                                    id='32GB'
+                                    name='ram'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'32 GB'}
+                                    className='form-check-input'
+                                />
+                                <label htmlFor='32GB'>&nbsp; 32 GB</label>
                             </div>
                         </div>
                     </div>

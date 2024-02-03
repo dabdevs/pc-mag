@@ -10,7 +10,7 @@ module.exports.getAll = async (req, res) => {
         const conditions = {}
 
         // Filters
-        const {category, formFactor, ram, processor, minPrice, maxPrice} = req.query
+        const { category, formFactor, ram, processor, minPrice, maxPrice, page = 1, limit = 10 } = req.query
 
         if (category) {
             conditions.formFactor = category
@@ -47,8 +47,18 @@ module.exports.getAll = async (req, res) => {
 
         // Get collection
         const products = await Product.find(conditions)
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+        //.sort({createdAt: -1})
 
-        return res.json(products)
+        // Getting the numbers of products stored in database
+        const count = await Product.countDocuments();
+
+        return res.status(200).json({
+            products,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page
+        })
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
@@ -61,7 +71,7 @@ module.exports.getOne = async (req, res) => {
         const product = await Product.findOne({ _id: new ObjectId(id) })
 
         if (!product) {
-            res.status(404).json({message: "Product not found!"})
+            res.status(404).json({ message: "Product not found!" })
         }
 
         const similarProducts = await Product.find({
@@ -83,11 +93,11 @@ module.exports.getOne = async (req, res) => {
 module.exports.store = async (req, res) => {
     try {
         const product = await Product.create(req.body)
-        return res.status(201).json({message: "Product created successfully", product})
-    } catch ({errors}) {
+        return res.status(201).json({ message: "Product created successfully", product })
+    } catch ({ errors }) {
         if (errors) {
             console.log(errors)
-            return res.status(422).json({ errors, message: "Unprocessable Entity"});
+            return res.status(422).json({ errors, message: "Unprocessable Entity" });
         }
         return res.status(500).send("Internal server error")
     }
@@ -97,8 +107,8 @@ module.exports.update = async (req, res) => {
     try {
         delete req.body._id
         const productId = req.params.id
-        const product = await Product.findByIdAndUpdate(productId, req.body, {new: true})
-        res.json({product, message: "Product updated successfully."})
+        const product = await Product.findByIdAndUpdate(productId, req.body, { new: true })
+        res.json({ product, message: "Product updated successfully." })
     } catch ({ errors }) {
         if (errors) {
             console.log(errors)
@@ -112,7 +122,7 @@ module.exports.destroy = async (req, res) => {
     try {
         const productId = req.params.id
         //return res.send('OK!')
-        const response = await Product.deleteOne({_id: productId})
+        const response = await Product.deleteOne({ _id: productId })
         res.json({ _id: productId, success: response.deletedCount })
     } catch (err) {
         console.log(err)

@@ -37,6 +37,7 @@ app.get('/api/flash-messages', (req, res) => {
 
 const routes = require('./src/routes/index');
 const User = require('./src/models/User');
+const Product = require('./src/models/Product');
 
 app.use('/api', routes);
 
@@ -55,6 +56,7 @@ DB.on('connecting', function () {
 }).on('connected', async function () {
     console.log('Database connected!');
 
+    // Create admin user if not exists (Delete later)
     const adminDetails = {
         email: 'admin@pcmag.com',
         password: await bcrypt.hash('admin', 10),

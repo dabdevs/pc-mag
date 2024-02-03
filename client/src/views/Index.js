@@ -15,8 +15,8 @@ export default function Index() {
     
     useEffect(() => {
         setLoading(true)
-        getProducts(category, search).then(data => {
-            setProducts(data)
+        getProducts(category, search).then(({products}) => {
+            setProducts(products)
             setLoading(false)
         })
         .catch(err => {

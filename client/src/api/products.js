@@ -7,7 +7,7 @@ export const getProducts = async (category='', search='') => {
         let url = `${baseUrl}/api/products`
 
         if (search) url += search
-
+        
         const { data } = await axios.get(url)
 
         return data

@@ -19,6 +19,7 @@ export default function Navbar() {
 
   return (
     <div className="row">
+      {console.log(authUser)}
       <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <div className="container px-4 px-lg-5">
           <a className="navbar-brand text-danger" href="/">
@@ -28,11 +29,11 @@ export default function Navbar() {
           <div className="d-flex gap-2">
             <ShoppingCart />
 
-            <DropdownList
+            {authUser? <DropdownList
               btnName={authUser? <FaUserCircle style={{ fontSize: '25px' }} /> : null}
               linkList={[{ name: authUser?.name, href: '/admin/profile' }, { name: 'Dashboard', href: '/admin' }]}
               dividerItems={[{ name: <button onClick={handleLogout} className="btn btn-danger w-100">Logout</button> }]}
-            />
+            /> : null}
           </div>
         </div>
       </nav>

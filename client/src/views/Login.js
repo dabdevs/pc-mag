@@ -39,6 +39,10 @@ export default function Login() {
                     </div>
                     <div className='card-body'>
                         <div className='row p-2'>
+                            <p className='m-0'><small className='text-info'>Test Email: admin@pcmag.com</small></p> 
+                            <p className='m-0'><small className='text-info'>Test Password: admin</small></p>
+                        </div>
+                        <div className='row p-2'>
                             <label htmlFor='email'>Email:</label>
                             <input
                                 id='email'

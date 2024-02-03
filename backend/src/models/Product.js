@@ -7,9 +7,18 @@ const productSchema = new mongoose.Schema({
         unique: true,
         maxLength: 150
     },
+    brand: {
+        type: String,
+        required: true,
+        maxLength: 50
+    },
     description: {
         type: String,
         maxLength: 256
+    },
+    category: {
+        type: String,
+        required: true
     },
     images: {
         type: Array,
@@ -50,6 +59,13 @@ const productSchema = new mongoose.Schema({
     quantity: {
         type: Number,
         required: true
+    },
+    rating: {
+        type: Number,
+    },
+    availability: {
+        type: Boolean,
+        required: false
     },
     // createdBy: { 
     //     type: mongoose.Schema.Types.ObjectId, 
