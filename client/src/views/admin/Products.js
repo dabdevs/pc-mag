@@ -15,6 +15,7 @@ export default function Products() {
     const [products, setProducts] = useState([])
     const [filteredProducts, setFilteredProducts] = useState([])
     const [loading, setLoading] = useState(false)
+    const [page, setPage] = useState(1)
     const [search, setSearch] = useState('')
     const [selectedProduct, setSelectedProduct] = useState(null)
     const [openModal, setOpenModal] = useState(false)
@@ -22,97 +23,100 @@ export default function Products() {
     const [tableData, setTableDada] = useState(undefined)
     const [action, setAction] = useState('')
     const [editRowId, setEditRowId] = useState(null);
+    const [content, setContent] = useState(null)
 
     useEffect(() => {
+        console.log('Page', page)
         setLoading(true)
-        getProducts()
-            .then(({products}) => {
+        getProducts('', '', page)
+            .then(({ products, totalPages, currentPage }) => {
                 setLoading(false)
                 setProducts(products)
+                createContent(loading, products, totalPages, currentPage)
             })
             .catch(err => {
                 setLoading(false)
                 console.log(err)
             })
-    }, [])
+    }, [page])
 
-    useEffect(() => {
-        console.log('Search: ', search.toLowerCase())
-        const filtered = products.filter(product => product.os.toLowerCase().includes(search.toLowerCase()))
-        setFilteredProducts(filtered)
-    }, [search])
+    function createContent(loading, products, totalPages, currentPage) {
+        const data = filteredProducts.length ? filteredProducts : products;
+        let _jsx = null;
 
-    const data = filteredProducts.length ? filteredProducts : products;
+        const prevBtnClasses = page === 1 ? 'page-item disabled' : ''
+        const nextBtnClasses = page == totalPages ? 'page-item disabled' : ''
 
-    return (
-        <Dashboard>
-            <section className='p-0 my-2 col-sm-12' style={{ minHeight: '80vh' }}>
-                <div className='card p-2 mb-2'>
-                    <h5>Filters</h5>
+        if (loading) _jsx = <p>Loading...</p>
 
-                    <div className='row'>
-                        <div className='col-sm-12'>
-                            <input className='form-control my-2' placeholder='Filter by name' value={search} onChange={(e) => setSearch(e.target.value)} />
-                        </div>
-                        <div className='col-sm-3'>
-                            <select className='form-control my-2'>
-                                <option>Operative System</option>
-                                <option>Windows</option>
-                                <option>Mac OS</option>
-                                <option>Linux</option>
-                            </select>
-                        </div>
-                        <div className='col-sm-3'>
-                            <select className='form-control my-2'>
-                                <option>Form Factor</option>
-                                <option>Windows</option>
-                                <option>Mac OS</option>
-                                <option>Linux</option>
-                            </select>
-                        </div>
-                        <div className='col-sm-3'>
-                            <select className='form-control my-2'>
-                                <option>Processor</option>
-                                <option>Intel i3</option>
-                                <option>Intel i5</option>
-                                <option>Intel i7</option>
-                                <option>Intel i9</option>
-                                <option>Amd</option>
-                            </select>
-                        </div>
-                        <div className='col-sm-3'>
-                            <select className='form-control my-2'>
-                                <option>Disk Type</option>
-                                <option>HDD</option>
-                                <option>SSD</option>
-                            </select>
-                        </div>
-                        <div className='col-sm-12'>
-                            <h6>Ram</h6>
-                            <input type='checkbox' value={'4 GB'} /> 4 GB &nbsp;&nbsp;
-                            <input type='checkbox' value={'8 GB'} /> 8 GB &nbsp;&nbsp;
-                            <input type='checkbox' value={'16 GB'} /> 16 GB &nbsp;&nbsp;
-                            <input type='checkbox' value={'32 GB'} /> 32 GB &nbsp;&nbsp;
+        if (products.length > 0) {
+            _jsx = (
+                <div>
+                    <div className='card p-2 mb-2'>
+                        <h5>Filters</h5>
+
+                        <div className='row'>
+                            <div className='col-sm-12'>
+                                <input className='form-control my-2' placeholder='Filter by name' value={search} onChange={(e) => setSearch(e.target.value)} />
+                            </div>
+                            <div className='col-sm-3'>
+                                <select className='form-control my-2'>
+                                    <option>Operative System</option>
+                                    <option>Windows</option>
+                                    <option>Mac OS</option>
+                                    <option>Linux</option>
+                                </select>
+                            </div>
+                            <div className='col-sm-3'>
+                                <select className='form-control my-2'>
+                                    <option>Form Factor</option>
+                                    <option>Windows</option>
+                                    <option>Mac OS</option>
+                                    <option>Linux</option>
+                                </select>
+                            </div>
+                            <div className='col-sm-3'>
+                                <select className='form-control my-2'>
+                                    <option>Processor</option>
+                                    <option>Intel i3</option>
+                                    <option>Intel i5</option>
+                                    <option>Intel i7</option>
+                                    <option>Intel i9</option>
+                                    <option>Amd</option>
+                                </select>
+                            </div>
+                            <div className='col-sm-3'>
+                                <select className='form-control my-2'>
+                                    <option>Disk Type</option>
+                                    <option>HDD</option>
+                                    <option>SSD</option>
+                                </select>
+                            </div>
+                            <div className='col-sm-12'>
+                                <h6>Ram</h6>
+                                <input type='checkbox' value={'4 GB'} /> 4 GB &nbsp;&nbsp;
+                                <input type='checkbox' value={'8 GB'} /> 8 GB &nbsp;&nbsp;
+                                <input type='checkbox' value={'16 GB'} /> 16 GB &nbsp;&nbsp;
+                                <input type='checkbox' value={'32 GB'} /> 32 GB &nbsp;&nbsp;
+                            </div>
                         </div>
                     </div>
-                </div>
-                {loading ? 
-                    <p>Loading...</p> : 
-                    products.length ? 
                     <table className='w-100 table table-striped'>
                         <thead>
-                            <th>Name</th>
-                            <th>Operative System</th>
-                            <th>Form Factor</th>
-                            <th>DiskType</th>
-                            <th>Disk</th>
-                            <th>Ram</th>
-                            <th>Processor</th>
-                            <th>quantity</th>
-                            <th>Action</th>
+                            <tr>
+                                <th>Name</th>
+                                <th>Operative System</th>
+                                <th>Form Factor</th>
+                                <th>DiskType</th>
+                                <th>Disk</th>
+                                <th>Ram</th>
+                                <th>Processor</th>
+                                <th>Quantity</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            {data &&
+                            {data.length > 0 ?
                                 data.map((product, index) => (
                                     <tr key={index}>
                                         <td >{product.name}</td>
@@ -126,12 +130,63 @@ export default function Products() {
                                         <td>{product.ram}</td>
                                         <td>Action</td>
                                     </tr>
-                            ))}
+                                )) : <p>No products found.</p>}
                         </tbody>
-                    </table> : 
-                    <p>No products found.</p> 
-                }
-            </section> 
+                    </table>
+                    {<nav>
+                        <ul className="pagination pagination-sm">
+                            <li className={prevBtnClasses}>
+                                <a className="page-link" href="#" tabIndex="-1" onClick={() => setPage(prevPage => prevPage - 1)}>Previous</a>
+                            </li>
+
+                            <li className={`page-item ${page == 1 ? 'active' : ''}`} aria-current="page">
+                                <a className="page-link" href="#">1</a>
+                            </li>
+                            <li className={`page-item ${page == 2 ? 'active' : ''}`} aria-current="page">
+                                <a className="page-link" href="#">2</a>
+                            </li>
+                            <li className={`page-item ${page == 3 ? 'active' : ''}`} aria-current="page">
+                                <a className="page-link" href="#">3</a>
+                            </li>
+                            <li className={`page-item ${page == 4 ? 'active' : ''}`} aria-current="page">
+                                <a className="page-link" href="#">4</a>
+                            </li>
+                            <li className={`page-item ${page == 5 ? 'active' : ''}`} aria-current="page">
+                                <a className="page-link" href="#">5</a>
+                            </li>
+                            <li className={`page-item disabled`} aria-current="page">
+                                <a className="page-link" href="#">...</a>
+                            </li>
+
+                            <li className={nextBtnClasses}>
+                                <a className="page-link" href="#" onClick={() => setPage(prevPage => prevPage + 1)}>Next</a>
+                            </li>
+                        </ul>
+                    </nav>}
+                </div>
+            )
+        }
+
+        setContent(_jsx)
+    }
+
+    useEffect(() => {
+        console.log('Search: ', search.toLowerCase())
+        const filtered = products.filter(product => product.os.toLowerCase().includes(search.toLowerCase()))
+        setFilteredProducts(filtered)
+    }, [search])
+
+    useEffect(() => {
+        createContent(loading, products)
+    }, [products])
+
+    return (
+        <Dashboard>
+            <section className='p-0 my-2 col-sm-12' style={{ minHeight: '80vh' }}>
+
+                {content}
+
+            </section>
         </Dashboard>
     );
 
