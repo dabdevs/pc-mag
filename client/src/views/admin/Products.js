@@ -139,19 +139,19 @@ export default function Products() {
                                 <a className="page-link" href="#" tabIndex="-1" onClick={() => setPage(prevPage => prevPage - 1)}>Previous</a>
                             </li>
 
-                            <li className={`page-item ${page == 1 ? 'active' : ''}`} aria-current="page">
+                            <li className={`page-item ${page == 1 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(1)}>
                                 <a className="page-link" href="#">1</a>
                             </li>
-                            <li className={`page-item ${page == 2 ? 'active' : ''}`} aria-current="page">
+                            <li className={`page-item ${page == 2 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(2)}>
                                 <a className="page-link" href="#">2</a>
                             </li>
-                            <li className={`page-item ${page == 3 ? 'active' : ''}`} aria-current="page">
+                            <li className={`page-item ${page == 3 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(3)}>
                                 <a className="page-link" href="#">3</a>
                             </li>
-                            <li className={`page-item ${page == 4 ? 'active' : ''}`} aria-current="page">
+                            <li className={`page-item ${page == 4 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(4)}>
                                 <a className="page-link" href="#">4</a>
                             </li>
-                            <li className={`page-item ${page == 5 ? 'active' : ''}`} aria-current="page">
+                            <li className={`page-item ${page == 5 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(5)}>
                                 <a className="page-link" href="#">5</a>
                             </li>
                             <li className={`page-item disabled`} aria-current="page">
