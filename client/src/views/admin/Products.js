@@ -15,7 +15,9 @@ export default function Products() {
     const [products, setProducts] = useState([])
     const [filteredProducts, setFilteredProducts] = useState([])
     const [loading, setLoading] = useState(false)
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(98)
+    const [totalPages, setTotalPages] = useState(null)
+    const [currentPage, setCurrentPage] = useState(null)
     const [search, setSearch] = useState('')
     const [selectedProduct, setSelectedProduct] = useState(null)
     const [openModal, setOpenModal] = useState(false)
@@ -26,13 +28,13 @@ export default function Products() {
     const [content, setContent] = useState(null)
 
     useEffect(() => {
-        console.log('Page', page)
         setLoading(true)
         getProducts('', '', page)
             .then(({ products, totalPages, currentPage }) => {
                 setLoading(false)
                 setProducts(products)
-                createContent(loading, products, totalPages, currentPage)
+                setTotalPages(totalPages)
+                setCurrentPage(currentPage)
             })
             .catch(err => {
                 setLoading(false)
@@ -40,12 +42,13 @@ export default function Products() {
             })
     }, [page])
 
-    function createContent(loading, products, totalPages, currentPage) {
+    function createContent() {
+        console.log('total pages function', currentPage, totalPages)
         const data = filteredProducts.length ? filteredProducts : products;
         let _jsx = null;
 
-        const prevBtnClasses = page === 1 ? 'page-item disabled' : ''
-        const nextBtnClasses = page == totalPages ? 'page-item disabled' : ''
+        const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
+        const nextBtnClasses = totalPages == currentPage ? 'page-item disabled' : 'page-item'
 
         if (loading) _jsx = <p>Loading...</p>
 
@@ -104,6 +107,7 @@ export default function Products() {
                     <table className='w-100 table table-striped'>
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Name</th>
                                 <th>Operative System</th>
                                 <th>Form Factor</th>
@@ -119,16 +123,18 @@ export default function Products() {
                             {data.length > 0 ?
                                 data.map((product, index) => (
                                     <tr key={index}>
-                                        <td >{product.name}</td>
-                                        <td>{product.os}</td>
-                                        <td>{product.formFactor}</td>
-                                        <td>{product.diskType}</td>
-                                        <td>{product.disk}</td>
-                                        <td>{product.ram}</td>
-                                        <td>{product.processor}</td>
-                                        <td>{product.quantity}</td>
-                                        <td>{product.ram}</td>
-                                        <td>Action</td>
+                                        <th>
+                                            <img height={40} className="card-img-top" src={`${product.images[0]}`} alt={product.name} />
+                                        </th>
+                                        <td className='pt-3'>{product.name}</td>
+                                        <td className='pt-3'>{product.os}</td>
+                                        <td className='pt-3'>{product.formFactor}</td>
+                                        <td className='pt-3'>{product.diskType}</td>
+                                        <td className='pt-3'>{product.disk}</td>
+                                        <td className='pt-3'>{product.ram}</td>
+                                        <td className='pt-3'>{product.processor}</td>
+                                        <td className='pt-3'>{product.quantity}</td>
+                                        <td className='pt-3'></td>
                                     </tr>
                                 )) : <p>No products found.</p>}
                         </tbody>
@@ -136,30 +142,36 @@ export default function Products() {
                     {<nav>
                         <ul className="pagination pagination-sm">
                             <li className={prevBtnClasses}>
-                                <a className="page-link" href="#" tabIndex="-1" onClick={() => setPage(prevPage => prevPage - 1)}>Previous</a>
+                                <a className="page-link" href="javascript:void(0)" tabIndex="-1" onClick={() => setPage(prevPage => prevPage - 1)}>Previous</a>
                             </li>
 
-                            <li className={`page-item ${page == 1 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(1)}>
-                                <a className="page-link" href="#">1</a>
+                            <li className={`page-item ${page === 1 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(1)}>
+                                <a className="page-link" href="javascript:void(0)">1</a>
                             </li>
-                            <li className={`page-item ${page == 2 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(2)}>
-                                <a className="page-link" href="#">2</a>
+                            <li className={`page-item ${page === 2 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(2)}>
+                                <a className="page-link" href="javascript:void(0)">2</a>
                             </li>
-                            <li className={`page-item ${page == 3 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(3)}>
-                                <a className="page-link" href="#">3</a>
+                            <li className={`page-item ${page === 3 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(3)}>
+                                <a className="page-link" href="javascript:void(0)">3</a>
                             </li>
-                            <li className={`page-item ${page == 4 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(4)}>
-                                <a className="page-link" href="#">4</a>
+                            <li className={`page-item ${page === 4 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(4)}>
+                                <a className="page-link" href="javascript:void(0)">4</a>
                             </li>
-                            <li className={`page-item ${page == 5 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(5)}>
-                                <a className="page-link" href="#">5</a>
+                            <li className={`page-item ${page === 5 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(5)}>
+                                <a className="page-link" href="javascript:void(0)">5</a>
                             </li>
                             <li className={`page-item disabled`} aria-current="page">
-                                <a className="page-link" href="#">...</a>
+                                <a className="page-link" href="javascript:void(0)">... {page === currentPage}</a>
                             </li>
 
+                            {page > 5 &&
+                                <li className={`page-item active`} aria-current="page">
+                                    <a className="page-link" href="javascript:void(0)">{page}</a>
+                                </li>
+                            }
+
                             <li className={nextBtnClasses}>
-                                <a className="page-link" href="#" onClick={() => setPage(prevPage => prevPage + 1)}>Next</a>
+                                <a className="page-link" href="javascript:void(0)" onClick={() => setPage(prevPage => prevPage + 1)}>Next</a>
                             </li>
                         </ul>
                     </nav>}
@@ -177,7 +189,7 @@ export default function Products() {
     }, [search])
 
     useEffect(() => {
-        createContent(loading, products)
+        createContent()
     }, [products])
 
     return (
