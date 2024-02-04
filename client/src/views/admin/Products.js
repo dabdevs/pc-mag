@@ -42,6 +42,40 @@ export default function Products() {
             })
     }, [page])
 
+    const createItem = (product) => {
+        setAction('create')
+        setSelectedProduct(product)
+    }
+
+    const editItem = (product) => {
+        setAction('edit')
+        setSelectedProduct(product)
+    }
+
+    const deleteItem = (product) => {
+        setAction('delete')
+        setModalTitle(`Deleting "${product.name}"`)
+        setOpenModal(true)
+        setSelectedProduct(product)
+    }
+
+    const deleteProduct = () => {
+        destroy(selectedProduct._id).then(({ _id }) => {
+            setOpenModal(false)
+            // setProducts((prevProducts) => {
+            //     return prevProducts.filter((prod) =>
+            //         prod._id !== _id
+            //     );
+            // });
+            alert('Product deleted successfully')
+        }).catch(err => console.log(err))
+    }
+
+    const closeForm = () => {
+        setSelectedProduct(null)
+        setAction('')
+    }
+    
     function createContent() {
         console.log('total pages function', currentPage, totalPages)
         const data = filteredProducts.length ? filteredProducts : products;
@@ -55,6 +89,15 @@ export default function Products() {
         if (products.length > 0) {
             _jsx = (
                 <div>
+                    <Row>
+                        <Col xs={9}>
+                            <h1 className="display-4 fw-bolder">Products</h1>
+                        </Col>
+                        <Col xs={3} className='d-flex align-items-center'>
+                            <button className='btn btn-success ms-auto' onClick={createItem}><FaPlus /> New Product</button>
+                        </Col>
+                    </Row>
+
                     <div className='card p-2 mb-2'>
                         <h5>Filters</h5>
 
@@ -109,6 +152,7 @@ export default function Products() {
                             <tr>
                                 <th></th>
                                 <th>Name</th>
+                                <th>Brand</th>
                                 <th>Operative System</th>
                                 <th>Form Factor</th>
                                 <th>DiskType</th>
@@ -127,6 +171,7 @@ export default function Products() {
                                             <img height={40} className="card-img-top" src={`${product.images[0]}`} alt={product.name} />
                                         </th>
                                         <td className='pt-3'>{product.name}</td>
+                                        <td className='pt-3'>{product.brand}</td>
                                         <td className='pt-3'>{product.os}</td>
                                         <td className='pt-3'>{product.formFactor}</td>
                                         <td className='pt-3'>{product.diskType}</td>
@@ -134,7 +179,12 @@ export default function Products() {
                                         <td className='pt-3'>{product.ram}</td>
                                         <td className='pt-3'>{product.processor}</td>
                                         <td className='pt-3'>{product.quantity}</td>
-                                        <td className='pt-3'></td>
+                                        <td className='pt-3'>
+                                            <div className='d-flex border-none gap-2'>
+                                                <button className='btn btn-warning btn-sm' onClick={() => editItem(product)}>Edit</button>
+                                                <button className='btn btn-danger btn-sm' onClick={() => deleteItem(product)}>Delete</button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 )) : <p>No products found.</p>}
                         </tbody>
@@ -196,29 +246,23 @@ export default function Products() {
         <Dashboard>
             <section className='p-0 my-2 col-sm-12' style={{ minHeight: '80vh' }}>
 
-                {content}
+                {
+                    selectedProduct
+                    && action !== 'delete'
+                    && <ProductForm closeForm={closeForm} setProducts={setProducts} product={selectedProduct} />
+                }
+
+                {
+                    !['create', 'edit'].includes(action) && content
+                }
+
+                {openModal && <ModalComponent handleConfirm={deleteProduct} action={action} title={modalTitle} setOpenModal={setOpenModal}>
+                    {action === 'delete' ? <p>Are you sure you want to confirm this action?</p> : <ProductForm product={selectedProduct} />}
+                </ModalComponent>}
 
             </section>
         </Dashboard>
     );
-
-    // useEffect(() => {
-    //     getProducts().then(products => {
-    //         setProducts(products)
-    //     }).then(() => {
-    //         setTableDada({
-    //             tHead: ['Name', 'Form Factor', 'OS', 'Processor', 'Ram', 'Disk', 'Price', 'Available', 'Actions'],
-    //             tBody: products?.map(product =>
-    //                 [product.name, product.formFactor, product.os, product.processor, product.ram, `${product.disk} ${product.diskType}`, `$ ${formatPrice(product.price)}`, product.quantity ?? 0, <div className='d-flex border-none gap-2'><button className='btn btn-warning btn-sm' onClick={() => editItem(product)}>Edit</button><button className='btn btn-danger btn-sm' onClick={() => deleteItem(product)}>Delete</button></div>]
-    //             )
-    //         })
-    //     }).catch(err => console.log(err))
-    // }, [products])
-
-
-    // const data = useMemo(async () => await getProducts(), [])
-
-    // console.log(data)
 
     function selectComponent({ value }) {
         return (
@@ -241,187 +285,5 @@ export default function Products() {
     const selectProduct = (id) => {
         console.log('Product selected with id', id)
     }
-
-
-
-    // const columns = useMemo(() => [
-    //     {
-    //         Header: 'Name',
-    //         accessor: 'name'
-    //     },
-    //     {
-    //         Header: 'Form Factor',
-    //         accessor: 'formFactor'
-    //     },
-    //     {
-    //         Header: 'Operative System',
-    //         accessor: 'os'
-    //     },
-    //     {
-    //         Header: 'Processor',
-    //         accessor: 'processor'
-    //     },
-    //     {
-    //         Header: 'Ram',
-    //         accessor: 'ram'
-    //     },
-    //     {
-    //         Header: 'Disk Type',
-    //         accessor: 'diskType'
-    //     },
-    //     {
-    //         Header: 'Disk',
-    //         accessor: 'disk'
-    //     },
-    //     {
-    //         Header: 'Price',
-    //         accessor: 'price',
-    //         Cell: ({ value }) => formatPrice(value),
-    //     },
-    //     {
-    //         Header: 'Action',
-    //         accessor: '_id',
-    //         Cell: ({ value }) => (<selectComponent value={value} />),
-    //     }
-    // ], []);
-
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     page,
-    //     prepareRow,
-    //     canPreviousPage,
-    //     canNextPage,
-    //     pageOptions,
-    //     nextPage,
-    //     previousPage,
-    //     state: { pageIndex }
-    // } = useTable({ columns, data, initialState: { pageIndex: 0 } }, usePagination);
-
-    // useEffect(() => {
-    //     console.log('PRODUCTS CHANGED', products)
-    //     setTableDada({
-    //         tHead: ['Name', 'Form Factor', 'OS', 'Processor', 'Ram', 'Disk', 'Price', 'Available', 'Actions'],
-    //         tBody: products?.map(product =>
-    //             [product.name, product.formFactor, product.os, product.processor, product.ram, `${product.disk} ${product.diskType}`, `$ ${formatPrice(product.price)}`, product.quantity ?? 0, <div className='d-flex border-none gap-2'><button className='btn btn-warning btn-sm' onClick={() => editItem(product)}>Edit</button><button className='btn btn-danger btn-sm' onClick={() => deleteItem(product)}>Delete</button></div>]
-    //         )
-    //     })
-    // }, [products])
-
-    const createItem = (product) => {
-        setAction('create')
-        setSelectedProduct(product)
-    }
-
-    const editItem = (product) => {
-        setAction('edit')
-        setSelectedProduct(product)
-    }
-
-    const deleteItem = (product) => {
-        setAction('delete')
-        setModalTitle(`Deleting "${product.name}"`)
-        setOpenModal(true)
-        setSelectedProduct(product)
-    }
-
-    const deleteProduct = () => {
-        destroy(selectedProduct._id).then(({ _id }) => {
-            setOpenModal(false)
-            // setProducts((prevProducts) => {
-            //     return prevProducts.filter((prod) =>
-            //         prod._id !== _id
-            //     );
-            // });
-            alert('Product deleted successfully')
-        }).catch(err => console.log(err))
-    }
-
-    const closeForm = () => {
-        setSelectedProduct(null)
-        setAction('')
-    }
-
-    // return products.length > 0 ? (
-    //     <Dashboard>
-    //         <section style={{ minHeight: '80vh' }} className='p-0 my-2 col-sm-12'>
-    //             {/* <table {...getTableProps()} className='w-100'>
-    //                 <thead>
-    //                     {headerGroups.map(headerGroup => (
-    //                         <tr {...headerGroup.getHeaderGroupProps()}>
-    //                             {headerGroup.headers.map(column => (
-    //                                 <th {...column.getHeaderProps()}>
-    //                                     {column.render('Header')}
-    //                                 </th>
-    //                             ))}
-    //                         </tr>
-    //                     ))}
-    //                 </thead>
-    //                 <tbody {...getTableBodyProps()}>
-    //                     {page.map(page => {
-    //                         prepareRow(page)
-    //                         return (
-    //                             <tr {...page.getRowProps()}>
-    //                                 {page.cells.map(cell => (
-    //                                     <td {...cell.getCellProps()}>
-    //                                         {cell.render('Cell')}
-    //                                     </td>
-    //                                 ))}
-    //                             </tr>
-    //                         )
-    //                     })}
-    //                 </tbody>
-    //             </table> */}
-
-    //             <table>
-    //                 <thead>
-
-    //                 </thead>
-    //                 <tbody>
-
-    //                 </tbody>
-    //             </table>
-    //             {/* <div className='mt-2'>
-    //                 <button className='btn btn-outline-secondary btn-sm' onClick={() => previousPage()} disabled={!canPreviousPage}>
-    //                     Previous
-    //                 </button>
-    //                 <span className='px-2'>
-    //                     Page{' '}
-    //                     <strong>
-    //                         { pageIndex ? pageIndex + 1 : 0 } of {pageOptions.length}
-    //                     </strong>
-    //                 </span>
-    //                 <button className='btn btn-outline-secondary btn-sm' onClick={() => nextPage()} disabled={!canNextPage}>
-    //                     Next
-    //                 </button>
-    //             </div> */}
-    //         </section>
-    //         <section className='card my-2 col-sm-12' style={{ minHeight: '80vh' }}>
-    //             <Row>
-    //                 <Col xs={9}>
-    //                     <h1 className="display-3 fw-bolder">Products</h1>
-    //                 </Col>
-    //                 <Col xs={3} className='d-flex align-items-center'>
-    //                     <button className='btn btn-success ms-auto' onClick={createItem}><FaPlus /> New Product</button>
-    //                 </Col>
-    //             </Row>
-
-    //             {
-    //                 selectedProduct
-    //                 && action !== 'delete'
-    //                 && <ProductForm closeForm={closeForm} setProducts={setProducts} product={selectedProduct} />
-    //             }
-
-    //             {
-    //                 !['create', 'edit'].includes(action) && <TableComponent data={tableData} />
-    //             }
-
-    //             {openModal && <ModalComponent handleConfirm={deleteProduct} action={action} title={modalTitle} setOpenModal={setOpenModal}>
-    //                 {action === 'delete' ? <p>Are you sure you want to confirm this action?</p> : <ProductForm product={selectedProduct} />}
-    //             </ModalComponent>}
-    //         </section>
-    //     </Dashboard>
-    // ) : null
 }
 
