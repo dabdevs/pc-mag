@@ -28,7 +28,7 @@ const schema = yup
     })
     .required()
 
-export default function ProductForm({ product, setProducts, closeForm }) {
+export default function ProductForm({ product, setProducts, closeForm, data }) {
     const initialState = {
         _id: '',
         name: '',
@@ -48,10 +48,10 @@ export default function ProductForm({ product, setProducts, closeForm }) {
 
     const [form, setForm] = useState(product || initialState)
     const [feedback, setFeedback] = useState({})
-    const [operativeSystems, setOperativeSystems] = useState([])
-    const [processors, setProcessors] = useState([])
-    const [categories, setCategories] = useState([])
-    const [brands, setBrands] = useState([])
+    const [operativeSystems, setOperativeSystems] = useState(data.operativeSystems)
+    const [processors, setProcessors] = useState(data.processors)
+    const [categories, setCategories] = useState(data.categories)
+    const [brands, setBrands] = useState(data.brands)
 
     useEffect(() => {
         setForm(product)

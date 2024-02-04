@@ -110,9 +110,15 @@ export const getProductFormData = async () => {
     try {
         let url = `${baseUrl}/api/products/formdata`
 
-        const { data } = await axios.get(url)
+        const productFormData = localStorage.getItem('productFormData')
 
-        return data
+        if (productFormData) {
+            return Promise.resolve(JSON.parse(productFormData))
+        } else {
+            const { data } = await axios.get(url)
+            localStorage.setItem('productFormData', JSON.stringify(data))
+            return data
+        }
     } catch (err) {
         console.error(err)
         throw err

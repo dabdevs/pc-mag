@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Dashboard from '../Dashboard'
 import TableComponent from '../../components/Shared/TableComponent'
-import { getProducts, create, update, destroy } from '../../api/products'
+import { getProducts, create, update, destroy, getProductFormData } from '../../api/products'
 import ModalComponent from '../../components/Shared/ModalComponent'
 import ProductForm from '../../Forms/ProductForm'
 import { useTable, usePagination, useRowSelect } from 'react-table';
@@ -26,9 +26,12 @@ export default function Products() {
     const [action, setAction] = useState('')
     const [editRowId, setEditRowId] = useState(null);
     const [content, setContent] = useState(null)
+    const [formData, setFormData] = useState([])
 
     useEffect(() => {
         setLoading(true)
+        getProductFormData().then(data => setFormData(data)).catch(err => console.log(err))
+        
         getProducts('', '', page)
             .then(({ products, totalPages, currentPage }) => {
                 setLoading(false)
@@ -249,7 +252,7 @@ export default function Products() {
                 {
                     selectedProduct
                     && action !== 'delete'
-                    && <ProductForm closeForm={closeForm} setProducts={setProducts} product={selectedProduct} />
+                    && <ProductForm data={formData} closeForm={closeForm} setProducts={setProducts} product={selectedProduct} />
                 }
 
                 {
@@ -257,7 +260,7 @@ export default function Products() {
                 }
 
                 {openModal && <ModalComponent handleConfirm={deleteProduct} action={action} title={modalTitle} setOpenModal={setOpenModal}>
-                    {action === 'delete' ? <p>Are you sure you want to confirm this action?</p> : <ProductForm product={selectedProduct} />}
+                    {action === 'delete' ? <p>Are you sure you want to confirm this action?</p> : <ProductForm data={formData} product={selectedProduct} />}
                 </ModalComponent>}
 
             </section>
