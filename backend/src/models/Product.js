@@ -66,19 +66,7 @@ const productSchema = new mongoose.Schema({
     availability: {
         type: Boolean,
         required: false
-    },
-    // createdBy: { 
-    //     type: mongoose.Schema.Types.ObjectId, 
-    //     ref: 'User' 
-    // },
-    // createdOn: {
-    //     type: Date,
-    //     required: true
-    // },
-    // modifiedAt: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User'
-    // }
+    }
 })
 
 const Product = mongoose.model('product', productSchema)

@@ -105,3 +105,16 @@ export const searchProducts = async (search) => {
         throw err
     }
 }
+
+export const getProductFormData = async () => {
+    try {
+        let url = `${baseUrl}/api/products/formdata`
+
+        const { data } = await axios.get(url)
+
+        return data
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}

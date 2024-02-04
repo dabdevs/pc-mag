@@ -3,6 +3,10 @@ const { ObjectId } = require('mongodb')
 const Product = require('../models/Product')
 const { formatPrice } = require('../utils')
 const { validationResult } = require('express-validator');
+const Processor = require('../models/Processor');
+const OperativeSystem = require('../models/OperativeSystem');
+const Category = require('../models/Category');
+const Brand = require('../models/Brand');
 
 module.exports.getAll = async (req, res) => {
     try {
@@ -126,6 +130,20 @@ module.exports.destroy = async (req, res) => {
         res.json({ _id: productId, success: response.deletedCount })
     } catch (err) {
         console.log(err)
+        res.status(500).json({ err: 'Internal Server Error' });
+    }
+}
+
+module.exports.getFormData = async (req, res) => {
+    try {
+        const processors = await Processor.find({})
+        const operativeSystems = await OperativeSystem.find({})
+        const categories = await Category.find({})
+        const brands = await Brand.find({})
+
+        res.json({ processors, operativeSystems, categories, brands })
+    } catch (err) {
+        console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
     }
 }

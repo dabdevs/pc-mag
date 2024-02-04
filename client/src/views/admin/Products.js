@@ -15,7 +15,7 @@ export default function Products() {
     const [products, setProducts] = useState([])
     const [filteredProducts, setFilteredProducts] = useState([])
     const [loading, setLoading] = useState(false)
-    const [page, setPage] = useState(98)
+    const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(null)
     const [currentPage, setCurrentPage] = useState(null)
     const [search, setSearch] = useState('')

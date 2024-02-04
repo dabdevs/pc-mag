@@ -3,10 +3,11 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { create, update } from '../api/products';
+import { create, getProductFormData, update } from '../api/products';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import { FaRegClosedCaptioning } from 'react-icons/fa';
 
 const schema = yup
     .object({
@@ -15,6 +16,8 @@ const schema = yup
         price: yup.number().integer().required(),
         images: yup.array(),
         formFactor: yup.string().required(),
+        brand: yup.string().required(),
+        category: yup.string().required(),
         os: yup.string().required(),
         ram: yup.string().required(),
         processor: yup.string().required(),
@@ -26,12 +29,13 @@ const schema = yup
     .required()
 
 export default function ProductForm({ product, setProducts, closeForm }) {
-    console.log('Loading form')
     const initialState = {
         _id: '',
         name: '',
         description: '',
         formFactor: '',
+        brand: '',
+        category: '',
         os: '',
         processor: '',
         ram: '',
@@ -44,6 +48,10 @@ export default function ProductForm({ product, setProducts, closeForm }) {
 
     const [form, setForm] = useState(product || initialState)
     const [feedback, setFeedback] = useState({})
+    const [operativeSystems, setOperativeSystems] = useState([])
+    const [processors, setProcessors] = useState([])
+    const [categories, setCategories] = useState([])
+    const [brands, setBrands] = useState([])
 
     useEffect(() => {
         setForm(product)
@@ -53,19 +61,19 @@ export default function ProductForm({ product, setProducts, closeForm }) {
     const {
         register,
         handleSubmit,
-        formState: {errors}
+        formState: { errors }
     } = useForm({ resolver: yupResolver(schema) })
 
     const handleCreate = (data) => {
         console.log('Creating', data)
 
-        create(data).then(({product}) => {
+        create(data).then(({ product }) => {
             setProducts(prevProducts => [...prevProducts, product]);
             setForm(initialState)
             setFeedback({})
             closeForm()
             alert('Product created successfully')
-        }).catch(({response}) => {
+        }).catch(({ response }) => {
             if (response?.data) {
                 setFeedback(response.data.errors)
             }
@@ -75,8 +83,8 @@ export default function ProductForm({ product, setProducts, closeForm }) {
     const handleEdit = (data) => {
         console.log('Editing')
         data._id = form._id
-        update(data).then(({product}) => {
-            console.log('Updated product',product)
+        update(data).then(({ product }) => {
+            console.log('Updated product', product)
             alert('Product updated successfully')
             setProducts(prevProducts => {
                 return prevProducts.map(prod => prod._id === product._id ? product : prod);
@@ -85,6 +93,8 @@ export default function ProductForm({ product, setProducts, closeForm }) {
             closeForm()
         }).catch(err => console.log(err))
     }
+
+    console.log(operativeSystems, processors)
 
     return (
         <Form>
@@ -111,7 +121,7 @@ export default function ProductForm({ product, setProducts, closeForm }) {
                         name='description'
                         defaultValue={form?.description}
                         onChange={(e) => setForm({ ...form, description: e.target.value })}
-                     
+
                         rows={3}
                         placeholder="ex: The Macbook Pro 2022 Retina Display is the one of the best computers you can buy..."
                         {...register("description")}
@@ -121,9 +131,25 @@ export default function ProductForm({ product, setProducts, closeForm }) {
             </Row>
 
             <Row>
-                <Col xs={3}>
+                <Col xs={2}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Form Factor </Form.Label>
+                        <Form.Label>Brand</Form.Label>
+                        <Form.Select
+                            defaultChecked={form?.brand}
+                            name='brand'
+                            value={form?.brand}
+                            {...register("brand")}
+                            onChange={(e) => setForm({ ...form, brand: e.target.value })}
+                        >
+                            <option value=''>Select an option</option>
+                            {brands?.map(brand => <option value={brand.name}>{brand.name}</option>)}
+                        </Form.Select>
+                        <small className='text-danger'>{errors.brand?.message} {feedback.brand?.message}</small>
+                    </Form.Group>
+                </Col>
+                <Col xs={2}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Form Factor</Form.Label>
                         <Form.Select
                             defaultChecked={form?.formFactor}
                             name='formFactor'
@@ -132,24 +158,28 @@ export default function ProductForm({ product, setProducts, closeForm }) {
                             onChange={(e) => setForm({ ...form, formFactor: e.target.value })}
                         >
                             <option value=''>Select an option</option>
-                            <option value='notebook'>Notebook</option>
-                            <option value='desktop'>Desktop</option>
-                            <option value='all-in-one'>All-In-One</option>
+                            <option value='Laptop'>Laptop</option>
+                            <option value='Desktop'>Desktop</option>
+                            <option value='All-In-One'>All-In-One</option>
                         </Form.Select>
                         <small className='text-danger'>{errors.formFactor?.message} {feedback.formFactor?.message}</small>
                     </Form.Group>
                 </Col>
-                <Col>
+                <Col xs={2}>
                     <Form.Group className="mb-3">
                         <Form.Label>Operative System</Form.Label>
-                        <Form.Control
+                        <Form.Select
+                            defaultChecked={form?.os}
                             name='os'
                             value={form?.os}
                             type='text'
                             placeholder='ex: Windows 10'
                             {...register("os")}
                             onChange={(e) => setForm({ ...form, os: e.target.value })}
-                        />
+                        >
+                            <option value=''>Select an option</option>
+                            {operativeSystems.map(os => <option value={os.name}>{os.name}</option>)}
+                        </Form.Select>
                         <small className='text-danger'>{errors.os?.message} {feedback.os?.message}</small>
                     </Form.Group>
                 </Col>
@@ -163,17 +193,14 @@ export default function ProductForm({ product, setProducts, closeForm }) {
                         onChange={(e) => setForm({ ...form, ram: e.target.value })}
                     >
                         <option value=''>Select an option</option>
-                        <option value={'4GB'}>4GB</option>
-                        <option value={'8GB'}>8GB</option>
-                        <option value={'16GB'}>16GB</option>
-                        <option value={'32GB'}>32GB</option>
+                        <option value={'4 GB'}>4 GB</option>
+                        <option value={'8 GB'}>8 GB</option>
+                        <option value={'16 GB'}>16 GB</option>
+                        <option value={'32 GB'}>32 GB</option>
                     </Form.Select>
                     <small className='text-danger'>{errors.ram?.message} {feedback.ram?.message}</small>
                 </Col>
-            </Row>
-
-            <Row>
-                <Col xs={3}>
+                <Col xs={2}>
                     <Form.Group className="mb-3">
                         <Form.Label>Disk Type</Form.Label>
                         <Form.Select
@@ -190,7 +217,7 @@ export default function ProductForm({ product, setProducts, closeForm }) {
                         <small className='text-danger'>{errors.diskType?.message} {feedback.diskType?.message}</small>
                     </Form.Group>
                 </Col>
-                <Col xs={3}>
+                <Col xs={2}>
                     <Form.Group className="mb-3">
                         <Form.Label>Disk Capacity</Form.Label>
                         <Form.Select
@@ -201,30 +228,37 @@ export default function ProductForm({ product, setProducts, closeForm }) {
                             onChange={(e) => setForm({ ...form, disk: e.target.value })}
                         >
                             <option value=''>Select an option</option>
-                            <option value={'128GB'}>128GB</option>
-                            <option value={'256GB'}>256GB</option>
-                            <option value={'500GB'}>500GB</option>
-                            <option value={'1TB'}>1TB</option>
+                            <option value={'128 GB'}>128 GB</option>
+                            <option value={'256 GB'}>256 GB</option>
+                            <option value={'500 GB'}>500 GB</option>
+                            <option value={'1 TB'}>1 TB</option>
                         </Form.Select>
                         <small className='text-danger'>{errors.disk?.message} {feedback.disk?.message}</small>
-                    </Form.Group>
-                </Col>
-                <Col>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Processor</Form.Label>
-                        <Form.Control
-                            name='processor'
-                            value={form?.processor}
-                            type='text'
-                            {...register("processor")}
-                            onChange={(e) => setForm({ ...form, processor: e.target.value })}
-                        />
-                        <small className='text-danger'>{errors.processor?.message} {feedback.processor?.message}</small>
                     </Form.Group>
                 </Col>
             </Row>
 
             <Row>
+                <Col xs={2}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Processor</Form.Label>
+                        <Form.Select
+                            name='processor'
+                            value={form?.processor}
+                            type='text'
+                            {...register("processor")}
+                            onChange={(e) => setForm({ ...form, processor: e.target.value })}
+                        >
+                            <option value=''>Select an option</option>
+                            <option value={'Intel i3'}>Intel i3</option>
+                            <option value={'Intel i5'}>Intel i5</option>
+                            <option value={'Intel i7'}>Intel i7</option>
+                            <option value={'Intel i9'}>Intel i9</option>
+                            <option value={'amd'}>amd</option>
+                        </Form.Select>
+                        <small className='text-danger'>{errors.processor?.message} {feedback.processor?.message}</small>
+                    </Form.Group>
+                </Col>
                 <Col xs={2}>
                     <Form.Group className="mb-3">
                         <Form.Label>Display</Form.Label>
@@ -241,8 +275,7 @@ export default function ProductForm({ product, setProducts, closeForm }) {
                         <small className='text-danger'>{errors.display?.message} {feedback.display?.message}</small>
                     </Form.Group>
                 </Col>
-
-                <Col xs={4}>
+                <Col xs={2}>
                     <Form.Group className="mb-3">
                         <Form.Label>Price <small>(In cents)</small> </Form.Label>
                         <Form.Control
@@ -270,10 +303,26 @@ export default function ProductForm({ product, setProducts, closeForm }) {
                         <small className='text-danger'>{errors.quantity?.message} {feedback.quantity?.message}</small>
                     </Form.Group>
                 </Col>
+                <Col xs={2}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Category</Form.Label>
+                        <Form.Select
+                            name='category'
+                            value={form?.category}
+                            type='text'
+                            {...register("category")}
+                            onChange={(e) => setForm({ ...form, category: e.target.value })}
+                        >
+                            <option value=''>Select an option</option>
+                            {categories?.map(category => <option value={category.name}>{category.name}</option>)}
+                        </Form.Select>
+                        <small className='text-danger'>{errors.category?.message} {feedback.category?.message}</small>
+                    </Form.Group>
+                </Col>
             </Row>
 
             <Row className='my-2 border-bottom py-2'>
-                <Col xs={3} className='d-flex gap-2'>
+                <Col xs={4} className='d-flex gap-2 border-0'>
                     <Button onClick={closeForm} type='button' variant="secondary">
                         Cancel
                     </Button>
