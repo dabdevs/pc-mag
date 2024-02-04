@@ -37,6 +37,7 @@ app.get('/api/flash-messages', (req, res) => {
 
 const routes = require('./src/routes/index');
 const User = require('./src/models/User');
+const data = require('./MOCK_DATA');
 const Product = require('./src/models/Product');
 
 app.use('/api', routes);
@@ -71,6 +72,17 @@ DB.on('connecting', function () {
     }).catch(error => {
         console.error('Error finding user:', error);
     });
+
+    // console.log(data)
+
+    // data.map(product => {
+    //     Product.create({
+    //         ...product,
+    //         name: `${product.brand} ${product.formFactor} ${product.os} ${product.processor} ${product.ram} ${product.disk} ${product.diskType} ${product.display}"`,
+    //         description: `${product.brand} ${product.formFactor} ${product.os} ${product.processor} ${product.ram} ${product.disk} ${product.diskType} ${product.display} Sed ante. Vivamus tortor. Duis mattis egestas metus`,
+    //     }).then(() => console.log('product created'))
+    // })
+
 }).once('open', function () {
     console.log('Database connection opened!');
 }).on('reconnected', function () {

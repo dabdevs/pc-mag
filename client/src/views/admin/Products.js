@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Dashboard from '../Dashboard'
 import TableComponent from '../../components/Shared/TableComponent'
-import { getProducts, create, update, destroy, getProductFormData } from '../../api/products'
+import { getProducts, destroy, getProductFormData } from '../../api/products'
 import ModalComponent from '../../components/Shared/ModalComponent'
 import ProductForm from '../../Forms/ProductForm'
 import { useTable, usePagination, useRowSelect } from 'react-table';
@@ -65,11 +65,11 @@ export default function Products() {
     const deleteProduct = () => {
         destroy(selectedProduct._id).then(({ _id }) => {
             setOpenModal(false)
-            // setProducts((prevProducts) => {
-            //     return prevProducts.filter((prod) =>
-            //         prod._id !== _id
-            //     );
-            // });
+            setProducts((prevProducts) => {
+                return prevProducts.filter((prod) =>
+                    prod._id !== _id
+                );
+            });
             alert('Product deleted successfully')
         }).catch(err => console.log(err))
     }
@@ -252,7 +252,7 @@ export default function Products() {
                 {
                     selectedProduct
                     && action !== 'delete'
-                    && <ProductForm data={formData} closeForm={closeForm} setProducts={setProducts} product={selectedProduct} />
+                    && <ProductForm data={formData} setProducts={setProducts} closeForm={closeForm} product={selectedProduct} />
                 }
 
                 {

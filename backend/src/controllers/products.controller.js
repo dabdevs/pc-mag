@@ -53,7 +53,7 @@ module.exports.getAll = async (req, res) => {
         const products = await Product.find(conditions)
             .limit(limit * 1)
             .skip((page - 1) * limit)
-        //.sort({createdAt: -1})
+            .sort({createdAt: -1})
 
         // Getting the numbers of products stored in database
         const count = await Product.countDocuments();

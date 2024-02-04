@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { create, getProductFormData, update } from '../api/products';
+import { create, update } from '../api/products';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import { FaRegClosedCaptioning } from 'react-icons/fa';
 
 const schema = yup
     .object({
@@ -68,7 +67,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
         console.log('Creating', data)
 
         create(data).then(({ product }) => {
-            setProducts(prevProducts => [...prevProducts, product]);
+            setProducts(prevProducts => [product, ...prevProducts]);
             setForm(initialState)
             setFeedback({})
             closeForm()
@@ -93,8 +92,6 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
             closeForm()
         }).catch(err => console.log(err))
     }
-
-    console.log(operativeSystems, processors)
 
     return (
         <Form>
