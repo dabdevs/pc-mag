@@ -124,3 +124,15 @@ export const getProductFormData = async () => {
         throw err
     }
 }
+
+export const deleteImage = async (productId, path) => {
+    try {
+        const url = `${baseUrl}/api/products/${productId}/delete-image`
+        const { data } = await axios.post(url, {path})
+
+        return data
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}

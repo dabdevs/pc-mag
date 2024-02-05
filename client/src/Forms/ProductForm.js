@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { create, update } from '../api/products';
+import { create, update, deleteImage } from '../api/products';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import ImageUploader from '../components/ImageUploader';
@@ -43,7 +43,8 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
         diskType: '',
         price: '',
         display: '',
-        quantity: ''
+        quantity: '',
+        images: []
     }
 
     const [form, setForm] = useState(product || initialState)
@@ -84,7 +85,6 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
         console.log('Editing')
         data._id = form._id
         update(data).then(({ product }) => {
-            console.log('Updated product', product)
             alert('Product updated successfully')
             setProducts(prevProducts => {
                 return prevProducts.map(prod => prod._id === product._id ? product : prod);
@@ -92,6 +92,23 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
             setFeedback({})
             closeForm()
         }).catch(err => console.log(err))
+    }
+
+    const removeImage = async (productId, url) => {
+        console.log(productId, url)
+        deleteImage(productId, url).then(({product}) => {
+            console.log('Updated images', data.product)
+
+            setProducts(prevProducts => {
+                return prevProducts.map(prod => {
+                    if (prod._id == product._id) {
+                        console.log('updated images', product.images)
+                        prod.images = product.images
+                    }
+                    return prod
+                });
+            });
+        }).then(() => alert('Image deleted successfully')).catch(err => alert('Error deleting image'))
     }
 
     return (
@@ -317,6 +334,18 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                         <small className='text-danger'>{errors.category?.message} {feedback.category?.message}</small>
                     </Form.Group>
                 </Col>
+            </Row>
+
+            {product.images ? <Row className='p-2'>
+                {product.images.map(url => (
+                    <Col xs={4} className='p-3 d-flex gap-2'>
+                        <img width={300} src={url} />
+                        <button type='button' className='btn btn-sm btn-danger' onClick={() => removeImage(product._id, url)}>X</button>
+                    </Col>
+                ))}
+            </Row> : null}
+
+            <Row>
                 <Col xs={6}>
                     <ImageUploader collection='products' id={product._id} setProducts={setProducts} />
                 </Col>

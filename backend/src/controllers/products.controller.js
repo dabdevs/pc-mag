@@ -147,3 +147,27 @@ module.exports.getFormData = async (req, res) => {
         res.status(500).json({ err: 'Internal Server Error' });
     }
 }
+
+module.exports.deleteImage = async (req, res) => {
+    try {
+        const path = req.body.path
+
+        Product.findOneAndUpdate(new ObjectId(req.params.id), { $pull: { images: path } }, { new: true })
+            .then(updatedProduct => {
+                if (updatedProduct) {
+                    console.log('Image deleted successfully:', updatedProduct);
+                    res.status(200).json({ message: 'Image deleted successfully', product: updatedProduct })
+                } else {
+                    console.log('Image cound not be deleted.');
+                    throw (error)
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting image:', error);
+                throw (error)
+            });
+    } catch (err) {
+        console.error('Error fetching data:', err);
+        res.status(500).json({ err: 'Internal Server Error' });
+    }
+}

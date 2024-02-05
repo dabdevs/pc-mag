@@ -170,7 +170,7 @@ export default function Products() {
                                 data.map((product, index) => (
                                     <tr key={index}>
                                         <th>
-                                            <img height={40} className="card-img-top" src={product.images[0]} alt={product.images[0]} />
+                                            {product.images ? <img height={40} width={60} className="card-img-top" src={product.images[0]} alt={'product image'} /> : null} 
                                         </th>
                                         <td className='pt-3'>{product.name}</td>
                                         <td className='pt-3'>{product.brand}</td>

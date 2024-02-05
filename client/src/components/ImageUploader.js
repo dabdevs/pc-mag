@@ -18,7 +18,7 @@ export default function ImageUploader({collection, id, setProducts}) {
             console.log('formData',formData)
             resetFileInput()
             
-            upload(formData).then(({error, success, fileUrls}) => {
+            upload(formData).then(({error, success, urls}) => {
                 if (error) {
                     setError(true)
                     setUploading(false)
@@ -29,10 +29,8 @@ export default function ImageUploader({collection, id, setProducts}) {
 
                 setProducts(prevProducts => {
                     return prevProducts.map(prod => {
-                        console.log('looopeando', prod)
                         if (prod._id == id) {
-                            prod.images = fileUrls
-                            console.log('images added', prod)
+                            prod.images = urls
                         }
                         return prod
                     });
