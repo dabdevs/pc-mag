@@ -318,7 +318,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                     </Form.Group>
                 </Col>
                 <Col xs={6}>
-                    <ImageUploader collection='products' id={product._id} />
+                    <ImageUploader collection='products' id={product._id} setProducts={setProducts} />
                 </Col>
             </Row>
 

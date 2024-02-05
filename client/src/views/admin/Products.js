@@ -1,15 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Dashboard from '../Dashboard'
-import TableComponent from '../../components/Shared/TableComponent'
 import { getProducts, destroy, getProductFormData } from '../../api/products'
 import ModalComponent from '../../components/Shared/ModalComponent'
 import ProductForm from '../../Forms/ProductForm'
-import { useTable, usePagination, useRowSelect } from 'react-table';
 import { FaPlus } from "react-icons/fa";
-import { formatPrice } from '../../utils'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import useSWR from 'swr';
+
 
 export default function Products() {
     const [products, setProducts] = useState([])
@@ -65,7 +62,7 @@ export default function Products() {
     const deleteProduct = () => {
         destroy(selectedProduct._id).then(({ _id }) => {
             setOpenModal(false)
-            setProducts((prevProducts) => {
+            setProducts(prevProducts => {
                 return prevProducts.filter((prod) =>
                     prod._id !== _id
                 );
@@ -77,10 +74,12 @@ export default function Products() {
     const closeForm = () => {
         setSelectedProduct(null)
         setAction('')
+        createContent()
     }
 
     function createContent() {
-        console.log('total pages function', currentPage, totalPages)
+        console.log('Creating content')
+        console.log(products)
         const data = filteredProducts.length ? filteredProducts : products;
         let _jsx = null;
 

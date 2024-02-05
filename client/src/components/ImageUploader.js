@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { upload } from '../api/uploader'
 import {getFlashMessages} from '../utils'
 
-export default function ImageUploader({collection, id}) {
+export default function ImageUploader({collection, id, setProducts}) {
     const [flashMessages, setFlashMessages] = useState({});
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false)
@@ -18,7 +18,7 @@ export default function ImageUploader({collection, id}) {
             console.log('formData',formData)
             resetFileInput()
             
-            upload(formData).then(({error}) => {
+            upload(formData).then(({error, success, fileUrls}) => {
                 if (error) {
                     setError(true)
                     setUploading(false)
@@ -26,6 +26,17 @@ export default function ImageUploader({collection, id}) {
                 }
                 setSuccess(true)
                 setUploading(false)
+
+                setProducts(prevProducts => {
+                    return prevProducts.map(prod => {
+                        console.log('looopeando', prod)
+                        if (prod._id == id) {
+                            prod.images = fileUrls
+                            console.log('images added', prod)
+                        }
+                        return prod
+                    });
+                });
             }).catch(err => {
                 console.log(err)
                 setUploading(false)
