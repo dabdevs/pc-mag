@@ -3,12 +3,17 @@ const router = express.Router();
 require('dotenv').config()
 const multer = require('multer');
 const path = require('path');
+const { ObjectId } = require('mongodb')
+const {
+    v4: uuidv4,
+} = require('uuid');
 
 // Multer Configuration
 const storage = multer.memoryStorage(); 
 const upload = multer({ storage });
 
-const AWS = require('aws-sdk')
+const AWS = require('aws-sdk');
+const Product = require('../models/Product');
 const s3 = new AWS.S3()
 
 s3.config.update({
@@ -22,6 +27,7 @@ s3.config.update({
 router.post('/upload', upload.array('images', 5), async (req, res) => {
     try {
         const images = req.files;
+        const {id, collection} = req.body
 
         if (!images || images.length === 0) {
             return res.status(400).json({ error: 'No images uploaded' });
@@ -30,7 +36,7 @@ router.post('/upload', upload.array('images', 5), async (req, res) => {
         const uploadPromises = images.map(file => {
             const params = {
                 Bucket: process.env.AWS_BUCKET,
-                Key: file.originalname,
+                Key: uuidv4() + file.mimetype.replace('image/', '.'),
                 Body: file.buffer,
                 ContentType: file.mimetype 
             };
@@ -39,9 +45,20 @@ router.post('/upload', upload.array('images', 5), async (req, res) => {
         });
 
         Promise.all(uploadPromises)
-            .then(data => {
+            .then(async data => {
                 const fileUrls = data.map(file => file.Location);
                 console.log('images uploaded to S3:', fileUrls);
+
+                try {
+                    switch (collection) {
+                        case 'products':
+                            await Product.findOneAndUpdate(new ObjectId(id), { images: fileUrls })
+                            break;
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+
                 req.flash('success', 'Images uploaded to S3!');
                 res.json({ success: 'Images uploaded to S3', fileUrls });
             })

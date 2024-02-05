@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { upload } from '../api/uploader'
 import {getFlashMessages} from '../utils'
 
-export default function ImageUploader() {
+export default function ImageUploader({collection, id}) {
     const [flashMessages, setFlashMessages] = useState({});
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false)
@@ -10,8 +10,12 @@ export default function ImageUploader() {
 
     const uploadImages = () => {
         try {
+            console.log('value request', id, collection)
             setUploading(true)
             const formData = new FormData(document.getElementById('uploadImagesForm'));
+            formData.append('id', id)
+            formData.append('collection', collection)
+            console.log('formData',formData)
             resetFileInput()
             
             upload(formData).then(({error}) => {
@@ -48,7 +52,7 @@ export default function ImageUploader() {
     }
 
     return (
-        <section className='card p-5 m-5 mx-auto w-50'>
+        <div className='card w-100'>
             {success && <div className='mt-3 alert alert-success'>Images uploaded successfully!</div>}
             {error && <div className='mt-3 alert alert-danger'>An error ocurred while uploading the files!</div>}
 
@@ -56,6 +60,6 @@ export default function ImageUploader() {
                 <input id='images' type='file' name='images' className='form-control' multiple />
                 <button onClick={uploadImages} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
             </form>
-        </section>
+        </div>
     )
 }

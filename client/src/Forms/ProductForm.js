@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { create, update } from '../api/products';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import ImageUploader from '../components/ImageUploader';
 import * as yup from "yup"
 
 const schema = yup
@@ -315,6 +316,9 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                         </Form.Select>
                         <small className='text-danger'>{errors.category?.message} {feedback.category?.message}</small>
                     </Form.Group>
+                </Col>
+                <Col xs={6}>
+                    <ImageUploader collection='products' id={product._id} />
                 </Col>
             </Row>
 

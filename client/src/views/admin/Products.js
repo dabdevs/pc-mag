@@ -31,7 +31,7 @@ export default function Products() {
     useEffect(() => {
         setLoading(true)
         getProductFormData().then(data => setFormData(data)).catch(err => console.log(err))
-        
+
         getProducts('', '', page)
             .then(({ products, totalPages, currentPage }) => {
                 setLoading(false)
@@ -78,7 +78,7 @@ export default function Products() {
         setSelectedProduct(null)
         setAction('')
     }
-    
+
     function createContent() {
         console.log('total pages function', currentPage, totalPages)
         const data = filteredProducts.length ? filteredProducts : products;
@@ -171,7 +171,7 @@ export default function Products() {
                                 data.map((product, index) => (
                                     <tr key={index}>
                                         <th>
-                                            <img height={40} className="card-img-top" src={`${product.images[0]}`} alt={product.name} />
+                                            <img height={40} className="card-img-top" src={product.images[0]} alt={product.images[0]} />
                                         </th>
                                         <td className='pt-3'>{product.name}</td>
                                         <td className='pt-3'>{product.brand}</td>
@@ -266,27 +266,5 @@ export default function Products() {
             </section>
         </Dashboard>
     );
-
-    function selectComponent({ value }) {
-        return (
-            <input value={value} type='checkbox' className='form-control' onChange={(e) => e.target.value} />
-        )
-    }
-
-    const handleEditClick = (rowId) => {
-        setEditRowId(rowId);
-    };
-
-    const formatPrice = (value) => {
-        if (value) {
-            return `$${(value / 100).toFixed(2)}`;
-        } else {
-            return "-";
-        }
-    };
-
-    const selectProduct = (id) => {
-        console.log('Product selected with id', id)
-    }
 }
 
