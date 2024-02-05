@@ -25,37 +25,22 @@ const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
-router.post('/upload', upload.array('images', 5), async (req, res) => {
+router.post('/upload', upload.array('images', process.env.IMAGES_PER_PRODUCT), async (req, res) => {
     try {
+        const imagesUploadCount = process.env.IMAGES_PER_PRODUCT
         const uploadedImages = req.files;
+
         const { id, collection } = req.body
 
         if (!uploadedImages || uploadedImages.length === 0) {
             return res.status(400).json({ error: 'No images uploaded' });
         }
 
+        if (uploadedImages.length > imagesUploadCount) {
+            return res.status(400).json({ error: `Upload up to ${imagesUploadCount} images` });
+        }
+
         const resizedImages = await resizeImagesAndUploadToS3(uploadedImages);
-
-        
-
-        // for (const image of uploadedImages) {
-        //     console.log('Image:', image)
-        //     const path = `public/${uuidv4()}_${image.mimetype.replace('image/', '.')}`
-
-        //     const resizedBuffer = await sharp(image.buffer)
-        //         .resize(640, 300)
-        //         .toBuffer();
-
-        //     const params = {
-        //         Bucket: process.env.AWS_BUCKET,
-        //         Key: path,
-        //         Body: resizedBuffer
-        //     };
-
-        //     const uploadResult = await s3.upload(params).promise();
-        //     resizedImages.push(uploadResult.Location);
-        // }
-
 
         const uploadedUrls = []
         resizedImages.map(path => uploadedUrls.push(path))

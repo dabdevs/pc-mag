@@ -6,7 +6,7 @@ export default function ImageUploader({collection, id, setProducts}) {
     const [flashMessages, setFlashMessages] = useState({});
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState('')
 
     const uploadImages = () => {
         try {
@@ -18,13 +18,9 @@ export default function ImageUploader({collection, id, setProducts}) {
             console.log('formData',formData)
             resetFileInput()
             
-            upload(formData).then(({error, success, urls}) => {
-                if (error) {
-                    setError(true)
-                    setUploading(false)
-                    return
-                }
+            upload(formData).then(({urls}) => {
                 setSuccess(true)
+                setError('')
                 setUploading(false)
 
                 setProducts(prevProducts => {
@@ -35,13 +31,15 @@ export default function ImageUploader({collection, id, setProducts}) {
                         return prod
                     });
                 });
-            }).catch(err => {
-                console.log(err)
+            }).catch(({response}) => {
+                setError(response.data.error)
                 setUploading(false)
+                setSuccess(false)
             })
         } catch (err) {
+            setError('An error ocurred while uploading the files. Please try again later.')
             setUploading(false)
-            console.log(err)
+            setSuccess(false)
         }
     }
 
@@ -63,7 +61,7 @@ export default function ImageUploader({collection, id, setProducts}) {
     return (
         <div className='card w-100'>
             {success && <div className='mt-3 alert alert-success'>Images uploaded successfully!</div>}
-            {error && <div className='mt-3 alert alert-danger'>An error ocurred while uploading the files!</div>}
+            {error && <div className='mt-3 alert alert-danger'>{error}</div>}
 
             <form id='uploadImagesForm' encType="multipart/form-data" className='d-flex gap-3'>
                 <input id='images' type='file' name='images' className='form-control' multiple />

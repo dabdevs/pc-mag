@@ -108,7 +108,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                     return prod
                 });
             });
-        }).then(() => alert('Image deleted successfully')).catch(err => alert('Error deleting image'))
+        }).then(() => alert('Image deleted successfully')).catch(err => console.log(err))
     }
 
     return (
