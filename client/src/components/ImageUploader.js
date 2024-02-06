@@ -65,7 +65,7 @@ export default function ImageUploader({ collection, id, setProducts }) {
 
             <form id='uploadImagesForm' encType="multipart/form-data" className='d-flex gap-3'>
                 <input id='images' type='file' name='images' className='form-control border-0' multiple />
-                <button onClick={uploadImages} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
+                <button onClick={() => uploadImages()} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
             </form>
         </div>
     )
