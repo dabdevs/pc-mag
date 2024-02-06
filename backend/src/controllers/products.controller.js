@@ -7,6 +7,8 @@ const Processor = require('../models/Processor');
 const OperativeSystem = require('../models/OperativeSystem');
 const Category = require('../models/Category');
 const Brand = require('../models/Brand');
+const S3Service = require('../services/s3');
+const s3 = new S3Service()
 
 module.exports.getAll = async (req, res) => {
     try {
@@ -152,20 +154,25 @@ module.exports.deleteImage = async (req, res) => {
     try {
         const path = req.body.path
 
-        Product.findOneAndUpdate(new ObjectId(req.params.id), { $pull: { images: path } }, { new: true })
-            .then(updatedProduct => {
-                if (updatedProduct) {
-                    console.log('Image deleted successfully:', updatedProduct);
-                    res.status(200).json({ message: 'Image deleted successfully', product: updatedProduct })
-                } else {
-                    console.log('Image cound not be deleted.');
-                    throw (error)
-                }
-            })
-            .catch(error => {
-                console.error('Error deleting image:', error);
-                throw (error)
-            });
+        s3.deleteObject(path).then(() => {
+            Product.findOneAndUpdate(new ObjectId(req.params.id), { $pull: { images: path } }, { new: true })
+                .then(updatedProduct => {
+                    if (updatedProduct) {
+                        console.log('Image deleted successfully:', updatedProduct);
+                        res.status(200).json({ message: 'Image deleted successfully', product: updatedProduct })
+                    } else {
+                        console.log('Image cound not be deleted.');
+                        throw (error)
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting image:', error);
+                    throw error
+                });
+        }).catch(error => {
+            console.error('Error deleting image:', error);
+            throw error
+        });
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });

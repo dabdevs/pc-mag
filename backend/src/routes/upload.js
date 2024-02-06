@@ -2,30 +2,17 @@ const express = require('express');
 const router = express.Router();
 require('dotenv').config()
 const multer = require('multer');
-const sharp = require('sharp')
 const { ObjectId } = require('mongodb')
-const {
-    v4: uuidv4,
-} = require('uuid');
 
-const AWS = require('aws-sdk');
 const Product = require('../models/Product');
-const { resizeImagesAndUploadToS3 } = require('../utils');
-const s3 = new AWS.S3()
+const S3Service = require('../services/s3');
+const s3 = new S3Service()
 
-s3.config.update({
-    maxRetries: 3,
-    httpOptions: { timeout: 30000, connectTimeout: 5000 },
-    region: process.env.AWS_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY,
-});
+// const storage = multer.memoryStorage(); 
 
-const storage = multer.memoryStorage(); 
+// const upload = multer({ storage });
 
-const upload = multer({ storage });
-
-router.post('/upload', upload.array('images', process.env.IMAGES_PER_PRODUCT), async (req, res) => {
+router.post('/upload', s3.upload().array('images', process.env.IMAGES_PER_PRODUCT), async (req, res) => {
     try {
         const imagesUploadCount = process.env.IMAGES_PER_PRODUCT
         const uploadedImages = req.files;
@@ -40,7 +27,7 @@ router.post('/upload', upload.array('images', process.env.IMAGES_PER_PRODUCT), a
             return res.status(400).json({ error: `Upload up to ${imagesUploadCount} images` });
         }
 
-        const resizedImages = await resizeImagesAndUploadToS3(uploadedImages);
+        const resizedImages = await s3.resizeImagesAndUploadToS3(uploadedImages);
 
         const uploadedUrls = []
         resizedImages.map(path => uploadedUrls.push(path))

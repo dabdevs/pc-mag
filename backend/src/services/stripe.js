@@ -1,4 +1,3 @@
-// services/stripeService.js
 const Stripe = require('stripe')
 require('dotenv').config()
 const SKYPE_SECRET = process.env.STRIPE_SECRET_KEY

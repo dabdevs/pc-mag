@@ -66,33 +66,5 @@ module.exports.resizeImage = async (inputPath, outputPath) => {
     });
 }
 
-module.exports.resizeImagesAndUploadToS3 = async (uploadedImages) => {
-    try {
-        const resizedImages = []
-
-        for (const image of uploadedImages) {
-            console.log('Resizing:', image)
-            const path = `public/${uuidv4()}_${image.mimetype.replace('image/', '.')}`
-
-            const resizedBuffer = await sharp(image.buffer)
-                .resize(1200, 1800)
-                .toBuffer();
-
-            const params = {
-                Bucket: process.env.AWS_BUCKET,
-                Key: path,
-                Body: resizedBuffer
-            };
-
-            const uploadResult = await s3.upload(params).promise();
-            resizedImages.push(uploadResult.Location);
-        }
-
-        return resizedImages
-    } catch (error) {
-        throw error
-    }
-}
-
 
 
