@@ -170,7 +170,7 @@ export default function Products() {
                                 data.map((product, index) => (
                                     <tr key={index}>
                                         <th>
-                                            {product.images ? <img height={40} width={60} className="card-img-top" src={product.images[0]} alt={'product image'} /> : null} 
+                                            {product.images ? <img height={40} width={60} className="card-img-top" src={product.images[0]} alt={'product image'} /> : null}
                                         </th>
                                         <td className='pt-3'>{product.name}</td>
                                         <td className='pt-3'>{product.brand}</td>
@@ -194,36 +194,36 @@ export default function Products() {
                     {<nav>
                         <ul className="pagination pagination-sm">
                             <li className={prevBtnClasses}>
-                                <a className="page-link" href="javascript:void(0)" tabIndex="-1" onClick={() => setPage(prevPage => prevPage - 1)}>Previous</a>
+                                <a className="page-link" tabIndex="-1" onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage - 1) }}>Previous</a>
                             </li>
 
-                            <li className={`page-item ${page === 1 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(1)}>
-                                <a className="page-link" href="javascript:void(0)">1</a>
+                            <li className={`page-item ${page === 1 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(1) }}>
+                                <a className="page-link">1</a>
                             </li>
-                            <li className={`page-item ${page === 2 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(2)}>
-                                <a className="page-link" href="javascript:void(0)">2</a>
+                            <li className={`page-item ${page === 2 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(2) }}>
+                                <a className="page-link">2</a>
                             </li>
-                            <li className={`page-item ${page === 3 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(3)}>
-                                <a className="page-link" href="javascript:void(0)">3</a>
+                            <li className={`page-item ${page === 3 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(3) }}>
+                                <a className="page-link">3</a>
                             </li>
-                            <li className={`page-item ${page === 4 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(4)}>
-                                <a className="page-link" href="javascript:void(0)">4</a>
+                            <li className={`page-item ${page === 4 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(4) }}>
+                                <a className="page-link">4</a>
                             </li>
-                            <li className={`page-item ${page === 5 ? 'active' : ''}`} aria-current="page" onClick={() => setPage(5)}>
-                                <a className="page-link" href="javascript:void(0)">5</a>
+                            <li className={`page-item ${page === 5 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(5) }}>
+                                <a className="page-link">5</a>
                             </li>
                             <li className={`page-item disabled`} aria-current="page">
-                                <a className="page-link" href="javascript:void(0)">... {page === currentPage}</a>
+                                <a className="page-link">... {page === currentPage}</a>
                             </li>
 
                             {page > 5 &&
                                 <li className={`page-item active`} aria-current="page">
-                                    <a className="page-link" href="javascript:void(0)">{page}</a>
+                                    <a className="page-link">{page}</a>
                                 </li>
                             }
 
                             <li className={nextBtnClasses}>
-                                <a className="page-link" href="javascript:void(0)" onClick={() => setPage(prevPage => prevPage + 1)}>Next</a>
+                                <a className="page-link" onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage + 1) }}>Next</a>
                             </li>
                         </ul>
                     </nav>}

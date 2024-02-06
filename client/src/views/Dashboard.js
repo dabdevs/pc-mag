@@ -18,7 +18,7 @@ export default function Dashboard({children}) {
             </div>
         </div>
 
-        <div className='row'>
+        <div className='row pt-4'>
           {children}
         </div>
       </section>

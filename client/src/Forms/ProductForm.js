@@ -112,7 +112,10 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
     }
 
     return (
-        <Form>
+        <div>
+            <Row>
+                <h1 className='display-4 fw-bolder'>{product ? product.name : 'New Product'}</h1>
+            </Row>
             {form?._id && <input type='hidden' value={form?._id} name='_id' />}
             <Row>
                 <Form.Group className="mb-3">
@@ -157,7 +160,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                             onChange={(e) => setForm({ ...form, brand: e.target.value })}
                         >
                             <option value=''>Select an option</option>
-                            {brands?.map(brand => <option value={brand.name}>{brand.name}</option>)}
+                            {brands?.map((brand, i) => <option key={i} value={brand.name}>{brand.name}</option>)}
                         </Form.Select>
                         <small className='text-danger'>{errors.brand?.message} {feedback.brand?.message}</small>
                     </Form.Group>
@@ -193,7 +196,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                             onChange={(e) => setForm({ ...form, os: e.target.value })}
                         >
                             <option value=''>Select an option</option>
-                            {operativeSystems.map(os => <option value={os.name}>{os.name}</option>)}
+                            {operativeSystems.map((os, i) => <option key={i} value={os.name}>{os.name}</option>)}
                         </Form.Select>
                         <small className='text-danger'>{errors.os?.message} {feedback.os?.message}</small>
                     </Form.Group>
@@ -329,16 +332,20 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                             onChange={(e) => setForm({ ...form, category: e.target.value })}
                         >
                             <option value=''>Select an option</option>
-                            {categories?.map(category => <option value={category.name}>{category.name}</option>)}
+                            {categories?.map((category, i) => <option key={i} value={category.name}>{category.name}</option>)}
                         </Form.Select>
                         <small className='text-danger'>{errors.category?.message} {feedback.category?.message}</small>
                     </Form.Group>
                 </Col>
             </Row>
 
-            {product.images ? <Row className='p-2'>
+            <Row>
+                <h4>Upload up to 6 images</h4>
+            </Row>
+
+            {product.images ? <Row>
                 {product.images.map(url => (
-                    <Col xs={4} className='p-3 d-flex gap-2'>
+                    <Col key={url} xs={4} className='p-3 d-flex gap-2'>
                         <img width={300} src={url} />
                         <button type='button' className='btn btn-sm btn-danger' onClick={() => removeImage(product._id, url)}>X</button>
                     </Col>
@@ -361,6 +368,6 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                     </Button>
                 </Col>
             </Row>
-        </Form>
+        </div>
     )
 }

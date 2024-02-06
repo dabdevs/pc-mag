@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { upload } from '../api/uploader'
-import {getFlashMessages} from '../utils'
+import { getFlashMessages } from '../utils'
 
-export default function ImageUploader({collection, id, setProducts}) {
+export default function ImageUploader({ collection, id, setProducts }) {
     const [flashMessages, setFlashMessages] = useState({});
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false)
@@ -15,10 +15,10 @@ export default function ImageUploader({collection, id, setProducts}) {
             const formData = new FormData(document.getElementById('uploadImagesForm'));
             formData.append('id', id)
             formData.append('collection', collection)
-            console.log('formData',formData)
+            console.log('formData', formData)
             resetFileInput()
-            
-            upload(formData).then(({urls}) => {
+
+            upload(formData).then(({ urls }) => {
                 setSuccess(true)
                 setError('')
                 setUploading(false)
@@ -31,7 +31,7 @@ export default function ImageUploader({collection, id, setProducts}) {
                         return prod
                     });
                 });
-            }).catch(({response}) => {
+            }).catch(({ response }) => {
                 setError(response.data.error)
                 setUploading(false)
                 setSuccess(false)
@@ -64,7 +64,7 @@ export default function ImageUploader({collection, id, setProducts}) {
             {error && <div className='mt-3 alert alert-danger'>{error}</div>}
 
             <form id='uploadImagesForm' encType="multipart/form-data" className='d-flex gap-3'>
-                <input id='images' type='file' name='images' className='form-control' multiple />
+                <input id='images' type='file' name='images' className='form-control border-0' multiple />
                 <button onClick={uploadImages} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
             </form>
         </div>
