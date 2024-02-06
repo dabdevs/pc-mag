@@ -3,12 +3,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Index from './views/Index';
 import Product from './views/Product';
 import { ShoppingCartProvider } from './context/ShoppingCartContext';
-import CheckoutForm from './components/Checkout/CheckoutForm';
 import CheckoutResponse from './components/Checkout/CheckoutResponse';
 import ImageUploader from './components/ImageUploader';
 import Login from './views/Login';
 import { AuthContextProvider } from './context/AuthContext';
 import Dashboard from './views/Dashboard';
+import Products from './views/admin/Products';
 
 function App() {
   const router = createBrowserRouter([
@@ -21,16 +21,8 @@ function App() {
       element: <Index />
     },
     {
-      path: "/category/:categoryName",
-      element: <Index />
-    },
-    {
       path: "/products/:productId/:productName",
       element: <Product />
-    },
-    {
-      path: "/checkout",
-      element: <CheckoutForm />
     },
     {
       path: "/checkout/:response",
@@ -45,8 +37,12 @@ function App() {
       element: <Login />
     },
     {
-      path: "/dashboard",
+      path: "/admin",
       element: <Dashboard />
+    },
+    {
+      path: "/admin/products",
+      element: <Products />
     },
     {
       path: "*",

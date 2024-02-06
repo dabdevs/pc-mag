@@ -4,14 +4,24 @@ const productSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
         maxLength: 150
+    },
+    brand: {
+        type: String,
+        required: true,
+        maxLength: 50
     },
     description: {
         type: String,
         maxLength: 256
     },
+    category: {
+        type: String,
+        required: true
+    },
     images: {
-        type: Array,
+        type: [String],
         required: true
     },
     price: {
@@ -50,11 +60,14 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    createdBy: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User' 
+    rating: {
+        type: Number,
+    },
+    availability: {
+        type: Boolean,
+        required: false
     }
-})
+}, { timestamps: true })
 
 const Product = mongoose.model('product', productSchema)
 

@@ -6,6 +6,6 @@ export const upload = async (images) => {
 
         return data
     } catch (err) {
-        console.error(err)
+        throw err
     }
 }

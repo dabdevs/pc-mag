@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useShoppingCartContext } from '../../context/ShoppingCartContext'
 import './cart-items.css'
 import Checkout from '../../api/checkout'
+import { BsFillCartCheckFill } from 'react-icons/bs';
 
 export default function CartItems() {
     const [checkingOut, setCheckingOut] = useState(false)
@@ -53,9 +54,11 @@ export default function CartItems() {
                             </tr>)
                         })}
                         <tr>
-                            <td colSpan={3}><h5>Total: $ {total.toFixed(2)}</h5></td>
-                            <td>
-                                <button className='btn btn-dark' onClick={handleCheckout}> {checkingOut? 'Checkout...' : 'Checkout' } </button>
+                            <td colSpan={2}><h5>Total: $ {total.toFixed(2)}</h5></td>
+                            <td colSpan={2}>
+                                <button className="btn btn-dark d-flex btn-block mx-auto" type="button" onClick={handleCheckout}>
+                                    {checkingOut ? <span><span class="spinner-border spinner-border-sm"></span> Checkout...</span> : <span><BsFillCartCheckFill className='mr-1'/>  Checkout</span>}
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -76,7 +79,9 @@ export default function CartItems() {
                     <div className='py-2 d-flex justify-content-between'>
                         <h5 className='m-0'>Total: $ {total.toFixed(2)}</h5>
                         
-                        <button className='btn btn-dark pull-right' onClick={handleCheckout}> {checkingOut ? 'Checkout...' : 'Checkout' } </button>
+                        <button className="btn btn-dark pull-right" type="button" onClick={handleCheckout}>
+                            {checkingOut ? <span><span class="spinner-border spinner-border-sm"></span> Checkout...</span> : <span><BsFillCartCheckFill className='mr-1' />  Checkout</span>}
+                        </button>
                     </div>
                 </div>
             </div>

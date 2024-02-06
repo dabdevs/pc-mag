@@ -1,25 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useProductsContext } from '../context/ProductsContext';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Sidebar({ category }) {
-    const { handleFilter } = useProductsContext()
+    const { setFiltered, filtered, setFilters } = useProductsContext()
     const [formFactor, setFormFactor] = useState([]);
     const [ram, setRam] = useState([]);
     const [processor, setProcessor] = useState([]);
-    const [minPrice, setMinPrice] = useState(null)
+    const [minPrice, setMinPrice] = useState('')
     const [maxPrice, setMaxPrice] = useState('')
     const [error, setError] = useState('')
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const disabled = formFactor.length === 0 && ram.length === 0 && processor.length === 0 && maxPrice === '' && minPrice === ''
 
-    const setFormFilter = (e) => {
+    useEffect(() => {
+        if (!filtered) clearFilters()
+    }, [filtered])
+
+    const setFormFilters = (e) => {
         const value = e.target.value
 
         switch (e.target.name) {
             case 'formFactor':
                 e.target.checked ? setFormFactor([...formFactor, value]) : setFormFactor(formFactor.filter(item => item !== value))
                 break;
-
             case 'ram':
                 e.target.checked ? setRam([...ram, value]) : setRam(ram.filter(item => item !== value))
                 break;
@@ -27,12 +32,32 @@ export default function Sidebar({ category }) {
             case 'processor':
                 e.target.checked ? setProcessor([...processor, value]) : setProcessor(processor.filter(item => item !== value))
                 break;
-        
             default:
                 break;
-        }
+        }   
+    }
 
-        
+    const clearFilters = async () => {
+        try {
+            setMinPrice('')
+            setMaxPrice('')
+            setFormFactor([])
+            setRam([])
+            setProcessor([])
+            document.getElementById('sort').value = ''
+
+            const inputs = document.querySelectorAll('input');
+
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    input.checked = false;
+                }
+
+                if (input.type === 'text') input.value = ''
+            });
+        } catch (err) {
+            console.log(err)
+        }
     }
     
     const handleSubmit = async (e) => {
@@ -44,7 +69,9 @@ export default function Sidebar({ category }) {
             return
         }
 
-        handleFilter({ formFactor, ram, processor, minPrice, maxPrice }, category)
+        const filters = { formFactor, ram, processor, minPrice, maxPrice }
+        setSearchParams(filters)
+        setFiltered(true)
     };
 
     return (
@@ -57,12 +84,12 @@ export default function Sidebar({ category }) {
                         <div id="filterPrice" className='d-flex gap-2 w-100'>
                             <div>
                                 <label htmlFor="minPrice" className="form-label"><small>Min. Price</small></label>
-                                <input value={minPrice} onChange={(e) => setMinPrice(e.target.value)} id="minPrice" type="number" className="form-control" min={300} max={8000} />
+                                <input value={minPrice} onChange={(e) => setMinPrice(e.target.value)} id="minPrice" type="number" className="form-control" min={100} />
                             </div>
 
                             <div>
                                 <label htmlFor="maxPrice" className="form-label"><small>Max. Price</small></label>
-                                <input value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} id="maxPrice" type="number" className="form-control" min={500} max={20000} />
+                                <input value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} id="maxPrice" type="number" className="form-control" min={100}/>
                             </div>
                         </div>
                     </div>
@@ -74,7 +101,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='notebook'
                                     name='formFactor'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
                                     value={'notebook'}
                                     className='form-check-input' />
@@ -84,7 +111,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='desktop'
                                     name='formFactor'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
                                     value={'desktop'}
                                     className='form-check-input' />
@@ -100,7 +127,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='i3'
                                     name='processor'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
                                     value={'Intel i3'}
                                     className='form-check-input' />
@@ -110,7 +137,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='i5'
                                     name='processor'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
                                     value={'Intel i5'}
                                     className='form-check-input' />
@@ -120,7 +147,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='i7'
                                     name='processor'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
                                     value={'Intel i7'}
                                     className='form-check-input' />
@@ -130,7 +157,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='amd'
                                     name='processor'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
                                     value={'amd'}
                                     className='form-check-input' />
@@ -140,7 +167,7 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='apple'
                                     name='processor'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
                                     value={'Apple M1'}
                                     className='form-check-input' />
@@ -156,34 +183,45 @@ export default function Sidebar({ category }) {
                                 <input
                                     id='4GB'
                                     name='ram'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
-                                    value={'4GB'}
+                                    value={'4 GB'}
                                     className='form-check-input'
                                 />
-                                <label htmlFor='4GB'>&nbsp; 4GB</label>
+                                <label htmlFor='4GB'>&nbsp; 4 GB</label>
                             </div>
                             <div>
                                 <input
                                     id='8GB'
                                     name='ram'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
-                                    value={'8GB'}
+                                    value={'8 GB'}
                                     className='form-check-input'
                                 />
-                                <label htmlFor='8GB'>&nbsp; 8GB</label>
+                                <label htmlFor='8GB'>&nbsp; 8 GB</label>
                             </div>
                             <div>
                                 <input
                                     id='16GB'
                                     name='ram'
-                                    onChange={setFormFilter}
+                                    onChange={setFormFilters}
                                     type='checkbox'
-                                    value={'16GB'}
+                                    value={'16 GB'}
                                     className='form-check-input'
                                 />
-                                <label htmlFor='16GB'>&nbsp; 16GB</label>
+                                <label htmlFor='16GB'>&nbsp; 16 GB</label>
+                            </div>
+                            <div>
+                                <input
+                                    id='32GB'
+                                    name='ram'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'32 GB'}
+                                    className='form-check-input'
+                                />
+                                <label htmlFor='32GB'>&nbsp; 32 GB</label>
                             </div>
                         </div>
                     </div>

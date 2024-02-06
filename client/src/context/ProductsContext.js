@@ -13,6 +13,7 @@ export const ProductsContextProvider = ({ children }) => {
     const [filtered, setFiltered] = useState(false)
     const [filters, setFilters] = useState([])
     const [loading, setLoading] = useState(false)
+    const [filtersCleared, setFiltersCleared] = useState(false)
 
     const handleSearch = async (search, category='') => {
         setSearch(search)
@@ -46,43 +47,27 @@ export const ProductsContextProvider = ({ children }) => {
         return data
     }
 
-    const handleFilter = async (filters, category) => {
-        try {
-            setFilters(filters)
-            setFiltered(true)
-            setLoading(true)
-            let data = await getProducts(category, search, filters)
+    // const clearFilters = (category) => {
+    //     setSearch('')
+    //     setFiltered(false)
+    //     setFilters()
 
-            setLoading(false)
-            setProducts(data)
-            document.getElementById('sort').value = ''
-        } catch (err) {
-            setLoading(false)
-            console.log(err)
-        }
-    }
+    //     const inputs = document.querySelectorAll('input');
 
-    const clearFilters = (category) => {
-        setSearch('')
-        setFiltered(false)
-        setFilters()
+    //     inputs.forEach(input => {
+    //         if (input.type === 'checkbox') {
+    //             input.checked = false;
+    //         }
 
-        const inputs = document.querySelectorAll('.form-check-input');
+    //         if (input.type === 'text') input.value = ''
+    //     });
 
-        inputs.forEach(input => {
-            if (input.type === 'checkbox') {
-                input.checked = false;
-            }
-        });
+    //     document.getElementById('sort').value = ''
 
-        document.getElementById('sort').value = ''
-
-        getProducts(category)
-            .then(data => {
-                setProducts(data)
-            })
-            .catch(err => console.error(err));
-    }
+    //     getProducts(category)
+    //         .then(data => setProducts(data))
+    //         .catch(err => console.error(err));
+    // }
 
     return (
         <ProductsContext.Provider value={{
@@ -94,9 +79,9 @@ export const ProductsContextProvider = ({ children }) => {
             setFiltered,
             loading,
             setLoading,
-            handleFilter,
             handleSearch,
-            clearFilters,
+            filtersCleared,
+            setFiltersCleared,
             filters,
             setFilters,
             handleSortBy

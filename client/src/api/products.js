@@ -2,19 +2,61 @@ import axios from "axios"
 
 const baseUrl = 'http://localhost:3000';
 
-export const getProducts = async (category='', search='', filters=[]) => {
+export const getProducts = async (category='', search='', page=1) => {
     try {
-        let url = `${baseUrl}/api/products/${category}`
+        let url = `${baseUrl}/api/products`
+        console.log('andan function ', page)
+        if (search) url += search
 
-        if (search) {
-            url += `?q=${search}`
-        }
+        if (page) url += `?page=${page}`
 
-        const { data } = await axios.post(url, filters)
+        console.log(url)
+        
+        const { data } = await axios.get(url)
 
         return data
     } catch (err) {
         console.error(err)
+        throw err
+    }
+}
+
+export const create = async (product) => {
+    try {
+        console.log(product)
+        const url = `${baseUrl}/api/products`
+        const { data } = await axios.post(url, product)
+
+        return data
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+export const update = async (product) => {
+    console.log('UPATING FROM API', product)
+    try {
+        const url = `${baseUrl}/api/products/${product._id}`
+        const { data } = await axios.put(url, product)
+
+        return data
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+export const destroy = async (id) => {
+    try {
+        const url = `${baseUrl}/api/products/${id}`
+
+        const { data } = await axios.delete(url)
+
+        return data
+    } catch (err) {
+        console.error(err)
+        throw err
     }
 }
 
@@ -26,6 +68,7 @@ export const getById = async (id) => {
         return data
     } catch (err) {
         console.error(err)
+        throw err
     }
 }
 
@@ -36,6 +79,7 @@ export const getByName = async (products, name) => {
         return product[0]
     } catch (err) {
         console.error(err)
+        throw err
     }
 }
 
@@ -58,5 +102,37 @@ export const searchProducts = async (search) => {
         return data
     } catch (err) {
         console.error(err)
+        throw err
+    }
+}
+
+export const getProductFormData = async () => {
+    try {
+        let url = `${baseUrl}/api/products/formdata`
+
+        const productFormData = localStorage.getItem('productFormData')
+
+        if (productFormData) {
+            return Promise.resolve(JSON.parse(productFormData))
+        } else {
+            const { data } = await axios.get(url)
+            localStorage.setItem('productFormData', JSON.stringify(data))
+            return data
+        }
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+export const deleteImage = async (productId, path) => {
+    try {
+        const url = `${baseUrl}/api/products/${productId}/delete-image`
+        const { data } = await axios.post(url, {path})
+
+        return data
+    } catch (err) {
+        console.error(err)
+        throw err
     }
 }

@@ -11,6 +11,8 @@ export default function Login() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+
+    const disabled = email === '' || password === ''
     
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -19,23 +21,27 @@ export default function Login() {
             setLoading(false)
             setToken(token)
             localStorage.setItem('token', JSON.stringify(token))
-        }).catch(err => {
-            setError(err.response.data)
+        }).catch(({response}) => {
+            setError(response.data)
             setLoading(false)
             localStorage.removeItem('token')
-            console.log(err)
+            console.log(response.data)
         })
     }
     
-    return token ? <Navigate to={'/dashboard'} /> : (
+    return token ? <Navigate to={'/admin'} /> : (
         <Layout>
             <section className='login'>
                 <form onSubmit={handleSubmit} className='card col-sm-3 mx-auto my-5'>
                     <div className='card-header'>
                         <h1>Admin</h1>
-                        {error && <Alert type={'danger'} message={error} />}
+                        {error && <Alert type={'danger'} messages={error} />}
                     </div>
                     <div className='card-body'>
+                        <div className='row p-2'>
+                            <p className='m-0'><small className='text-info'>Test Email: admin@pcmag.com</small></p> 
+                            <p className='m-0'><small className='text-info'>Test Password: admin</small></p>
+                        </div>
                         <div className='row p-2'>
                             <label htmlFor='email'>Email:</label>
                             <input
@@ -60,7 +66,7 @@ export default function Login() {
                         </div>
                     </div>
                     <div className='card-footer'>
-                        <button className='btn btn-dark w-100'>{loading ? 'Login...' : 'Login'}</button>
+                        <button disabled={disabled} className='btn btn-dark w-100'>{loading ? 'Login...' : 'Login'}</button>
                     </div>
                 </form>
             </section>

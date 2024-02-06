@@ -10,14 +10,14 @@ export default function ProductCard({ product }) {
 
                 <div className="card-body pt-2 pb-0 px-2">
                     <div className="h-100 d-flex align-content-between flex-wrap">
-                        <h5 className="text-center fw-bolder product-name text-ellipsis">{product.name}</h5>
+                        <h5 className="text-center fw-bolder text-ellipsis">{product.name}</h5>
 
                         <div className='text-center w-100 justify-content-between d-flex gap-3'>
                             <small>
                                 <i className="bi bi-cpu mr-1"></i> {product.ram}
                             </small>
                             <small> <i className='bi bi-hdd mr-1'></i> {product.disk} {product.diskType}</small>
-                            <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {product.display}</small>
+                            <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {product.display}"</small>
                         </div>
 
                         <div className='text-center w-100'>

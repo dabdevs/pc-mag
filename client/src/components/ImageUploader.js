@@ -1,34 +1,45 @@
 import { useState } from 'react';
 import { upload } from '../api/uploader'
-import {getFlashMessages} from '../api/utils'
+import { getFlashMessages } from '../utils'
 
-export default function ImageUploader() {
+export default function ImageUploader({ collection, id, setProducts }) {
     const [flashMessages, setFlashMessages] = useState({});
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState('')
 
     const uploadImages = () => {
         try {
+            console.log('value request', id, collection)
             setUploading(true)
             const formData = new FormData(document.getElementById('uploadImagesForm'));
+            formData.append('id', id)
+            formData.append('collection', collection)
+            console.log('formData', formData)
             resetFileInput()
-            
-            upload(formData).then(({error}) => {
-                if (error) {
-                    setError(true)
-                    setUploading(false)
-                    return
-                }
+
+            upload(formData).then(({ urls }) => {
                 setSuccess(true)
+                setError('')
                 setUploading(false)
-            }).catch(err => {
-                console.log(err)
+
+                setProducts(prevProducts => {
+                    return prevProducts.map(prod => {
+                        if (prod._id == id) {
+                            prod.images = urls
+                        }
+                        return prod
+                    });
+                });
+            }).catch(({ response }) => {
+                setError(response.data.error)
                 setUploading(false)
+                setSuccess(false)
             })
         } catch (err) {
+            setError('An error ocurred while uploading the files. Please try again later.')
             setUploading(false)
-            console.log(err)
+            setSuccess(false)
         }
     }
 
@@ -48,14 +59,14 @@ export default function ImageUploader() {
     }
 
     return (
-        <section className='card p-5 m-5 mx-auto w-50'>
+        <div className='card w-100'>
             {success && <div className='mt-3 alert alert-success'>Images uploaded successfully!</div>}
-            {error && <div className='mt-3 alert alert-danger'>An error ocurred while uploading the files!</div>}
+            {error && <div className='mt-3 alert alert-danger'>{error}</div>}
 
             <form id='uploadImagesForm' encType="multipart/form-data" className='d-flex gap-3'>
-                <input id='images' type='file' name='images' className='form-control' multiple />
-                <button onClick={uploadImages} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
+                <input id='images' type='file' name='images' className='form-control border-0' multiple />
+                <button onClick={() => uploadImages()} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
             </form>
-        </section>
+        </div>
     )
 }

@@ -12,7 +12,6 @@ export const AuthContextProvider = ({children}) => {
     const tokendIsExpired = isExpired
 
     const authUser = decodedToken ? decodedToken.user : null
-    console.log('Authenticated user:', authUser)
  
     return (
         <AuthContext.Provider value={{

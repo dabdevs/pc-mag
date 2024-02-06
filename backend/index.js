@@ -2,6 +2,7 @@ const { NotFoundMiddleware, ErrorMiddleware } = require('./src/middlewares');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 const session = require('express-session');
 const flash = require('connect-flash');
 const crypto = require('crypto');
@@ -11,7 +12,8 @@ require('dotenv').config()
 const PORT = process.env.PORT
 
 app.use(cors());
-app.use(express.json());
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 app.use(express.static('public'));
 
 app.use(session({
@@ -34,6 +36,9 @@ app.get('/api/flash-messages', (req, res) => {
 });
 
 const routes = require('./src/routes/index');
+const User = require('./src/models/User');
+const data = require('./MOCK_DATA');
+const Product = require('./src/models/Product');
 
 app.use('/api', routes);
 
@@ -49,8 +54,35 @@ DB.on('connecting', function () {
 }).on('error', function (error) {
     console.error('Error in Database connection: ' + error);
     mongoose.disconnect();
-}).on('connected', function () {
+}).on('connected', async function () {
     console.log('Database connected!');
+
+    // Create admin user if not exists (Delete later)
+    const adminDetails = {
+        email: 'admin@pcmag.com',
+        password: await bcrypt.hash('admin', 10),
+        name: 'Admin Admin',
+        role: 'admin'
+    }
+
+    User.findOne({ email: adminDetails.email }).then(user => {
+        if (!user) {
+            User.create(adminDetails).then(admin => console.log('Admin user created', admin)).catch(err => console.log('Error creating admin user', err))
+        }
+    }).catch(error => {
+        console.error('Error finding user:', error);
+    });
+
+    // console.log(data)
+
+    // data.map(product => {
+    //     Product.create({
+    //         ...product,
+    //         name: `${product.brand} ${product.formFactor} ${product.os} ${product.processor} ${product.ram} ${product.disk} ${product.diskType} ${product.display}"`,
+    //         description: `${product.brand} ${product.formFactor} ${product.os} ${product.processor} ${product.ram} ${product.disk} ${product.diskType} ${product.display} Sed ante. Vivamus tortor. Duis mattis egestas metus`,
+    //     }).then(() => console.log('product created'))
+    // })
+
 }).once('open', function () {
     console.log('Database connection opened!');
 }).on('reconnected', function () {
