@@ -105,7 +105,7 @@ export default function Products() {
 
                         <div className='row'>
                             <div className='col-sm-12'>
-                                <input className='form-control my-2' placeholder='Filter by name' value={search} onChange={(e) => setSearch(e.target.value)} />
+                                <input id='search' value={search} onChange={handleSearch} className='form-control search-input' placeholder='Filter by name' />
                             </div>
                             <div className='col-sm-3'>
                                 <select className='form-control my-2'>
@@ -170,7 +170,7 @@ export default function Products() {
                                 data.map((product, index) => (
                                     <tr key={index}>
                                         <th>
-                                            {product.images ? <img height={40} width={60} className="card-img-top" src={product.images[0]} alt={'product image'} /> : null}
+                                            {product.images ? <img height={60} className="card-img-top" src={product.images[0]} alt={'product image'} /> : null}
                                         </th>
                                         <td className='pt-3'>{product.name}</td>
                                         <td className='pt-3'>{product.brand}</td>
@@ -234,11 +234,16 @@ export default function Products() {
         setContent(_jsx)
     }
 
-    useEffect(() => {
-        console.log('Search: ', search.toLowerCase())
-        const filtered = products.filter(product => product.os.toLowerCase().includes(search.toLowerCase()))
-        setFilteredProducts(filtered)
-    }, [search])
+    const handleSearch = async (e) => {
+        setSearch(e.target.value)
+        console.log('Keyword',e.target.value)
+    }
+
+    // useEffect(() => {
+    //     console.log('Search: ', search.toLowerCase())
+    //     const filtered = products.filter(product => product.os.toLowerCase().includes(search.toLowerCase()))
+    //     setFilteredProducts(filtered)
+    // }, [search])
 
     useEffect(() => {
         createContent()

@@ -6,11 +6,11 @@ export default function ProductCard({ product }) {
     return (
         <div className="my-2 product-card" role='button' onClick={() => navigate(`/products/${product._id}/${product.name.split(' ').join(' - ')}`)}>
             <div className="card h-100">
-                <img className="card-img-top" src={`${product.images[0]}`} alt={product.name} />
+                <img className="card-img-top" height={170} src={product?.images[0] ? product.images[0] : '../../img/default-notebook-img.jpg'} alt={'Product image'} />
 
                 <div className="card-body pt-2 pb-0 px-2">
                     <div className="h-100 d-flex align-content-between flex-wrap">
-                        <h5 className="text-center fw-bolder text-ellipsis">{product.name}</h5>
+                        <h5 className="text-center fw-bolder text-truncate">{product.name}</h5>
 
                         <div className='text-center w-100 justify-content-between d-flex gap-3'>
                             <small>

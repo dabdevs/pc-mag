@@ -14,9 +14,10 @@ module.exports.getAll = async (req, res) => {
     try {
         const query = req.query.q
         const conditions = {}
-
+        
         // Filters
-        const { category, formFactor, ram, processor, minPrice, maxPrice, page = 1, limit = 10 } = req.query
+        const { category, formFactor, ram, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = 10 } = req.query
+        
 
         if (category) {
             conditions.formFactor = category
@@ -37,6 +38,14 @@ module.exports.getAll = async (req, res) => {
 
         if (processor && processor.length > 0) {
             conditions.processor = { '$in': processor }
+        }
+
+        if (diskType && diskType.length > 0) {
+            conditions.diskType = { '$in': diskType }
+        }
+
+        if (disk && disk.length > 0) {
+            conditions.disk = { '$in': disk }
         }
 
         if (maxPrice) {
@@ -152,14 +161,16 @@ module.exports.getFormData = async (req, res) => {
 module.exports.deleteImage = async (req, res) => {
     try {
         const path = req.body.path
+        
+        // if (!path) throw('No image url found')
 
-        const deleted = await s3.deleteObject(path)
+        // const deleted = await s3.deleteObject(path)
 
-        console.log('s3 response', deleted)
+        // console.log('s3 response', deleted)
 
-        if (!deleted) {
-            return res.status(400).json({ message: 'Error while deleting the file'})
-        }
+        // if (!deleted) {
+        //     return res.status(400).json({ message: 'Error while deleting the file'})
+        // }
 
         const updatedProduct = await Product.findOneAndUpdate(new ObjectId(req.params.id), { $pull: { images: path } }, { new: true })
         res.status(200).json({ message: 'Image deleted successfully', product: updatedProduct })
@@ -204,6 +215,6 @@ module.exports.deleteImage = async (req, res) => {
         // });
     } catch (err) {
         console.error('Error fetching data:', err);
-        res.status(500).json({ err: 'Internal Server Error' });
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 }

@@ -12,8 +12,6 @@ export default function Product() {
     const [similarProducts, setSimilarProducts] = useState([])
     const { productId} = useParams()
 
-    console.log(productId)
-
     useEffect(() => {
         getById(productId)
             .then(data => {

@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { useProductsContext } from '../context/ProductsContext';
 import { useSearchParams } from 'react-router-dom';
 
-export default function Sidebar({ category }) {
-    const { setFiltered, filtered, setFilters } = useProductsContext()
+export default function Sidebar({ page, category }) {
+    const { setFiltered, filtered } = useProductsContext()
     const [formFactor, setFormFactor] = useState([]);
     const [ram, setRam] = useState([]);
     const [processor, setProcessor] = useState([]);
-    const [minPrice, setMinPrice] = useState('')
-    const [maxPrice, setMaxPrice] = useState('')
+    const [diskType, setDiskType] = useState([]);
+    const [disk, setDisk] = useState([]);
+    const [minPrice, setMinPrice] = useState(null)
+    const [maxPrice, setMaxPrice] = useState(null)
     const [error, setError] = useState('')
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const disabled = formFactor.length === 0 && ram.length === 0 && processor.length === 0 && maxPrice === '' && minPrice === ''
+    const disabled = formFactor.length === 0 && ram.length === 0 && processor.length === 0 && maxPrice && minPrice
 
     useEffect(() => {
         if (!filtered) clearFilters()
@@ -28,9 +30,20 @@ export default function Sidebar({ category }) {
             case 'ram':
                 e.target.checked ? setRam([...ram, value]) : setRam(ram.filter(item => item !== value))
                 break;
-
             case 'processor':
                 e.target.checked ? setProcessor([...processor, value]) : setProcessor(processor.filter(item => item !== value))
+                break;
+            case 'diskType':
+                e.target.checked ? setDiskType([...diskType, value]) : setDiskType(diskType.filter(item => item !== value))
+                break;
+            case 'disk':
+                e.target.checked ? setDisk([...disk, value]) : setDisk(disk.filter(item => item !== value))
+                break;
+            case 'minPrice':
+                e.target.checked ? setMinPrice(value) : setMinPrice(null)
+                break;
+            case 'maxPrice':
+                e.target.checked ? setMaxPrice(value) : setMaxPrice(null)
                 break;
             default:
                 break;
@@ -39,11 +52,13 @@ export default function Sidebar({ category }) {
 
     const clearFilters = async () => {
         try {
-            setMinPrice('')
-            setMaxPrice('')
+            setMinPrice(null)
+            setMaxPrice(null)
             setFormFactor([])
             setRam([])
             setProcessor([])
+            setDiskType([])
+            setDisk([])
             document.getElementById('sort').value = ''
 
             const inputs = document.querySelectorAll('input');
@@ -63,13 +78,21 @@ export default function Sidebar({ category }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError('')
-
+        
         if (parseInt(minPrice) >= parseInt(maxPrice)) {
             setError('Max. price must be greater than min. price')
             return
         }
 
-        const filters = { formFactor, ram, processor, minPrice, maxPrice }
+        const filters = {}
+        if (formFactor) filters.formFactor = formFactor
+        if (ram) filters.ram = ram
+        if (diskType) filters.diskType = diskType
+        if (disk) filters.disk = disk
+        if (minPrice) filters.minPrice = minPrice
+        if (maxPrice) filters.maxPrice = maxPrice
+        if (page) filters.page = page
+        
         setSearchParams(filters)
         setFiltered(true)
     };
@@ -99,23 +122,33 @@ export default function Sidebar({ category }) {
                         <div className='d-flex flex-column'>
                             <div className='d-flex'>
                                 <input
-                                    id='notebook'
+                                    id='Laptop'
                                     name='formFactor'
                                     onChange={setFormFilters}
                                     type='checkbox'
-                                    value={'notebook'}
+                                    value={'Laptop'}
                                     className='form-check-input' />
-                                <label htmlFor='notebook'>&nbsp; Notebook</label>
+                                <label htmlFor='Laptop'>&nbsp; Laptop</label>
                             </div>
                             <div>
                                 <input
-                                    id='desktop'
+                                    id='Desktop'
                                     name='formFactor'
                                     onChange={setFormFilters}
                                     type='checkbox'
-                                    value={'desktop'}
+                                    value={'Desktop'}
                                     className='form-check-input' />
-                                <label htmlFor='desktop'>&nbsp; Desktop</label>
+                                <label htmlFor='Desktop'>&nbsp; Desktop</label>
+                            </div>
+                            <div>
+                                <input
+                                    id='All-in-One'
+                                    name='formFactor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'All-in-One'}
+                                    className='form-check-input' />
+                                <label htmlFor='All-in-One'>&nbsp; All-In-One</label>
                             </div>
                         </div>
                     </div>
@@ -222,6 +255,84 @@ export default function Sidebar({ category }) {
                                     className='form-check-input'
                                 />
                                 <label htmlFor='32GB'>&nbsp; 32 GB</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mb-3">
+                        <label htmlFor="diskType" className="form-label">By Disk Type</label>
+                        <div className='d-flex flex-column' id='diskType'>
+                            <div className='d-flex'>
+                                <input
+                                    id='HDD'
+                                    name='diskType'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'HDD'}
+                                    className='form-check-input'
+                                />
+                                <label htmlFor='HDD'>&nbsp; HDD</label>
+                            </div>
+                            <div>
+                                <input
+                                    id='SSD'
+                                    name='diskType'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'SSD'}
+                                    className='form-check-input'
+                                />
+                                <label htmlFor='SSD'>&nbsp; SSD</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mb-3">
+                        <label htmlFor="disk" className="form-label">By Disk Capacity</label>
+                        <div className='d-flex flex-column' id='disk'>
+                            <div className='d-flex'>
+                                <input
+                                    id='disk'
+                                    name='disk'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'128 GB'}
+                                    className='form-check-input'
+                                />
+                                <label htmlFor='disk'>&nbsp; 128 GB</label>
+                            </div>
+                            <div className='d-flex'>
+                                <input
+                                    id='disk'
+                                    name='disk'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'256 GB'}
+                                    className='form-check-input'
+                                />
+                                <label htmlFor='disk'>&nbsp; 256 GB</label>
+                            </div>
+                            <div className='d-flex'>
+                                <input
+                                    id='disk'
+                                    name='disk'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'500 GB'}
+                                    className='form-check-input'
+                                />
+                                <label htmlFor='disk'>&nbsp; 500 GB</label>
+                            </div>
+                            <div className='d-flex'>
+                                <input
+                                    id='disk'
+                                    name='disk'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'1 TB'}
+                                    className='form-check-input'
+                                />
+                                <label htmlFor='disk'>&nbsp; 1 TB</label>
                             </div>
                         </div>
                     </div>

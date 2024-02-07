@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import Sidebar from '../components/Sidebar'
 import { useParams, useLocation, useSearchParams } from 'react-router-dom'
@@ -11,11 +11,12 @@ export default function Index() {
     const {search} = useLocation()
     const [searchParams] = useSearchParams()
     const category = searchParams.get('category')
+    const [page, setPage] = useState(1) 
     const {products, setProducts, loading, setLoading} = useProductsContext()
     
     useEffect(() => {
         setLoading(true)
-        getProducts(category, search).then(({products}) => {
+        getProducts(category, search, page).then(({products}) => {
             setProducts(products)
             setLoading(false)
         })
@@ -31,7 +32,7 @@ export default function Index() {
                 <SearchForm />
 
                 <div className='row py-lg-4'>
-                    <Sidebar category={category} />
+                    <Sidebar category={category} page={page} />
                     <ListProducts category={category} products={products} loading={loading} />
                 </div>    
             </Layout>

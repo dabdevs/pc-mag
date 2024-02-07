@@ -33,7 +33,10 @@ class S3Service {
                 const path = `public/${uuidv4()}_${image.mimetype.replace('image/', '.')}`
 
                 const resizedBuffer = await sharp(image.buffer)
-                    .resize(1200, 1800)
+                    .resize(1200, 1800, {
+                        fit: 'inside',
+                    })
+                    .jpeg({ quality: 80 })
                     .toBuffer();
 
                 const params = {
@@ -54,6 +57,7 @@ class S3Service {
     
     async deleteObject(url) {
         try {
+            console.log(url)
             const params = {
                 Bucket: process.env.AWS_BUCKET,
                 Key: url.replace(process.env.AWS_BUCKET_URL, '')

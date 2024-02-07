@@ -5,12 +5,11 @@ const baseUrl = 'http://localhost:3000';
 export const getProducts = async (category='', search='', page=1) => {
     try {
         let url = `${baseUrl}/api/products`
-        console.log('andan function ', page)
+
         if (search) url += search
 
-        if (page) url += `?page=${page}`
-
         console.log(url)
+
         
         const { data } = await axios.get(url)
 

@@ -4316,11 +4316,6 @@ textarea.form-control-lg {
   -webkit-box-orient: vertical;
 }
 
-.text-ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .search-input {
   border: 1px solid gray;
 }
