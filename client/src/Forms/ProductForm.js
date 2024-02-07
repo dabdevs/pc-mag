@@ -49,6 +49,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
 
     const [form, setForm] = useState(product || initialState)
     const [feedback, setFeedback] = useState({})
+    const [alert, setAlert] = useState({})
     const [operativeSystems, setOperativeSystems] = useState(data.operativeSystems)
     const [processors, setProcessors] = useState(data.processors)
     const [categories, setCategories] = useState(data.categories)
@@ -85,13 +86,15 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
         console.log('Editing')
         data._id = form._id
         update(data).then(({ product }) => {
-            alert('Product updated successfully')
+            if (product) alert('Product updated successfully')
+            else alert('An error occured')
+
             setProducts(prevProducts => {
                 return prevProducts.map(prod => prod._id === product._id ? product : prod);
             });
             setFeedback({})
             closeForm()
-        }).catch(err => console.log(err))
+        }).catch(err => alert('An error occured'))
     }
 
     const removeImage = async (productId, url) => {
@@ -108,7 +111,11 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                     return prod
                 });
             });
-        }).then(() => alert('Image deleted successfully')).catch(err => console.log(err))
+        }).then(() => setAlert({class: 'success', message: 'Image deleted successfully'}))
+        .catch(({response}) => {
+            console.log(response.data.message)
+            setAlert({ class: 'danger', message: response.data.message })
+        })
     }
 
     return (
@@ -129,7 +136,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                         autoFocus
                         {...register("name")}
                     />
-                    <small className='text-danger'>{errors.name?.message} {feedback.name?.message}</small>
+                    <small className='text-danger'>{errors?.name?.message} {feedback?.name?.message}</small>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <label htmlFor='description'>Description</label>
@@ -351,6 +358,8 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                     </Col>
                 ))}
             </Row> : null}
+
+            {alert?.message && <div className={`alert alert-${alert.class}`}>{alert.message}</div>}
 
             <Row>
                 <Col xs={6}>

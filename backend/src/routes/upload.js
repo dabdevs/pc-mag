@@ -3,14 +3,9 @@ const router = express.Router();
 require('dotenv').config()
 const multer = require('multer');
 const { ObjectId } = require('mongodb')
-
 const Product = require('../models/Product');
 const S3Service = require('../services/s3');
 const s3 = new S3Service()
-
-// const storage = multer.memoryStorage(); 
-
-// const upload = multer({ storage });
 
 router.post('/upload', s3.upload().array('images', process.env.IMAGES_PER_PRODUCT), async (req, res) => {
     try {
