@@ -86,22 +86,21 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
         console.log('Editing')
         data._id = form._id
         update(data).then(({ product }) => {
-            if (product) alert('Product updated successfully')
-            else alert('An error occured')
-
             setProducts(prevProducts => {
                 return prevProducts.map(prod => prod._id === product._id ? product : prod);
             });
-            setFeedback({})
+            setFeedback({ message: 'Product updated successfully', class: 'success'})
             closeForm()
-        }).catch(err => alert('An error occured'))
+        }).catch(err => {
+            setFeedback({ message: 'An error ocurred', class: 'danger' })
+        })
     }
 
     const removeImage = async (productId, url) => {
         console.log(productId, url)
         deleteImage(productId, url).then(({product}) => {
             console.log('Updated images', data.product)
-
+            
             setProducts(prevProducts => {
                 return prevProducts.map(prod => {
                     if (prod._id == product._id) {
@@ -363,7 +362,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
 
             <Row>
                 <Col xs={6}>
-                    <ImageUploader collection='products' id={product._id} setProducts={setProducts} />
+                    <ImageUploader collection='products' id={product._id} setForm={setForm} setAlert={setAlert} setProducts={setProducts} />
                 </Col>
             </Row>
 

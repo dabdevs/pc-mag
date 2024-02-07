@@ -2,11 +2,9 @@ import { useState } from 'react';
 import { upload } from '../api/uploader'
 import { getFlashMessages } from '../utils'
 
-export default function ImageUploader({ collection, id, setProducts }) {
+export default function ImageUploader({ collection, id, setAlert, setForm, setProducts }) {
     const [flashMessages, setFlashMessages] = useState({});
     const [uploading, setUploading] = useState(false);
-    const [success, setSuccess] = useState(false)
-    const [error, setError] = useState('')
 
     const uploadImages = () => {
         try {
@@ -18,28 +16,26 @@ export default function ImageUploader({ collection, id, setProducts }) {
             console.log('formData', formData)
             resetFileInput()
 
-            upload(formData).then(({ urls }) => {
-                setSuccess(true)
-                setError('')
+            upload(formData).then(({ product }) => {
+                setAlert({ message: 'Images uploaded successfully', class: 'success' })
                 setUploading(false)
-
+                setForm(product)
                 setProducts(prevProducts => {
                     return prevProducts.map(prod => {
-                        if (prod._id == id) {
-                            prod.images = urls
+                        if (prod._id == product._id) {
+                            console.log('updated images', product.images)
+                            prod.images = product.images
                         }
                         return prod
                     });
                 });
             }).catch(({ response }) => {
-                setError(response.data.error)
+                setAlert({ message: response.data.error, class: 'danger'})
                 setUploading(false)
-                setSuccess(false)
             })
         } catch (err) {
-            setError('An error ocurred while uploading the files. Please try again later.')
+            setAlert({ message: 'An error ocurred while uploading the files. Please try again later.', class: 'danger' })
             setUploading(false)
-            setSuccess(false)
         }
     }
 
@@ -60,9 +56,6 @@ export default function ImageUploader({ collection, id, setProducts }) {
 
     return (
         <div className='card w-100'>
-            {success && <div className='mt-3 alert alert-success'>Images uploaded successfully!</div>}
-            {error && <div className='mt-3 alert alert-danger'>{error}</div>}
-
             <form id='uploadImagesForm' encType="multipart/form-data" className='d-flex gap-3'>
                 <input id='images' type='file' name='images' className='form-control border-0' multiple />
                 <button onClick={() => uploadImages()} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>

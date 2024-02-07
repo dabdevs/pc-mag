@@ -37,16 +37,14 @@ router.post('/upload', s3.upload().array('images', process.env.IMAGES_PER_PRODUC
                             console.log('Product not found.');
                             throw (error)
                         }
+                        res.json({ success: 'Images uploaded to S3', product: updatedProduct });
                     })
                     .catch(error => {
                         console.error('Error updating product:', error);
                         throw (error)
                     });
                 break;
-        }
-
-        req.flash('success', 'Images uploaded to S3!');
-        res.json({ success: 'Images uploaded to S3', urls: uploadedUrls });  
+        }  
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
