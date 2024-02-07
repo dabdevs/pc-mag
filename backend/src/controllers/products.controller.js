@@ -162,57 +162,16 @@ module.exports.deleteImage = async (req, res) => {
     try {
         const path = req.body.path
         
-        // if (!path) throw('No image url found')
+        if (!path) throw('No image url found')
 
-        // const deleted = await s3.deleteObject(path)
+        const deleted = await s3.deleteObject(path)
 
-        // console.log('s3 response', deleted)
-
-        // if (!deleted) {
-        //     return res.status(400).json({ message: 'Error while deleting the file'})
-        // }
+        if (!deleted) {
+            return res.status(400).json({ message: 'Error while deleting the file'})
+        }
 
         const updatedProduct = await Product.findOneAndUpdate(new ObjectId(req.params.id), { $pull: { images: path } }, { new: true })
         res.status(200).json({ message: 'Image deleted successfully', product: updatedProduct })
-        
-        // .then(updatedProduct => {
-        //     console.log('Updated product', updatedProduct)
-        //     if (updatedProduct) {
-        //         console.log('Image deleted successfully:', updatedProduct);
-        //         res.status(200).json({ message: 'Image deleted successfully', product: updatedProduct })
-        //     } else {
-        //         console.log('Image cound not be deleted.');
-        //         throw (error)
-        //     }
-        // })
-        // .catch(error => {
-        //     console.error('Error deleting image:', error);
-        //     throw error
-        // });
-
-        // s3.deleteObject(path).then((response) => {
-        //     console.log('s3 delete response',response)
-        //     if (!response) throw('An error occured while deleting the file')
-
-        //     Product.findOneAndUpdate(new ObjectId(req.params.id), { $pull: { images: path } }, { new: true })
-        //         .then(updatedProduct => {
-        //             console.log('Updated product',updatedProduct)
-        //             if (updatedProduct) {
-        //                 console.log('Image deleted successfully:', updatedProduct);
-        //                 res.status(200).json({ message: 'Image deleted successfully', product: updatedProduct })
-        //             } else {
-        //                 console.log('Image cound not be deleted.');
-        //                 throw (error)
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.error('Error deleting image:', error);
-        //             throw error
-        //         });
-        // }).catch(error => {
-        //     console.error('Error deleting image:', error);
-        //     throw error
-        // });
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ message: 'Internal Server Error' });
