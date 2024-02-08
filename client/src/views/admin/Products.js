@@ -6,7 +6,8 @@ import ProductForm from '../../Forms/ProductForm'
 import { FaPlus } from "react-icons/fa";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import { Link, useSearchParams } from 'react-router-dom';
+import { SiPagespeedinsights } from 'react-icons/si'
 
 export default function Products() {
     const [products, setProducts] = useState([])
@@ -24,17 +25,19 @@ export default function Products() {
     const [editRowId, setEditRowId] = useState(null);
     const [content, setContent] = useState(null)
     const [formData, setFormData] = useState([])
+    const [searchParams, setSearchParams] = useSearchParams()
 
     useEffect(() => {
         setLoading(true)
         getProductFormData().then(data => setFormData(data)).catch(err => console.log(err))
-
+        setSearchParams({page})
         getProducts('', '', page)
             .then(({ products, totalPages, currentPage }) => {
                 setLoading(false)
                 setProducts(products)
                 setTotalPages(totalPages)
                 setCurrentPage(currentPage)
+                createContent()
             })
             .catch(err => {
                 setLoading(false)
@@ -42,9 +45,9 @@ export default function Products() {
             })
     }, [page])
 
-    const createItem = (product) => {
+    const createItem = () => {
         setAction('create')
-        setSelectedProduct(product)
+        setSelectedProduct({images: []})
     }
 
     const editItem = (product) => {
@@ -74,7 +77,7 @@ export default function Products() {
     const closeForm = () => {
         setSelectedProduct(null)
         setAction('')
-        createContent()
+        // createContent()
     }
 
     function createContent() {
@@ -84,7 +87,7 @@ export default function Products() {
         let _jsx = null;
 
         const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
-        const nextBtnClasses = totalPages == currentPage ? 'page-item disabled' : 'page-item'
+        const nextBtnClasses = totalPages === currentPage ? 'page-item disabled' : 'page-item'
 
         if (loading) _jsx = <p>Loading...</p>
 
@@ -170,7 +173,7 @@ export default function Products() {
                                 data.map((product, index) => (
                                     <tr key={index}>
                                         <th>
-                                            {product.images ? <img height={60} className="card-img-top" src={product.images[0]} alt={'product image'} /> : null}
+                                            {product?.images ? <img width={100} className="card-img-top" alt='' src={product?.images[0] ? product?.images[0] : '../../../img/default-notebook-img.jpg'} /> : null}
                                         </th>
                                         <td className='pt-3'>{product.name}</td>
                                         <td className='pt-3'>{product.brand}</td>
@@ -194,36 +197,36 @@ export default function Products() {
                     {<nav>
                         <ul className="pagination pagination-sm">
                             <li className={prevBtnClasses}>
-                                <a className="page-link" tabIndex="-1" onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage - 1) }}>Previous</a>
+                                <Link className="page-link" href='#' tabIndex="-1" onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage - 1) }}>Previous</Link>
                             </li>
 
                             <li className={`page-item ${page === 1 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(1) }}>
-                                <a className="page-link">1</a>
+                                <Link className="page-link" href='#'>1</Link>
                             </li>
                             <li className={`page-item ${page === 2 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(2) }}>
-                                <a className="page-link">2</a>
+                                <Link className="page-link" href='#'>2</Link>
                             </li>
                             <li className={`page-item ${page === 3 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(3) }}>
-                                <a className="page-link">3</a>
+                                <Link className="page-link">3</Link>
                             </li>
                             <li className={`page-item ${page === 4 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(4) }}>
-                                <a className="page-link">4</a>
+                                <Link className="page-link" href='#'>4</Link>
                             </li>
                             <li className={`page-item ${page === 5 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(5) }}>
-                                <a className="page-link">5</a>
+                                <Link className="page-link" href='#'>5</Link>
                             </li>
                             <li className={`page-item disabled`} aria-current="page">
-                                <a className="page-link">... {page === currentPage}</a>
+                                <Link className="page-link" href='#'>... {page === currentPage}</Link>
                             </li>
 
                             {page > 5 &&
                                 <li className={`page-item active`} aria-current="page">
-                                    <a className="page-link">{page}</a>
+                                    <Link className="page-link" href='#'>{page}</Link>
                                 </li>
                             }
-
-                            <li className={nextBtnClasses}>
-                                <a className="page-link" onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage + 1) }}>Next</a>
+                            
+                            <li className={nextBtnClasses}> 
+                                <Link className="page-link" href='#' onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage + 1) }}>Next</Link>
                             </li>
                         </ul>
                     </nav>}

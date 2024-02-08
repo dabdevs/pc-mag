@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { upload } from '../api/uploader'
 import { getFlashMessages } from '../utils'
 
-export default function ImageUploader({ collection, id, setAlert, setForm, setProducts }) {
+export default function ImageUploader({ collection, id, setAlert, setForm, setProducts, imagesCount }) {
     const [flashMessages, setFlashMessages] = useState({});
     const [uploading, setUploading] = useState(false);
 
@@ -14,6 +14,14 @@ export default function ImageUploader({ collection, id, setAlert, setForm, setPr
             formData.append('id', id)
             formData.append('collection', collection)
             console.log('formData', formData)
+
+            const data = JSON.parse(localStorage.getItem('productFormData'))
+
+            if (imagesCount + formData.getAll('images').length > data.imagesPerProduct) {
+                setAlert({ message: `Upload up to ${data.imagesPerProduct} images`, class: 'danger'})
+                return
+            }
+        
             resetFileInput()
 
             upload(formData).then(({ product }) => {
@@ -22,7 +30,7 @@ export default function ImageUploader({ collection, id, setAlert, setForm, setPr
                 setForm(product)
                 setProducts(prevProducts => {
                     return prevProducts.map(prod => {
-                        if (prod._id == product._id) {
+                        if (prod._id === product._id) {
                             console.log('updated images', product.images)
                             prod.images = product.images
                         }

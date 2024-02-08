@@ -29,6 +29,15 @@ router.post('/upload', s3.upload().array('images', process.env.IMAGES_PER_PRODUC
 
         switch (collection) {
             case 'products':
+                const checkProduct = await Product.find({ _id: new ObjectId(id)})
+                console.log('Check product: ', checkProduct)
+                // const imagesCount = checkProduct.images.length
+
+                // if (checkProduct && imagesCount >= process.env.IMAGES_PER_PRODUCT) {
+                //     console.log('max images allowed')
+                //     res.status(400).json({ message: "Maximum images allowed." })
+                // }
+
                 Product.findOneAndUpdate(new ObjectId(id), { $push: { images: uploadedUrls } }, { new: true })
                     .then(updatedProduct => {
                         if (updatedProduct) {

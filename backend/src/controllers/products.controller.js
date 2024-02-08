@@ -14,6 +14,7 @@ module.exports.getAll = async (req, res) => {
     try {
         const query = req.query.q
         const conditions = {}
+        console.log(req.body, req.query)
         
         // Filters
         const { category, formFactor, ram, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = 10 } = req.query
@@ -107,6 +108,10 @@ module.exports.getOne = async (req, res) => {
 
 module.exports.store = async (req, res) => {
     try {
+        const productExists = await Product.findOne({ name: req.body.name })
+
+        if (productExists) return res.status(400).json({message: 'Product already exists'})
+        
         const product = await Product.create(req.body)
         return res.status(201).json({ message: "Product created successfully", product })
     } catch ({ errors }) {
@@ -150,8 +155,9 @@ module.exports.getFormData = async (req, res) => {
         const operativeSystems = await OperativeSystem.find({})
         const categories = await Category.find({})
         const brands = await Brand.find({})
+        const imagesPerProduct = process.env.IMAGES_PER_PRODUCT
 
-        res.json({ processors, operativeSystems, categories, brands })
+        res.json({ processors, operativeSystems, categories, brands, imagesPerProduct })
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
