@@ -61,20 +61,6 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
         images = product.images
         imagesCount = product.images.length
     }
-
-    const activateUpload = form.name != '' && 
-                            form.description != '' && 
-                            form.formFactor != '' && 
-                            form.brand != '' &&
-                            form.category != '' &&
-                            form.os != '' &&
-                            form.processor != '' &&
-                            form.ram != '' &&
-                            form.disk != '' && 
-                            form.diskType != '' &&
-                            form.price != '' &&
-                            form.display != '' &&
-                            form.quantity != '' 
   
     const {
         register,
@@ -100,6 +86,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
             setProducts(prevProducts => {
                 return prevProducts.map(prod => prod._id === product._id ? product : prod);
             });
+            setForm(product)
             setAlert({ message: 'Product updated successfully', class: 'success' })
         }).catch(err => {
             setAlert({ message: 'An error ocurred', class: 'danger' })
@@ -108,30 +95,31 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
 
     const removeImage = async (productId, url) => {
         console.log(productId, url)
-        deleteImage(productId, url).then(({ product }) => {
-            console.log('Updated images', data.product)
-
-            setProducts(prevProducts => {
-                return prevProducts.map(prod => {
-                    if (prod._id === product._id) {
-                        console.log('updated images', product.images)
-                        prod.images = product.images
-                    }
-                    return prod
+        if (confirm('Are you sure you want to delete this image?')) {
+            deleteImage(productId, url).then(({ product }) => {
+                console.log('Updated images', data.product)
+                setProducts(prevProducts => {
+                    return prevProducts.map(prod => {
+                        if (prod._id === product._id) {
+                            console.log('updated images', product.images)
+                            prod.images = product.images
+                        }
+                        return prod
+                    });
                 });
-            });
-        })
-        .then(() => setAlert({ class: 'success', message: 'Image deleted successfully' }))
-        .catch(({ response }) => {
-            console.log(response.data.message)
-            setAlert({ class: 'danger', message: response.data.message })
-        })
+            })
+            .then(() => setAlert({ class: 'success', message: 'Image deleted successfully' }))
+            .catch(({ response }) => {
+                console.log(response.data.message)
+                setAlert({ class: 'danger', message: response.data.message })
+            })
+        }
     }
 
     return (
         <div>
             <Row>
-                <h1 className='display-4 fw-bolder'>{product ? product.name : 'New Product'}</h1>
+                <h1 className='display-4 fw-bolder'>{form._id ? form.name : 'New Product'}</h1>
             </Row>
             {form?._id && <input type='hidden' value={form?._id} name='_id' />}
             <Row>

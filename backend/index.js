@@ -37,9 +37,8 @@ app.get('/api/flash-messages', (req, res) => {
 
 const routes = require('./src/routes/index');
 const User = require('./src/models/User');
-const data = require('./MOCK_DATA');
-const Product = require('./src/models/Product');
 
+app.get('/health-check', (req, res) => {res.send('OK')})
 app.use('/api', routes);
 
 app.use(ErrorMiddleware);
