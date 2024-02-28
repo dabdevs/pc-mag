@@ -1,8 +1,6 @@
 require('dotenv').config()
 const { ObjectId } = require('mongodb')
 const Product = require('../models/Product')
-const { formatPrice } = require('../utils')
-const { validationResult } = require('express-validator');
 const Processor = require('../models/Processor');
 const OperativeSystem = require('../models/OperativeSystem');
 const Category = require('../models/Category');
@@ -19,7 +17,6 @@ module.exports.getAll = async (req, res) => {
         // Filters
         const { category, formFactor, ram, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = 10 } = req.query
         
-
         if (category) {
             conditions.formFactor = category
         }
@@ -28,7 +25,6 @@ module.exports.getAll = async (req, res) => {
             conditions.name = { '$regex': query, '$options': 'i' }
         }
 
-        // Filters
         if (formFactor && formFactor.length > 0) {
             conditions.formFactor = { '$in': formFactor }
         }

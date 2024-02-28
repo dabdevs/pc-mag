@@ -49,18 +49,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
 
     const [form, setForm] = useState(product || initialState)
     const [alert, setAlert] = useState({})
-    const [showUploader, setShowUploader] = useState(false)
-
-    // useEffect(() => {
-    //     setForm(product)
-    // }, [])
-    let imagesCount = null;
-    let images = []
-    if (product) {
-        console.log('gade',product)
-        images = product.images
-        imagesCount = product.images.length
-    }
+    const [images, setImages] = useState(form.images)
   
     const {
         register,
@@ -71,8 +60,10 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
     const handleCreate = (product) => {
         console.log('Creating', product)
         create(product).then(({ product }) => {
-            setProducts(prevProducts => [product, ...prevProducts]);
             setForm(product)
+            setProducts(prevProducts => {
+                return prevProducts.map(prod => prod._id === product._id ? product : prod);
+            });
             setAlert({ message: 'Product created successfully', class: 'success' })
         }).catch(({ response }) => {
             setAlert({ message: response.data.message, class: 'danger' })
@@ -94,10 +85,10 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
     }
 
     const removeImage = async (productId, url) => {
-        console.log(productId, url)
         if (confirm('Are you sure you want to delete this image?')) {
             deleteImage(productId, url).then(({ product }) => {
                 console.log('Updated images', data.product)
+                setImages(product.images)
                 setProducts(prevProducts => {
                     return prevProducts.map(prod => {
                         if (prod._id === product._id) {
@@ -344,18 +335,18 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                 {images.map(url => (
                     <Col key={url} xs={4} className='p-3 d-flex gap-2'>
                         <img width={300} src={url} alt='' />
-                        <button type='button' className='btn btn-sm btn-danger' onClick={() => removeImage(product._id, url)}>X</button>
+                        <button type='button' className='btn btn-sm btn-danger' onClick={() => removeImage(form._id, url)}>X</button>
                     </Col>
                 ))}
             </Row> : null}
 
             {alert?.message && <div className={`alert alert-${alert.class}`}>{alert.message}</div>}
 
-            {form._id && product ? imagesCount < data.imagesPerProduct && <Row>
+            {form._id && product ? images.length < data.imagesPerProduct && <Row>
                 <>
                     <Col xs={10}><h4>Upload up to {data.imagesPerProduct} images</h4></Col>
                     <Col xs={6}>
-                        <ImageUploader imagesCount={imagesCount} collection='products' id={form._id} setForm={setForm} setAlert={setAlert} setProducts={setProducts} />
+                        <ImageUploader imagesCount={images.length} collection='products' id={form._id} setImages={setImages} setAlert={setAlert} setProducts={setProducts} />
                     </Col>
                 </>
             </Row> : null}

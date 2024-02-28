@@ -67,16 +67,7 @@ class S3Service {
                 .deleteObject(params)
                 .promise();
 
-            return data;
-
-            // s3.deleteObject(params, function (err, data) {
-            //     console.log('s3 service',err, data)
-            //     if (err) {
-            //         return false
-            //     }
-            // });
-
-            // return true
+            return data
         } catch (error) {
             console.log(error)
         }

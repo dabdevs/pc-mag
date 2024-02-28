@@ -30,13 +30,10 @@ module.exports.upload = async (req, res) => {
                 
                 Product.findOneAndUpdate(new ObjectId(id), { $push: { images: uploadedUrls } }, { new: true })
                     .then(updatedProduct => {
-                        if (updatedProduct) {
-                            console.log('Product updated successfully:', updatedProduct);
-                        } else {
-                            console.log('Product not found.');
+                        if (!updatedProduct) {
                             throw (error)
-                        }
-                        res.json({ success: 'Images uploaded to S3', product: updatedProduct });
+                        } 
+                        res.json({ success: 'Images uploaded successfully', product: updatedProduct });
                     })
                     .catch(error => {
                         console.error('Error updating product:', error);
