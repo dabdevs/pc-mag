@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { upload } from '../api/uploader'
-import { getFlashMessages } from '../utils'
 
 export default function ImageUploader({ collection, id, setAlert, setImages, setProducts, imagesCount }) {
     const [uploading, setUploading] = useState(false);
     const [btnUploadDisabled, setBtnUploadDisabled] = useState(true)
+    const [inputValue, setInputValue] = useState('')
 
     const uploadImages = async () => {
         try {
@@ -18,11 +18,11 @@ export default function ImageUploader({ collection, id, setAlert, setImages, set
             if (imagesCount + formData.getAll('images').length > data.imagesPerProduct) {
                 setAlert({ message: `Upload up to ${data.imagesPerProduct} images`, class: 'danger' })
                 setUploading(false)
-                resetFileInput()
+                setInputValue('')
                 return
             }
 
-            const {product} = await upload(formData)
+            const { product } = await upload(formData)
 
             setProducts(prevProducts => {
                 return prevProducts.map(prod => prod._id === product._id ? product : prod);
@@ -30,38 +30,26 @@ export default function ImageUploader({ collection, id, setAlert, setImages, set
             setImages(product.images)
             setAlert({ message: 'Images uploaded successfully', class: 'success' })
             setUploading(false)
+            setInputValue('')
         } catch (err) {
             console.log(err)
-            resetFileInput()
+            setInputValue('')
             setAlert({ message: 'An error ocurred while uploading the files. Please try again later.', class: 'danger' })
             setUploading(false)
         }
     }
 
-    function resetFileInput() {
-        var formElement = document.getElementById('uploadImagesForm');
-
-        // Create a new input element with the same attributes
-        var newInput = document.createElement('input');
-        newInput.type = 'file';
-        newInput.id = 'images';
-        newInput.name = 'images';
-        newInput.multiple = true;
-        newInput.classList.add('form-control')
-
-        // Replace the existing input with the new one
-        formElement.replaceChild(newInput, document.getElementById('images'));
-    }
-
     const inputFileEmpty = (e) => {
-        e.target.value === '' ? setBtnUploadDisabled(true) : setBtnUploadDisabled(false)
+        const value = e.target.value
+        setInputValue(value)
+        value === '' ? setBtnUploadDisabled(true) : setBtnUploadDisabled(false)
     }
 
     return (
         <div className='card w-100'>
             <form id='uploadImagesForm' encType="multipart/form-data" className='d-flex gap-3'>
                 <fieldset disabled={uploading} className='w-100 d-flex justify-content-between'>
-                    <input onChange={(e) => inputFileEmpty(e)} id='images' type='file' name='images' className='form-control border-0' multiple />
+                    <input value={inputValue} onChange={(e) => inputFileEmpty(e)} id='images' type='file' name='images' className='form-control border-0' multiple />
                     <button disabled={btnUploadDisabled} onClick={() => uploadImages()} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
                 </fieldset>
             </form>

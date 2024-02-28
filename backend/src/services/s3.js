@@ -31,9 +31,8 @@ class S3Service {
             for (const image of uploadedImages) {
                 console.log('Resizing:', image)
                 const path = `public/${uuidv4()}_${image.mimetype.replace('image/', '.')}`
-
                 const resizedBuffer = await sharp(image.buffer)
-                    .resize(1200, 1800, {
+                    .resize(parseInt(process.env.IMAGE_WIDTH), parseInt(process.env.IMAGE_HEIGTH), {
                         fit: 'inside',
                     })
                     .jpeg({ quality: 80 })
