@@ -6,7 +6,7 @@ import { BsFillCartCheckFill } from 'react-icons/bs';
 
 export default function CartItems() {
     const [checkingOut, setCheckingOut] = useState(false)
-    const { cartItems, showCart, setShowCart, removeFromCart } = useShoppingCartContext()
+    const { cartItems, removeFromCart } = useShoppingCartContext()
     let total = 0; 
 
     async function handleCheckout() {
@@ -70,6 +70,7 @@ export default function CartItems() {
                 })}
 
                 <div className='py-2 d-flex justify-content-between'>
+                    
                     <h5 className='m-0'>Total: $ {total.toFixed(2)}</h5>
 
                     <button className="btn btn-dark pull-right" type="button" onClick={handleCheckout}>

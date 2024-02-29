@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import ShoppingCart from "./ShoppingCart";
 import { useAuthContext } from "../context/AuthContext";
 import { FaUserCircle } from "react-icons/fa";
 import { logout } from "../api/auth";
