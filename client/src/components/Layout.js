@@ -6,7 +6,6 @@ export default function Layout({ children, classes }) {
   return (
     <>
       <Navbar />
-      <CartItems />
       <main className={classes}>
         {children}
       </main>
