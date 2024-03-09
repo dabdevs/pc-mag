@@ -5,7 +5,7 @@ import LazyLoad from 'react-lazyload'
 import { useSearchParams } from 'react-router-dom';
 
 
-export default function ListProducts({ products, category }) {
+export default function ListProducts({productsCount, products, category }) {
     const [searchParams, setSearchParams] = useSearchParams()
     const { search, filtered, setFiltered, loading } = useProductsContext()
     
@@ -15,8 +15,10 @@ export default function ListProducts({ products, category }) {
 
             <div className='row-cols-2 gx-4 gx-lg-5'>
                 <div className='col'>
-                    {products?.length > 0 && (<b className=''>{products?.length} item{products?.length > 1 ? 's' : ''} {search && (<span>for <b>{search}</b></span>)} </b>)}
+                    {productsCount > 0 && (<b className=''>{productsCount} item{productsCount > 1 ? 's' : ''} {search && (<span>for <b>{search}</b></span>)} </b>)}
+                    
                     {filtered}
+                    
                     {filtered && (
                         <button type='button' onClick={() => {setSearchParams({}); setFiltered(false)}} className='btn btn-sm border btn-danger mx-1'>
                             Clear filters <i className="bi bi-x"></i>
@@ -25,7 +27,7 @@ export default function ListProducts({ products, category }) {
                 </div>
             </div>
 
-            {!loading && products?.length > 0 &&
+            {!loading && productsCount > 0 &&
                 (
                     <div className="row gx-3 gx-lg-4 row-cols-xs-1 row-cols-md-2 row-cols-lg-4">
                         {products?.map(product =>
@@ -37,7 +39,7 @@ export default function ListProducts({ products, category }) {
                 )
             }
 
-            {loading ? (<b>Loading...</b>) : products?.length === 0 && <p className='mx-auto lead my-5 text-center'>No products found <i className="bi bi-emoji-frown"></i></p>}
+            {loading ? (<b>Loading...</b>) : productsCount === 0 && <p className='mx-auto lead my-5 text-center'>No products found <i className="bi bi-emoji-frown"></i></p>}
         </div >
     )
 }

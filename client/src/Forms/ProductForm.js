@@ -64,11 +64,13 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
             console.log('product created')
             setForm(product)
             setProducts(prevProducts => {
-                return prevProducts.map(prod => prod._id === product._id ? product : prod);
+                return [product, ...prevProducts]
             });
             setAlert({ message: 'Product created successfully', class: 'success' })
-        }).catch(({ response }) => {
-            setAlert({ message: response.data.message, class: 'danger' })
+        }).catch(err => {
+            if (err.response) {
+                setAlert({ message: err.response.data.message, class: 'danger' })
+            }
         })
     }
 

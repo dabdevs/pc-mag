@@ -19,6 +19,7 @@ export default function ImageUploader({ collection, id, setAlert, setImages, set
                 setAlert({ message: `Upload up to ${data.imagesPerProduct} images`, class: 'danger' })
                 setUploading(false)
                 setInputValue('')
+                setBtnUploadDisabled(true) 
                 return
             }
 
@@ -31,10 +32,12 @@ export default function ImageUploader({ collection, id, setAlert, setImages, set
             setAlert({ message: 'Images uploaded successfully', class: 'success' })
             setUploading(false)
             setInputValue('')
+            setBtnUploadDisabled(true) 
         } catch (err) {
             setInputValue('')
             setAlert({ message: err.response.data.error, class: 'danger' })
             setUploading(false)
+            setBtnUploadDisabled(true) 
         }
     }
 

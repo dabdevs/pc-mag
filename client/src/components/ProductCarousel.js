@@ -3,10 +3,10 @@ import Carousel from 'react-bootstrap/Carousel';
 
 export default function ProductCarousel({ product }) {
   return (
-    <div className='col-md-6' style={{ height: '300px', overflow: 'hidden' }}>
+    <div className='col-md-6' style={{ height: '500px' }}>
       <Carousel>
         {product.images.map((img, i) => (
-          <Carousel.Item className='w-100 h-100' interval={1500} key={i}>
+          <Carousel.Item style={{ height: '500px' }} className='w-100' interval={1500} key={i}>
             <img
               className="w-100 h-100 img-responsive"
               src={img}

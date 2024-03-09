@@ -12,12 +12,14 @@ export default function Index() {
     const [searchParams] = useSearchParams()
     const category = searchParams.get('category')
     const [page, setPage] = useState(1) 
+    const [productsCount, setProductsCount] = useState(0)
     const {products, setProducts, loading, setLoading} = useProductsContext()
     
     useEffect(() => {
         setLoading(true)
-        getProducts(category, search, page).then(({products}) => {
+        getProducts(category, search, page).then(({products, count}) => {
             setProducts(products)
+            setProductsCount(count)
             setLoading(false)
         })
         .catch(err => {
@@ -33,7 +35,7 @@ export default function Index() {
 
                 <div className='row py-lg-4'>
                     <Sidebar category={category} page={page} />
-                    <ListProducts category={category} products={products} loading={loading} />
+                    <ListProducts productsCount={productsCount} category={category} products={products} loading={loading} />
                 </div>    
             </Layout>
         </div>

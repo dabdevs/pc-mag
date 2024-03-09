@@ -244,6 +244,7 @@ export default function Products() {
     // }, [search])
 
     useEffect(() => {
+        console.log('Products changed', products)
         createContent()
     }, [products])
 

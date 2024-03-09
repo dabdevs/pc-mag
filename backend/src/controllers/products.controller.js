@@ -68,6 +68,7 @@ module.exports.getAll = async (req, res) => {
 
         return res.status(200).json({
             products,
+            count,
             totalPages: Math.ceil(count / limit),
             currentPage: page
         })
