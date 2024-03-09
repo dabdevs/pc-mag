@@ -8,11 +8,10 @@ export const getProducts = async (category='', search='', page=1) => {
 
         if (search) url += search
 
-        url += `?page=${page}`
+        if (!url.includes(`?page=${page}`)) url += `?page=${page}`
 
         console.log('URL', url)
 
-        
         const { data } = await axios.get(url)
 
         return data

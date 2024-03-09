@@ -189,42 +189,41 @@ export default function Products() {
                                 )) : <p>No products found.</p>}
                         </tbody>
                     </table>
-                    {<nav>
-                        <ul className="pagination pagination-sm">
+                    <nav>
+                        <ul className="pagination pagination-sm mt-3">
                             <li className={prevBtnClasses}>
                                 <Link className="page-link text-dark" href='#' tabIndex="-1" onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage - 1) }}>Previous</Link>
                             </li>
-
-                            <li className={`page-item ${page === 1 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(1) }}>
-                                <Link className="page-link text-dark" href='#'>1</Link>
+                            <li className="page-item" aria-current="page" onClick={(e) => { e.preventDefault(); setPage(1) }}>
+                                <Link className={`page-link ${page === 1 ? 'text-danger' : 'text-dark'}`} href='#'>1</Link>
                             </li>
-                            <li className={`page-item ${page === 2 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(2) }}>
-                                <Link className="page-link text-dark" href='#'>2</Link>
+                            <li className="page-item" onClick={(e) => { e.preventDefault(); setPage(2) }}>
+                                <Link className={`page-link ${page === 2 ? 'text-danger' : 'text-dark'}`} href='#'>2</Link>
                             </li>
-                            <li className={`page-item ${page === 3 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(3) }}>
-                                <Link className="page-link text-dark">3</Link>
+                            <li className="page-item" onClick={(e) => { e.preventDefault(); setPage(3) }}>
+                                <Link className={`page-link ${page === 3 ? 'text-danger' : 'text-dark'}`} href='#'>3</Link>
                             </li>
-                            <li className={`page-item ${page === 4 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(4) }}>
-                                <Link className="page-link text-dark" href='#'>4</Link>
+                            <li className="page-item" onClick={(e) => { e.preventDefault(); setPage(4) }}>
+                                <Link className={`page-link ${page === 4 ? 'text-danger' : 'text-dark'}`} href='#'>4</Link>
                             </li>
-                            <li className={`page-item ${page === 5 ? 'active' : ''}`} aria-current="page" onClick={(e) => { e.preventDefault(); setPage(5) }}>
-                                <Link className="page-link text-dark" href='#'>5</Link>
+                            <li className="page-item" onClick={(e) => { e.preventDefault(); setPage(5) }}>
+                                <Link className={`page-link ${page === 5 ? 'text-danger' : 'text-dark'}`} href='#'>5</Link>
                             </li>
                             <li className={`page-item disabled`} aria-current="page">
                                 <Link className="page-link text-dark" href='#'>... {page === currentPage}</Link>
                             </li>
 
                             {page > 5 &&
-                                <li className={`page-item active`} aria-current="page">
-                                    <Link className="page-link text-dark" href='#'>{page}</Link>
+                                <li className={`page-item`} aria-current="page">
+                                    <Link className="page-link text-danger" href='#'>{page}</Link>
                                 </li>
                             }
-                            
-                            <li className={nextBtnClasses}> 
+
+                            <li className={nextBtnClasses}>
                                 <Link className="page-link text-dark" href='#' onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage + 1) }}>Next</Link>
                             </li>
                         </ul>
-                    </nav>}
+                    </nav>
                 </div>
             )
         }
@@ -236,12 +235,6 @@ export default function Products() {
         setSearch(e.target.value)
         console.log('Keyword',e.target.value)
     }
-
-    // useEffect(() => {
-    //     console.log('Search: ', search.toLowerCase())
-    //     const filtered = products.filter(product => product.os.toLowerCase().includes(search.toLowerCase()))
-    //     setFilteredProducts(filtered)
-    // }, [search])
 
     useEffect(() => {
         console.log('Products changed', products)
