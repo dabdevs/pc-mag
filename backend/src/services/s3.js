@@ -8,7 +8,7 @@ const {
 const sharp = require('sharp');
 
 s3.config.update({
-    maxRetries: 3,
+    maxRetries: process.env.AWS_MAX_RETRIES,
     httpOptions: { timeout: 30000, connectTimeout: 5000 },
     region: process.env.AWS_REGION,
     credentials: {
@@ -27,10 +27,16 @@ class S3Service {
     async resizeImagesAndUploadToS3(uploadedImages) {
         try {
             const resizedImages = []
+            const allowedExtensions = ['jpeg', 'jpg']
 
             for (const image of uploadedImages) {
-                console.log('Resizing:', image)
-                const path = `public/${uuidv4()}_${image.mimetype.replace('image/', '.')}`
+                const fileExtension = image.mimetype.replace('image/', '')
+
+                if (!allowedExtensions.includes(fileExtension)) {
+                    throw new Error('Invalid image extension')
+                }
+
+                const path = `public/${uuidv4()}_.${fileExtension}`
                 const resizedBuffer = await sharp(image.buffer)
                     .resize(parseInt(process.env.IMAGE_WIDTH), parseInt(process.env.IMAGE_HEIGTH), {
                         fit: 'inside',

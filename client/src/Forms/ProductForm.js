@@ -50,6 +50,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
     const [form, setForm] = useState(product || initialState)
     const [alert, setAlert] = useState({})
     const [images, setImages] = useState(form.images)
+    const loadedForm = form
   
     const {
         register,
@@ -60,6 +61,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
     const handleCreate = (product) => {
         console.log('Creating', product)
         create(product).then(({ product }) => {
+            console.log('product created')
             setForm(product)
             setProducts(prevProducts => {
                 return prevProducts.map(prod => prod._id === product._id ? product : prod);
@@ -72,6 +74,12 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
 
     const handleEdit = (product) => {
         console.log('Editing')
+
+        if (loadedForm !== form) {
+            console.log('form edited')
+        } else {
+            console.log('form not edited')
+        }
         product._id = form._id
         update(product).then(({ product }) => {
             setProducts(prevProducts => {

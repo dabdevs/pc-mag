@@ -42,7 +42,7 @@ module.exports.upload = async (req, res) => {
                 break;
         }
     } catch (err) {
-        console.error('Error fetching data:', err);
-        res.status(500).json({ err: 'Internal Server Error' });
+        console.error('Error fetching data:', err.message);
+        res.status(500).json({ error: err.message});
     }
 }

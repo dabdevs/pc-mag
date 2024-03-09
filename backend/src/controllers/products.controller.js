@@ -137,7 +137,15 @@ module.exports.update = async (req, res) => {
 module.exports.destroy = async (req, res) => {
     try {
         const productId = req.params.id
-        const response = await Product.deleteOne({ _id: productId })
+        const product = await Product.findOne({ _id: new ObjectId(productId) })
+
+        if (product) {
+            product.images.map(img => {
+                s3.deleteObject(img).catch(err => console.log(err))
+            })
+        }
+
+        const response = await Product.deleteOne({ _id: product._id })
         res.json({ _id: productId, success: response.deletedCount })
     } catch (err) {
         console.log(err)

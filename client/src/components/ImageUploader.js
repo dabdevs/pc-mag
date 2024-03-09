@@ -32,9 +32,8 @@ export default function ImageUploader({ collection, id, setAlert, setImages, set
             setUploading(false)
             setInputValue('')
         } catch (err) {
-            console.log(err)
             setInputValue('')
-            setAlert({ message: 'An error ocurred while uploading the files. Please try again later.', class: 'danger' })
+            setAlert({ message: err.response.data.error, class: 'danger' })
             setUploading(false)
         }
     }
@@ -49,7 +48,7 @@ export default function ImageUploader({ collection, id, setAlert, setImages, set
         <div className='card w-100'>
             <form id='uploadImagesForm' encType="multipart/form-data" className='d-flex gap-3'>
                 <fieldset disabled={uploading} className='w-100 d-flex justify-content-between'>
-                    <input value={inputValue} onChange={(e) => inputFileEmpty(e)} id='images' type='file' name='images' className='form-control border-0' multiple />
+                    <input value={inputValue} onChange={(e) => inputFileEmpty(e)} id='images' type='file' name='images' className='form-control border-0' multiple accept="image/*" />
                     <button disabled={btnUploadDisabled} onClick={() => uploadImages()} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
                 </fieldset>
             </form>
