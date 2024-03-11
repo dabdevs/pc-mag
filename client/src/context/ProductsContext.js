@@ -10,6 +10,7 @@ export function useProductsContext() {
 
 export const ProductsContextProvider = ({ children }) => {
     const [products, setProducts] = useState([])
+    const [sort, setSort] = useState('')
     const [unfilteredProducts, setUnfilteredProducts] = useState([])
     const [search, setSearch] = useState()
     //const { keyword } = useLocation()
@@ -28,7 +29,7 @@ export const ProductsContextProvider = ({ children }) => {
         console.log('Products context')
         setLoading(true)
         //setSearchParams({ page })
-        getProducts(page)
+        getProducts(page, sort)
             .then(({ products, count, totalPages, currentPage }) => {
                 setProducts(products)
                 setUnfilteredProducts(products)
@@ -67,6 +68,7 @@ export const ProductsContextProvider = ({ children }) => {
 
     const handleSortBy = async (sort) => {
         console.log('sorting')
+        setSort(sort)
 
         getProducts(page, sort)
             .then(({ products, count, totalPages, currentPage }) => {
