@@ -2,13 +2,17 @@ import axios from "axios"
 
 const baseUrl = 'http://localhost:3000';
 
-export const getProducts = async (category='', search='', page=1) => {
+export const getProducts = async (page=1) => {
     try {
-        let url = `${baseUrl}/api/products`
+        let url = `${baseUrl}/api/products${window.location.search}`
 
-        if (search) url += search
+        // console.log('window location', window.location.search)
 
-        if (!url.includes(`?page=${page}`)) url += `?page=${page}`
+        // if (category) url += `?q=${category}`
+
+        // if (search) url += `?q=${search}`
+
+        if (!url.includes(`page=${page}`)) url += url.includes('?') ? `&page=${page}` : `?page=${page}`
 
         console.log('URL', url)
 
@@ -83,22 +87,21 @@ export const getByName = async (products, name) => {
     }
 }
 
-export const searchProducts = async (search) => {
+export const searchProducts = async (category='', search, page=1) => {
     try {
-        let url = `${baseUrl}/api/search/${search}`
+        console.log('searching for', category, search)
+        let url = `${baseUrl}/api/products`
+
+        if (search) url += search
+
+        if (!url.includes(`?page=${page}`)) url += `?page=${page}`
+
+        console.log('URL', url)
+
+        return
 
         const { data } = await axios.get(url)
-        localStorage.setItem('products', JSON.stringify(data))
 
-        const cachedProducts = localStorage.getItem('products')
-
-        // if (cachedProducts) {
-        //     return Promise.resolve(JSON.parse(cachedProducts))
-        // } else {
-        //     const { data } = await axios.get(url)
-        //     localStorage.setItem('products', JSON.stringify(data))
-        //     return data
-        // }
         return data
     } catch (err) {
         console.error(err)

@@ -1,19 +1,24 @@
 import React, { useState } from 'react'
 import { useProductsContext } from '../context/ProductsContext';
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { FaHourglassEnd } from 'react-icons/fa';
 
 export default function SearchForm() {
     const [search, setSearch] = useState('')
     const { handleSearch } = useProductsContext()
     const navigate = useNavigate()
-    const { categoryName } = useParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const disabled = search === ''
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        navigate(`?q=${search}`)
-        setSearch('')
-        handleSearch(search, categoryName)
+        const formFactor = searchParams.get('formFactor')
+        const params = {search}
+
+        if (formFactor) params.formFactor = formFactor
+        setSearchParams(params)
+
+        handleSearch(search, formFactor)
     }
 
     return (

@@ -10,23 +10,23 @@ const s3 = new S3Service()
 
 module.exports.getAll = async (req, res) => {
     try {
-        const query = req.query.q
         const conditions = {}
         console.log(req.body, req.query)
         
         // Filters
-        const { category, formFactor, ram, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = 10 } = req.query
+        const { category, search, formFactor, ram, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = 10 } = req.query
         
         if (category) {
-            conditions.formFactor = category
+            conditions.category = category
         }
 
-        if (query) {
-            conditions.name = { '$regex': query, '$options': 'i' }
+        if (search) {
+            console.log('searching...')
+            conditions.name = { '$regex': search, '$options': 'i' }
         }
 
-        if (formFactor && formFactor.length > 0) {
-            conditions.formFactor = { '$in': formFactor }
+        if (formFactor) {
+            conditions.formFactor = Array.isArray(formFactor) ? { '$in': formFactor } : formFactor
         }
 
         if (ram && ram.length > 0) {
@@ -64,8 +64,9 @@ module.exports.getAll = async (req, res) => {
             .sort({createdAt: -1})
 
         // Getting the numbers of products stored in database
-        const count = await Product.countDocuments();
-
+        const count = await Product.countDocuments(conditions)
+        console.log('conditions', conditions)
+        console.log('products', products)
         return res.status(200).json({
             products,
             count,

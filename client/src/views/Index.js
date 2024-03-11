@@ -12,7 +12,7 @@ import List from '../components/Products/front/List'
 
 export default function Index() {
     const [searchParams, setSearchParams] = useSearchParams()
-    const category = searchParams.get('category')
+    const formFactor = searchParams.get('formFactor')
     const [loading, setLoading] = useState(false)
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(null)
@@ -21,7 +21,7 @@ export default function Index() {
     const [content, setContent] = useState(null)
     //const [products, setProducts] = useState([])
     //const [filtered, setFiltered] = useState(false)
-    const { products, setProducts, filtered, setFiltered, nextBtnClasses, prevBtnClasses, productsCount } = useProductsContext()
+    //const { products, setProducts, filtered, setFiltered, nextBtnClasses, prevBtnClasses, productsCount } = useProductsContext()
 
     // const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
     // const nextBtnClasses = totalPages === currentPage ? 'page-item disabled' : 'page-item'
@@ -29,7 +29,7 @@ export default function Index() {
     // useEffect(() => {
     //     setLoading(true)
     //     setSearchParams({ page })
-    //     getProducts(category, search, page)
+    //     getProducts(formFactor, search, page)
     //         .then(({ products, count, totalPages, currentPage }) => {
     //             setProducts(products)
     //             setProductsCount(count)
@@ -42,7 +42,7 @@ export default function Index() {
     //             console.error(err)
     //             setLoading(false)
     //         });
-    // }, [category, search, page])
+    // }, [formFactor, search, page])
 
     // const createContent = async (products) => {
     //     console.log('Creating content')
@@ -57,14 +57,14 @@ export default function Index() {
     //     setContent(_jsx)
     // }
 
-    const pagination = {
-        page,
-        setPage,
-        prevBtnClasses,
-        nextBtnClasses,
-        currentPage,
-        productsCount
-    }
+    // const pagination = {
+    //     page,
+    //     setPage,
+    //     prevBtnClasses,
+    //     nextBtnClasses,
+    //     currentPage,
+    //     productsCount
+    // }
 
     return (
         <div>
@@ -72,12 +72,12 @@ export default function Index() {
                 <SearchForm />
 
                 <div className='row py-lg-4'>
-                    <Sidebar category={category} page={page} />
+                    <Sidebar formFactor={formFactor} page={page} />
 
                     <div className="col-sm-9 col-lg-10 ms-sm-auto p-4" >
-                        <Menu category={category} />
+                        <Menu formFactor={formFactor} />
 
-                        <div className='row-cols-2 gx-4 gx-lg-5'>
+                        {/* <div className='row-cols-2 gx-4 gx-lg-5'>
                             <div className='col'>
                                 {filtered}
 
@@ -87,11 +87,11 @@ export default function Index() {
                                     </button>
                                 )}
                             </div>
-                        </div>
+                        </div> */}
 
                         {loading?
                             <b>Loading...</b> :
-                            <List products={products} pagination={pagination} />
+                            <List />
                         }
                     </div >
                 </div>

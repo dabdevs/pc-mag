@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { getProducts } from "../api/products";
+import { getProducts, searchProducts } from "../api/products";
 import { useSearchParams } from "react-router-dom";
 
 const ProductsContext = createContext({})
@@ -27,7 +27,7 @@ export const ProductsContextProvider = ({ children }) => {
         console.log('Products context')
         setLoading(true)
         //setSearchParams({ page })
-        getProducts('', search, page)
+        getProducts(page)
             .then(({ products, count, totalPages, currentPage }) => {
                 setProducts(products)
                 setProductsCount(count)
@@ -49,9 +49,12 @@ export const ProductsContextProvider = ({ children }) => {
         setFiltered(true)
         setLoading(true)
 
-        getProducts(category, search)
-            .then(data => {
-                setProducts(data)
+        getProducts(page)
+            .then(({ products, count, totalPages, currentPage }) => {
+                setProducts(products)
+                setProductsCount(count)
+                setTotalPages(totalPages)
+                setCurrentPage(currentPage)
                 setLoading(false)
             })
             .catch(err => {
