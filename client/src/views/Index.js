@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import Layout from '../components/Layout'
 import Sidebar from '../components/Sidebar'
 import { getProducts } from '../api/products'
@@ -11,39 +11,38 @@ import LazyLoad from 'react-lazyload'
 import List from '../components/Products/front/List'
 
 export default function Index() {
-    const { search } = useLocation()
     const [searchParams, setSearchParams] = useSearchParams()
     const category = searchParams.get('category')
     const [loading, setLoading] = useState(false)
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(null)
     const [currentPage, setCurrentPage] = useState(null)
-    const [productsCount, setProductsCount] = useState(0)
+    //const [productsCount, setProductsCount] = useState(0)
     const [content, setContent] = useState(null)
-    const [products, setProducts] = useState([])
-    const [filtered, setFiltered] = useState(false)
-    //const { products, setProducts, filtered, setFiltered } = useProductsContext()
+    //const [products, setProducts] = useState([])
+    //const [filtered, setFiltered] = useState(false)
+    const { products, setProducts, filtered, setFiltered, nextBtnClasses, prevBtnClasses, productsCount } = useProductsContext()
 
-    const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
-    const nextBtnClasses = totalPages === currentPage ? 'page-item disabled' : 'page-item'
+    // const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
+    // const nextBtnClasses = totalPages === currentPage ? 'page-item disabled' : 'page-item'
 
-    useEffect(() => {
-        setLoading(true)
-        setSearchParams({ page })
-        getProducts(category, search, page)
-            .then(({ products, count, totalPages, currentPage }) => {
-                setProducts(products)
-                setProductsCount(count)
-                setTotalPages(totalPages)
-                setCurrentPage(currentPage)
-                setLoading(false)
-                //createContent(products).then(() => setLoading(false))
-            })
-            .catch(err => {
-                console.error(err)
-                setLoading(false)
-            });
-    }, [category, search, page])
+    // useEffect(() => {
+    //     setLoading(true)
+    //     setSearchParams({ page })
+    //     getProducts(category, search, page)
+    //         .then(({ products, count, totalPages, currentPage }) => {
+    //             setProducts(products)
+    //             setProductsCount(count)
+    //             setTotalPages(totalPages)
+    //             setCurrentPage(currentPage)
+    //             setLoading(false)
+    //             //createContent(products).then(() => setLoading(false))
+    //         })
+    //         .catch(err => {
+    //             console.error(err)
+    //             setLoading(false)
+    //         });
+    // }, [category, search, page])
 
     // const createContent = async (products) => {
     //     console.log('Creating content')
@@ -63,7 +62,8 @@ export default function Index() {
         setPage,
         prevBtnClasses,
         nextBtnClasses,
-        currentPage
+        currentPage,
+        productsCount
     }
 
     return (

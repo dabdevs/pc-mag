@@ -1,5 +1,6 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { getProducts } from "../api/products";
+import { useSearchParams } from "react-router-dom";
 
 const ProductsContext = createContext({})
 
@@ -10,34 +11,65 @@ export function useProductsContext() {
 export const ProductsContextProvider = ({ children }) => {
     const [products, setProducts] = useState([])
     const [search, setSearch] = useState()
+    //const { keyword } = useLocation()
+    //const [searchParams, setSearchParams] = useSearchParams()
+    //const category = searchParams.get('category')
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(null)
+    const [currentPage, setCurrentPage] = useState(null)
+    const [productsCount, setProductsCount] = useState(0)
     const [filtered, setFiltered] = useState(false)
     const [filters, setFilters] = useState([])
     const [loading, setLoading] = useState(false)
     const [filtersCleared, setFiltersCleared] = useState(false)
 
-    const handleSearch = async (search, category='') => {
+    useEffect(() => {
+        console.log('Products context')
+        setLoading(true)
+        //setSearchParams({ page })
+        getProducts('', search, page)
+            .then(({ products, count, totalPages, currentPage }) => {
+                setProducts(products)
+                setProductsCount(count)
+                setTotalPages(totalPages)
+                setCurrentPage(currentPage)
+                setLoading(false)
+            })
+            .catch(err => {
+                console.error(err)
+                setLoading(false)
+            });
+    }, [search, page])
+
+    const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
+    const nextBtnClasses = totalPages === currentPage ? 'page-item disabled' : 'page-item'
+
+    const handleSearch = async (search, category = '') => {
         setSearch(search)
         setFiltered(true)
         setLoading(true)
 
         getProducts(category, search)
-        .then(data => {
-            setProducts(data)
-            setLoading(false)
-        })
-        .catch(err => {
-            console.error(err)
-            setLoading(false)
-        })
+            .then(data => {
+                setProducts(data)
+                setLoading(false)
+            })
+            .catch(err => {
+                console.error(err)
+                setLoading(false)
+            })
     }
 
-    const handleSortBy = async (data, sort, category='') => {
+    const handleSortBy = async (data, sort, category = '') => {
+        console.log('sorting', data)
+
         if (sort === '') {
             data = await getProducts(category, search, filters)
         }
 
         if (sort === 'lowest-price') {
             data = data.sort((a, b) => a.price - b.price)
+            console.log(data)
         }
 
         if (sort === 'highest-price') {
@@ -84,7 +116,12 @@ export const ProductsContextProvider = ({ children }) => {
             setFiltersCleared,
             filters,
             setFilters,
-            handleSortBy
+            handleSortBy,
+            prevBtnClasses,
+            nextBtnClasses,
+            productsCount,
+            page,
+            setPage
         }}
         >
             {children}

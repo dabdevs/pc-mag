@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react'
 import ProductCard from '../../ProductCard'
 import LazyLoad from 'react-lazyload'
 import { Link } from 'react-router-dom'
+import { useProductsContext } from '../../../context/ProductsContext'
 
-export default function List({ products, pagination }) {
+export default function List({ pagination }) {
     const [data, setData] = useState([])
-    const { page, setPage, prevBtnClasses, nextBtnClasses, currentPage } = pagination
-
+    const { products, page, setPage, prevBtnClasses, nextBtnClasses, currentPage, productsCount } = useProductsContext()
+    
     useEffect(() => {
-        console.log('Reloading List')
+        console.log('Reloading List', 'page:', page, products)
         setData(products)
-    }, [products])
+    }, [products, page])
 
     return (
         <div >
-            {data.length && <b className=''>{data.length} item{data.length > 1 ? 's' : ''} </b>}
+            {productsCount > 0 && <b className=''>{productsCount} item{productsCount > 1 ? 's' : ''} </b>}
 
             {data.length ?
                 <>
