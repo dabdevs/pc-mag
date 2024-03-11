@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { getProducts, searchProducts } from "../api/products";
+import { getProducts } from "../api/products";
 import { useSearchParams } from "react-router-dom";
 
 const ProductsContext = createContext({})
@@ -10,6 +10,7 @@ export function useProductsContext() {
 
 export const ProductsContextProvider = ({ children }) => {
     const [products, setProducts] = useState([])
+    const [unfilteredProducts, setUnfilteredProducts] = useState([])
     const [search, setSearch] = useState()
     //const { keyword } = useLocation()
     //const [searchParams, setSearchParams] = useSearchParams()
@@ -30,6 +31,7 @@ export const ProductsContextProvider = ({ children }) => {
         getProducts(page)
             .then(({ products, count, totalPages, currentPage }) => {
                 setProducts(products)
+                setUnfilteredProducts(products)
                 setProductsCount(count)
                 setTotalPages(totalPages)
                 setCurrentPage(currentPage)
@@ -44,7 +46,7 @@ export const ProductsContextProvider = ({ children }) => {
     const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
     const nextBtnClasses = totalPages === currentPage ? 'page-item disabled' : 'page-item'
 
-    const handleSearch = async (search, category = '') => {
+    const handleSearch = async (search) => {
         setSearch(search)
         setFiltered(true)
         setLoading(true)
@@ -63,23 +65,37 @@ export const ProductsContextProvider = ({ children }) => {
             })
     }
 
-    const handleSortBy = async (data, sort, category = '') => {
-        console.log('sorting', data)
+    const handleSortBy = async (sort) => {
+        console.log('sorting')
 
-        if (sort === '') {
-            data = await getProducts(category, search, filters)
-        }
+        getProducts(page, sort)
+            .then(({ products, count, totalPages, currentPage }) => {
+                setProducts(products)
+                setProductsCount(count)
+                setTotalPages(totalPages)
+                setCurrentPage(currentPage)
+                setLoading(false)
+            })
+            .catch(err => {
+                console.error(err)
+                setLoading(false)
+            })
 
-        if (sort === 'lowest-price') {
-            data = data.sort((a, b) => a.price - b.price)
-            console.log(data)
-        }
+        // if (sort === '') {
+        //     return unfilteredProducts
+        // }
 
-        if (sort === 'highest-price') {
-            data = data.sort((a, b) => b.price - a.price)
-        }
+        // let data = []
 
-        return data
+        // if (sort === 'lowest-price') {
+        //     data = products.sort((a, b) => a.price - b.price)
+        // }
+
+        // if (sort === 'highest-price') {
+        //     data = products.sort((a, b) => b.price - a.price)
+        // }
+
+        // return data
     }
 
     // const clearFilters = (category) => {

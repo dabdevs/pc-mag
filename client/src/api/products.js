@@ -2,15 +2,13 @@ import axios from "axios"
 
 const baseUrl = 'http://localhost:3000';
 
-export const getProducts = async (page=1) => {
+export const getProducts = async (page=1, sort='') => {
     try {
         let url = `${baseUrl}/api/products${window.location.search}`
 
-        // console.log('window location', window.location.search)
-
-        // if (category) url += `?q=${category}`
-
-        // if (search) url += `?q=${search}`
+        if (sort) {
+            url += url.includes('?') ? `&orderBy=${sort}` : `?orderBy=${sort}`
+        }
 
         if (!url.includes(`page=${page}`)) url += url.includes('?') ? `&page=${page}` : `?page=${page}`
 
@@ -81,28 +79,6 @@ export const getByName = async (products, name) => {
         const product = products.filter(product => product.name === name.split('-').join(' '))
   
         return product[0]
-    } catch (err) {
-        console.error(err)
-        throw err
-    }
-}
-
-export const searchProducts = async (category='', search, page=1) => {
-    try {
-        console.log('searching for', category, search)
-        let url = `${baseUrl}/api/products`
-
-        if (search) url += search
-
-        if (!url.includes(`?page=${page}`)) url += `?page=${page}`
-
-        console.log('URL', url)
-
-        return
-
-        const { data } = await axios.get(url)
-
-        return data
     } catch (err) {
         console.error(err)
         throw err

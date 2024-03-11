@@ -14,7 +14,7 @@ module.exports.getAll = async (req, res) => {
         console.log(req.body, req.query)
         
         // Filters
-        const { category, search, formFactor, ram, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = 10 } = req.query
+        const { category, search, formFactor, ram, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = 10, orderBy } = req.query
         
         if (category) {
             conditions.category = category
@@ -57,16 +57,21 @@ module.exports.getAll = async (req, res) => {
             conditions.price = { $gte: parseInt(minPrice) * 100, $lte: parseInt(maxPrice) * 100 }
         }
 
+        let sort = {createdAt: -1}
+
+        if (orderBy) {
+            sort = { price: orderBy === 'lowest-price' ? 1 : -1}
+        }
+
         // Get collection
         const products = await Product.find(conditions)
             .limit(limit * 1)
             .skip((page - 1) * limit)
-            .sort({createdAt: -1})
+            .sort(sort)
 
         // Getting the numbers of products stored in database
         const count = await Product.countDocuments(conditions)
-        console.log('conditions', conditions)
-        console.log('products', products)
+       
         return res.status(200).json({
             products,
             count,

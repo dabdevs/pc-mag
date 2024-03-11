@@ -18,7 +18,7 @@ export default function SearchForm() {
         if (formFactor) params.formFactor = formFactor
         setSearchParams(params)
 
-        handleSearch(search, formFactor)
+        handleSearch(search)
     }
 
     return (

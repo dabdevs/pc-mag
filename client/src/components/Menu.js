@@ -3,19 +3,20 @@ import { useProductsContext } from '../context/ProductsContext'
 
 export default function Menu({formFactor}) {
     const sortRef = useRef(null)
-    const { handleSortBy, products, setProducts, setLoading } = useProductsContext()
+    const { handleSortBy, setProducts, setLoading } = useProductsContext()
 
-    const handleChange = (sort) => {
+    const handleChange = async (sort) => {
         setLoading(true)
-        handleSortBy(products, sort, formFactor)
-        .then(data => {
-            setProducts(data)
-            setLoading(false)
-        })
-        .catch(err => {
-            setLoading(false)
-            console.error(err)
-        })
+        await handleSortBy(sort)
+        // .then(data => {
+        //     console.log('Ordered')
+        //     setProducts(data)
+        //     setLoading(false)
+        // })
+        // .catch(err => {
+        //     setLoading(false)
+        //     console.error(err)
+        // })
     }
 
     return (
