@@ -95,7 +95,7 @@ export default function Sidebar({ page, category }) {
         
         setSearchParams(filters)
         setFiltered(true)
-    };
+    }
 
     return (
         <div id="sidebar" className="col-sm-3 col-lg-2 d-none d-md-block">

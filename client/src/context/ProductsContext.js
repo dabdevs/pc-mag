@@ -82,22 +82,6 @@ export const ProductsContextProvider = ({ children }) => {
                 console.error(err)
                 setLoading(false)
             })
-
-        // if (sort === '') {
-        //     return unfilteredProducts
-        // }
-
-        // let data = []
-
-        // if (sort === 'lowest-price') {
-        //     data = products.sort((a, b) => a.price - b.price)
-        // }
-
-        // if (sort === 'highest-price') {
-        //     data = products.sort((a, b) => b.price - a.price)
-        // }
-
-        // return data
     }
 
     // const clearFilters = (category) => {

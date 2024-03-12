@@ -36,9 +36,12 @@ export default function Navbar() {
                 </span>
               </Dropdown.Toggle>
 
-              <Dropdown.Menu style={{ width: '800px' }}>
-                <CartItems />
-              </Dropdown.Menu>
+              {
+                cartItems.length > 0 &&
+                <Dropdown.Menu style={{ width: '800px' }}>
+                  <CartItems />
+                </Dropdown.Menu>
+              }
             </Dropdown>
 
             {authUser ? <DropdownList

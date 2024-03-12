@@ -1,22 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useProductsContext } from '../context/ProductsContext'
 
-export default function Menu({formFactor}) {
+export default function Menu({ formFactor }) {
     const sortRef = useRef(null)
-    const { handleSortBy, setProducts, setLoading } = useProductsContext()
+    const { handleSortBy, setLoading } = useProductsContext()
 
     const handleChange = async (sort) => {
         setLoading(true)
         await handleSortBy(sort)
-        // .then(data => {
-        //     console.log('Ordered')
-        //     setProducts(data)
-        //     setLoading(false)
-        // })
-        // .catch(err => {
-        //     setLoading(false)
-        //     console.error(err)
-        // })
     }
 
     return (
@@ -46,16 +37,14 @@ export default function Menu({formFactor}) {
                         <a className={formFactor === 'Laptop' ? 'text-danger nav-link text-decoration-underline' : 'nav-link'} href="?formFactor=Laptop"> <i className="bi bi-laptop mr-2"></i> Laptops</a>
                     </li>
                 </ul>
-                <div>
-                    <form className='d-flex'>
-                        <label htmlFor='sort' className='px-2 pt-2'>Sort:</label>
-                        <select ref={sortRef} id='sort' className='form-control ml-2' onChange={(e) => handleChange(e.target.value)}>
-                            <option value={''}>best match</option>
-                            <option value={'lowest-price'}>lowest price</option>
-                            <option value={'highest-price'}>highest price</option>
-                        </select>
-                    </form>
-                </div>
+                <form className='d-flex' style={{ width: '200px' }}>
+                    <label htmlFor='sort' className='pt-2 w-75 text-right'>Sort by:</label>
+                    <select ref={sortRef} id='sort' className='form-control ml-1' onChange={(e) => handleChange(e.target.value)}>
+                        <option value={''}>best match</option>
+                        <option value={'lowest-price'}>lowest price</option>
+                        <option value={'highest-price'}>highest price</option>
+                    </select>
+                </form>
             </div>
         </nav>
     )
