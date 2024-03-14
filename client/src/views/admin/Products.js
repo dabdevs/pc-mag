@@ -7,6 +7,7 @@ import { FaPlus } from "react-icons/fa";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link, useSearchParams } from 'react-router-dom';
+import BasicTable from '../../components/BasicTable'
 
 export default function Products() {
     const [products, setProducts] = useState([])
@@ -147,7 +148,7 @@ export default function Products() {
                             </div>
                         </div>
                     </div>
-                    <table className='w-100 table table-striped'>
+                    {/* <table className='w-100 table table-striped'>
                         <thead>
                             <tr>
                                 <th></th>
@@ -188,7 +189,8 @@ export default function Products() {
                                     </tr>
                                 )) : <p>No products found.</p>}
                         </tbody>
-                    </table>
+                    </table> */}
+                    <BasicTable />
                     <nav>
                         <ul className="pagination pagination-sm mt-3">
                             <li className={prevBtnClasses}>
