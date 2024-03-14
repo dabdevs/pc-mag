@@ -9,7 +9,7 @@ export default function Dashboard({children}) {
 
   return !token ? <Navigate to={'/login'} /> : (
     <Layout classes={'p-3'}>
-      <section className='col-sm-9 mx-auto'>
+      <section className='col-sm-10 mx-auto'>
         <div className='row'>
             <div onClick={() => window.location.href = '/admin/products'} className='card col-sm-2 p-2 d-flex flex-column align-items-center' role='button'>
               <SiProducthunt style={{ fontSize: '50px' }} />

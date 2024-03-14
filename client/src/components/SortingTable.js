@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
 import { COLUMNS, GROUPED_COLUMNS } from './columns'
 import computers from './computers.json'
 
-export default function BasicTable() {
+export default function SortingTable() {
     const columns = useMemo(() => GROUPED_COLUMNS, [])
     const data = useMemo(() => computers, [])
 
@@ -17,7 +17,7 @@ export default function BasicTable() {
     } = useTable({
         columns,
         data
-    })
+    }, useSortBy)
 
     return (
         <table {...getTableProps()} className='w-100 table table-striped border'>
@@ -27,7 +27,12 @@ export default function BasicTable() {
                         <tr className='border' {...headerGroup.getHeaderGroupProps()}>
                             {
                                 headerGroup.headers.map(column => (
-                                    <th className='border' {...column.getHeaderProps}>{column.render('Header')}</th>
+                                    <th className='border' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                        {column.render('Header')}
+                                        <span>
+                                            {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
+                                        </span>
+                                    </th>
                                 ))
                             }
                         </tr>
