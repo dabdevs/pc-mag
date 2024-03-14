@@ -21,6 +21,7 @@ export default function FilteringTable() {
         pageOptions,
         gotoPage,
         pageCount,
+        setPageSize,
         prepareRow,
         state,
         setGlobalFilter
@@ -29,7 +30,7 @@ export default function FilteringTable() {
         data
     }, useGlobalFilter, useSortBy, usePagination)
 
-    const { globalFilter, pageIndex } = state
+    const { globalFilter, pageIndex, pageSize } = state
 
     return (
         <div>
@@ -99,7 +100,7 @@ export default function FilteringTable() {
                 </div>
 
                 <div className='d-flex'>
-                    Go to page: {'  '}
+                    Go to page: {' '}
                     <input
                         type='number'
                         defaultValue={pageIndex + 1}
@@ -110,6 +111,22 @@ export default function FilteringTable() {
                         className='form-control form-control-sm mx-2'
                         style={{ width: '50px' }}
                     />
+
+                    Show: {'  '}
+                    <select
+                        className='form-control form-control-sm'
+                        value={pageSize}
+                        onChange={e => setPageSize(Number(e.target.value))}
+                        style={{ width: '50px' }}
+                    >
+                        {
+                            [10, 25, 50].map(pageSize => (
+                                <option key={pageSize} value={pageSize}>
+                                    {pageSize}
+                                </option>
+                            ))
+                        }
+                    </select>
                 </div>
 
                 <div style={{ width: '400px' }}>
