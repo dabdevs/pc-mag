@@ -145,7 +145,7 @@ export default function Products() {
                         </tbody>
                     </table> */}
                     <FilteringTable />
-                    <nav>
+                    {/* <nav>
                         <ul className="pagination pagination-sm mt-3">
                             <li className={prevBtnClasses}>
                                 <Link className="page-link text-dark" href='#' tabIndex="-1" onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage - 1) }}>Previous</Link>
@@ -179,7 +179,7 @@ export default function Products() {
                                 <Link className="page-link text-dark" href='#' onClick={(e) => { e.preventDefault(); setPage(prevPage => prevPage + 1) }}>Next</Link>
                             </li>
                         </ul>
-                    </nav>
+                    </nav> */}
                 </div>
             )
         }

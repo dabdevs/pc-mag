@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { useTable, useSortBy, useGlobalFilter } from 'react-table'
+import { useTable, useSortBy, useGlobalFilter, usePagination } from 'react-table'
 import { COLUMNS, GROUPED_COLUMNS } from './columns'
 import computers from './computers.json'
 import GlobalFilter from './GlobalFilter'
@@ -13,21 +13,25 @@ export default function FilteringTable() {
         getTableBodyProps,
         headerGroups,
         footerGroups,
-        rows,
+        page,
+        nextPage,
+        previousPage,
+        canNextPage,
+        canPreviousPage,
         prepareRow,
         state,
         setGlobalFilter
     } = useTable({
         columns,
         data
-    }, useGlobalFilter, useSortBy)
+    }, useGlobalFilter, useSortBy, usePagination)
 
-    const {globalFilter} = state
+    const { globalFilter } = state
 
     return (
-        <div className='table-responsive'>
-            <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter}/>
-        
+        <div>
+            <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+
             <table {...getTableProps()} className='w-100 table table-striped border'>
                 <thead>
                     {
@@ -49,7 +53,7 @@ export default function FilteringTable() {
                 </thead>
 
                 <tbody {...getTableBodyProps()}>
-                    {rows.map(row => {
+                    {page.map(row => {
                         prepareRow(row)
                         return (
                             <tr className='border' {...row.getRowProps()}>
@@ -63,7 +67,7 @@ export default function FilteringTable() {
                     })}
                 </tbody>
 
-                <tfoot>
+                {/* <tfoot>
                     {
                         footerGroups.map(footerGroup => (
                             <tr className='border' {...footerGroup.getFooterGroupProps}>
@@ -79,8 +83,13 @@ export default function FilteringTable() {
                             </tr>
                         ))
                     }
-                </tfoot>
+                </tfoot> */}
             </table>
+
+            <div>
+                <button className='btn btn-sm btn-outline-dark' onClick={() => previousPage()} disabled={!canPreviousPage}>Previous</button>
+                <button className='btn btn-sm btn-outline-dark mx-2' onClick={() => nextPage()} disabled={!canNextPage}>Next</button>
+            </div>
         </div>
     )
 }
