@@ -18,6 +18,9 @@ export default function FilteringTable() {
         previousPage,
         canNextPage,
         canPreviousPage,
+        pageOptions,
+        gotoPage,
+        pageCount,
         prepareRow,
         state,
         setGlobalFilter
@@ -26,7 +29,7 @@ export default function FilteringTable() {
         data
     }, useGlobalFilter, useSortBy, usePagination)
 
-    const { globalFilter } = state
+    const { globalFilter, pageIndex } = state
 
     return (
         <div>
@@ -86,9 +89,35 @@ export default function FilteringTable() {
                 </tfoot> */}
             </table>
 
-            <div>
-                <button className='btn btn-sm btn-outline-dark' onClick={() => previousPage()} disabled={!canPreviousPage}>Previous</button>
-                <button className='btn btn-sm btn-outline-dark mx-2' onClick={() => nextPage()} disabled={!canNextPage}>Next</button>
+            <div className='d-flex gap-1'>
+                <div>
+                    Page{' '}
+                    <strong>
+                        {pageIndex + 1} of {pageOptions.length}
+                    </strong>
+                    {' '}
+                </div>
+
+                <div className='d-flex'>
+                    Go to page: {'  '}
+                    <input
+                        type='number'
+                        defaultValue={pageIndex + 1}
+                        onChange={e => {
+                            const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
+                            gotoPage(pageNumber)
+                        }}
+                        className='form-control form-control-sm mx-2'
+                        style={{ width: '50px' }}
+                    />
+                </div>
+
+                <div style={{ width: '400px' }}>
+                    <button className='btn btn-sm btn-outline-dark me-1' onClick={() => gotoPage(0)} disabled={!canPreviousPage}>{'<<'}</button>
+                    <button className='btn btn-sm btn-outline-dark me-1' onClick={() => previousPage()} disabled={!canPreviousPage}>Previous</button>
+                    <button className='btn btn-sm btn-outline-dark me-1' onClick={() => nextPage()} disabled={!canNextPage}>Next</button>
+                    <button className='btn btn-sm btn-outline-dark' onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>{'>>'}</button>
+                </div>
             </div>
         </div>
     )
