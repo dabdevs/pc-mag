@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
-import { useTable, useSortBy, useGlobalFilter, usePagination } from 'react-table'
+import { useTable, useSortBy, useGlobalFilter, usePagination, useRowSelect } from 'react-table'
 import { COLUMNS, GROUPED_COLUMNS } from './columns'
 import computers from './computers.json'
 import GlobalFilter from './GlobalFilter'
+import { Checkbox } from './Checkbox'
 
-export default function FilteringTable() {
+export default function DefaultTable() {
     const columns = useMemo(() => GROUPED_COLUMNS, [])
     const data = useMemo(() => computers, [])
 
@@ -23,12 +24,28 @@ export default function FilteringTable() {
         pageCount,
         setPageSize,
         prepareRow,
+        selectedFlatRows,
         state,
         setGlobalFilter
     } = useTable({
         columns,
         data
-    }, useGlobalFilter, useSortBy, usePagination)
+    }, useGlobalFilter, useSortBy, usePagination, useRowSelect, (hooks) => {
+        hooks.visibleColumns.push(columns => {
+            return [
+                {
+                    id: 'selection',
+                    Header: ({ getToggleAllRowsSelectedProps }) => (
+                        <Checkbox {...getToggleAllRowsSelectedProps()} />
+                    ),
+                    Cell: ({ row }) => (
+                        <Checkbox {...row.getToggleRowSelectedProps()} />
+                    )
+                },
+                ...columns
+            ]
+        })
+    })
 
     const { globalFilter, pageIndex, pageSize } = state
 
@@ -43,7 +60,7 @@ export default function FilteringTable() {
                             <tr className='border' {...headerGroup.getHeaderGroupProps()}>
                                 {
                                     headerGroup.headers.map(column => (
-                                        <th className='border' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                        <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
                                             {column.render('Header')}
                                             <span>
                                                 {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}

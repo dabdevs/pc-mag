@@ -1,4 +1,6 @@
 import { format } from 'date-fns'
+import DeleteButton from './DeleteButton'
+import EditButton from './EditButton'
 
 export const COLUMNS = [
     {
@@ -91,14 +93,23 @@ export const COLUMNS = [
         Header: 'Status',
         Footer: 'Status',
         accessor: 'status'
+    },
+    {
+        Header: 'Action',
+        Footer: 'Action',
+        Cell: (props) => (
+            <button className='btn btn-sm btn-primary' onClick={console.log(props)}>
+                Edit
+            </button>
+        )
     }
 ]
 
 export const GROUPED_COLUMNS = [
     {
-        Header: 'Id',
-        Footer: 'Id',
-        accessor: 'id'
+        Header: 'Brand',
+        Footer: 'Brand',
+        accessor: 'brand'
     },
     {
         Header: 'Specs',
@@ -161,19 +172,17 @@ export const GROUPED_COLUMNS = [
                 accessor: 'rating'
             },
             {
-                Header: 'Date Created',
-                Footer: 'Date Created',
-                accessor: 'dateCreated'
-            },
-            {
-                Header: 'Date Published',
-                Footer: 'Date Published',
-                accessor: 'datePublished'
-            },
-            {
                 Header: 'Status',
                 Footer: 'Status',
                 accessor: 'status'
+            },
+            {
+                Header: 'Action',
+                Footer: 'Action',
+                Cell: ({ row }) => <div onClick={(event) => event.stopPropagation()} className='d-flex'>
+                    <EditButton id={row.original.id} />
+                    <DeleteButton id={row.original.id} />
+                </div>
             }
         ]
     }

@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/Col';
 import { Link, useSearchParams } from 'react-router-dom';
 import BasicTable from '../../components/BasicTable'
 import SortingTable from '../../components/SortingTable'
-import FilteringTable from '../../components/FilteringTable'
+import DefaultTable from '../../components/DefaultTable'
 
 export default function Products() {
     const [products, setProducts] = useState([])
@@ -30,7 +30,7 @@ export default function Products() {
     useEffect(() => {
         getProductFormData().then(data => setFormData(data)).catch(err => console.log(err))
         setLoading(true)
-        setSearchParams({page})
+        setSearchParams({ page })
         getProducts('', '', page)
             .then(({ products, totalPages, currentPage }) => {
                 setLoading(false)
@@ -47,7 +47,7 @@ export default function Products() {
 
     const createItem = () => {
         setAction('create')
-        setSelectedProduct({images: []})
+        setSelectedProduct({ images: [] })
     }
 
     const editItem = (product) => {
@@ -101,7 +101,7 @@ export default function Products() {
                         </Col>
                     </Row>
 
-                    
+
                     {/* <table className='w-100 table table-striped'>
                         <thead>
                             <tr>
@@ -144,7 +144,7 @@ export default function Products() {
                                 )) : <p>No products found.</p>}
                         </tbody>
                     </table> */}
-                    <FilteringTable />
+                    <DefaultTable />
                     {/* <nav>
                         <ul className="pagination pagination-sm mt-3">
                             <li className={prevBtnClasses}>
@@ -189,7 +189,7 @@ export default function Products() {
 
     const handleSearch = async (e) => {
         setSearch(e.target.value)
-        console.log('Keyword',e.target.value)
+        console.log('Keyword', e.target.value)
     }
 
     useEffect(() => {
