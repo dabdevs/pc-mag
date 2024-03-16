@@ -47,8 +47,28 @@ export default function ComputersTable({setSelectedComputer}) {
 
     function nextPage(e) {
         e.preventDefault(); 
-        setCurrentPage(currentPage => currentPage + 1)
-        setSearchParams({page: currentPage + 1})
+        const newPage = currentPage + 1
+        setCurrentPage(newPage)
+        setSearchParams({ page: newPage })
+    }
+
+    function previousPage(e) {
+        e.preventDefault(); 
+        const newPage = currentPage - 1
+        setCurrentPage(newPage)
+        setSearchParams({page: newPage})
+    }
+
+    function firstPage(e) {
+        e.preventDefault(); 
+        setCurrentPage(1)
+        setSearchParams({page: 1})
+    }
+
+    function lastPage(e) {
+        e.preventDefault(); 
+        setCurrentPage(totalPages)
+        setSearchParams({ page: totalPages })
     }
 
     return (
@@ -169,10 +189,10 @@ export default function ComputersTable({setSelectedComputer}) {
                 </div>
 
                 <div style={{ width: '400px' }}>
-                    <button className='btn btn-sm btn-outline-dark me-1' onClick={(e) => { e.preventDefault(); setCurrentPage(currentPage => currentPage - 1) }} disabled={currentPage <= 1}>Previous</button>
-                    <button className='btn btn-sm btn-outline-dark me-1' onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>First</button>
-                    <button className='btn btn-sm btn-outline-dark me-1' onClick={() => setCurrentPage(totalPages)} disabled={currentPage >= totalPages}>Last</button>
-                    <button className="btn btn-sm btn-outline-dark" onClick={nextPage}e disabled={currentPage >= totalPages}>Next</button>
+                    <button className='btn btn-sm btn-outline-dark me-1' onClick={previousPage} disabled={currentPage <= 1}>Previous</button>
+                    <button className='btn btn-sm btn-outline-dark me-1' onClick={firstPage} disabled={currentPage === 1}>First</button>
+                    <button className='btn btn-sm btn-outline-dark me-1' onClick={lastPage} disabled={currentPage >= totalPages}>Last</button>
+                    <button className="btn btn-sm btn-outline-dark" onClick={nextPage} disabled={currentPage >= totalPages}>Next</button>
                 </div>
             </div>}
         </div>
