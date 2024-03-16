@@ -40,7 +40,7 @@ export const ComputersContextProvider = ({ children }) => {
                 console.error(err)
                 setLoading(false)
             });
-    }, [search, page])
+    }, [search, page, filters])
 
     const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
     const nextBtnClasses = totalPages === currentPage ? 'page-item disabled' : 'page-item'

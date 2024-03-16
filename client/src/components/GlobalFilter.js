@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function GlobalFilter({ filter, setFilter }) {
+export default function GlobalFilter({ filter, setFilter, setSearch }) {
     return (
         <div className='card p-2 mb-2 w-100'>
             <h5>Filters</h5>

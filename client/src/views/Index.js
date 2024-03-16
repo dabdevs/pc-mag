@@ -18,7 +18,17 @@ export default function Index() {
     return (
         <div>
             <Layout>
-                <SearchForm />
+                <section className="py-3 banner">
+                    <div className="container px-4 px-lg-5 my-5">
+                        <div className="text-center text-white row">
+                            <h1 className="display-4 text-shadow fw-bolder mb-0">Shop Computers & Accesories</h1>
+                            <p className="fw-normal text-white mb-0">Find your next great computer.</p>
+                            <div className='col-sm-6 mx-auto'>
+                                <SearchForm />
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <div className='row py-lg-4'>
                     <Sidebar formFactor={formFactor} page={page} />

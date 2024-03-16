@@ -10,6 +10,7 @@ export default function ComputersTable() {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [search, setSearch] = useState('')
     const [pageInput, setPageInput] = useState('')
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState(0);
@@ -20,6 +21,7 @@ export default function ComputersTable() {
         setLoading(true)
         getComputers(currentPage, '', limit)
             .then(({ computers, totalPages, currentPage, rowsCount }) => {
+                if(search) setSearchParams({ search })
                 setData(computers)
                 setLoading(false)
                 setTotalPages(totalPages)
@@ -30,9 +32,7 @@ export default function ComputersTable() {
                 setLoading(false)
                 console.log(err)
             })
-    }, [currentPage, limit])
-
-    console.log('data in table', data)
+    }, [currentPage, limit, search, searchParams])
 
     const {
         getTableProps,
@@ -52,53 +52,58 @@ export default function ComputersTable() {
     }, useGlobalFilter, useSortBy, usePagination, useRowSelect)
 
     return (
-        <div>
-            <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+        <div className='card'>
+            <div className='card-header'>
+                <label htmlFor='filter'>Filter by column</label>
+                <input id='filter' defaultValue={''} onChange={(e) => setSearch(e.target.value)} className='form-control search-input w-100' placeholder='Ex.: Apple' />
+            </div>
 
-            {loading && <b>Loading...</b>}
+            <div className='card-body p-0'>
+                {loading && <b>Loading...</b>}
 
-            {!loading &&
-                <>
-                    <div className='mt-3'>
-                        <b></b> {results} items
-                    </div>
+                {!loading &&
+                    <>
+                        <div className='mt-2 px-2 d-flex flex-column'>
+                            <b>{search}</b> 
+                            <span>{results} items</span>
+                        </div>
 
-                    <table {...getTableProps()} className='w-100 table table-striped border'>
-                        <thead>
-                            {
-                                headerGroups.map(headerGroup => (
-                                    <tr className='border' {...headerGroup.getHeaderGroupProps()}>
-                                        {
-                                            headerGroup.headers.map(column => (
-                                                <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                                    {column.render('Header')}
-                                                    <span>
-                                                        {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
-                                                    </span>
-                                                </th>
-                                            ))
-                                        }
-                                    </tr>
-                                ))
-                            }
-                        </thead>
+                        <table {...getTableProps()} className='w-100 table table-striped border'>
+                            <thead>
+                                {
+                                    headerGroups.map(headerGroup => (
+                                        <tr className='border' {...headerGroup.getHeaderGroupProps()}>
+                                            {
+                                                headerGroup.headers.map(column => (
+                                                    <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                                        {column.render('Header')}
+                                                        <span>
+                                                            {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
+                                                        </span>
+                                                    </th>
+                                                ))
+                                            }
+                                        </tr>
+                                    ))
+                                }
+                            </thead>
 
-                        <tbody {...getTableBodyProps()}>
-                            {rows.map(row => {
-                                prepareRow(row)
-                                return (
-                                    <tr className='border' {...row.getRowProps()}>
-                                        {
-                                            row.cells.map(cell => {
-                                                return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                            })
-                                        }
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
+                            <tbody {...getTableBodyProps()}>
+                                {rows.map(row => {
+                                    prepareRow(row)
+                                    return (
+                                        <tr className='border' {...row.getRowProps()}>
+                                            {
+                                                row.cells.map(cell => {
+                                                    return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                                })
+                                            }
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
 
-                        {/* <tfoot>
+                            {/* <tfoot>
                         {
                             footerGroups.map(footerGroup => (
                                 <tr className='border' {...footerGroup.getFooterGroupProps}>
@@ -115,19 +120,22 @@ export default function ComputersTable() {
                             ))
                         }
                     </tfoot> */}
-                    </table>
+                        </table>
+                    </>
+                }
+            </div>
 
-                    <div className='d-flex gap-1'>
-                        <div>
-                            Page{' '}
-                            <strong>
-                                {currentPage} of {totalPages}
-                            </strong>
-                            {' '}
-                        </div>
+            <div className='card-footer d-flex gap-1'>
+                <div>
+                    Page{' '}
+                    <strong>
+                        {currentPage} of {totalPages}
+                    </strong>
+                    {' '}
+                </div>
 
-                        <div className='d-flex mx-3'>
-                            {/* Go to page: {' '}
+                <div className='d-flex mx-3'>
+                    {/* Go to page: {' '}
                     <input
                         type='number'
                         defaultValue={''}
@@ -144,32 +152,33 @@ export default function ComputersTable() {
                         style={{ width: '80px' }}
                     /> */}
 
-                            Show: {'  '}
-                            <select
-                                className='form-control form-control-sm'
-                                value={limit}
-                                onChange={e => setLimit(Number(e.target.value))}
-                                style={{ width: '50px' }}
-                            >
-                                {
-                                    [10, 25, 50].map(pageSize => (
-                                        <option key={pageSize} value={pageSize}>
-                                            {pageSize}
-                                        </option>
-                                    ))
-                                }
-                            </select>
-                        </div>
+                    Show: {'  '}
+                    <select
+                        className='form-control form-control-sm'
+                        value={limit}
+                        onChange={e => setLimit(Number(e.target.value))}
+                        style={{ width: '50px' }}
+                    >
+                        {
+                            [10, 25, 50].map(pageSize => (
+                                <option key={pageSize} value={pageSize}>
+                                    {pageSize}
+                                </option>
+                            ))
+                        }
+                    </select>
+                </div>
 
-                        <div style={{ width: '400px' }}>
-                            <button className='btn btn-sm btn-outline-dark me-1' onClick={(e) => { e.preventDefault(); setCurrentPage(currentPage => currentPage - 1) }} disabled={currentPage <= 1}>Previous</button>
-                            <button className='btn btn-sm btn-outline-dark me-1' onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>First</button>
-                            <button className='btn btn-sm btn-outline-dark me-1' onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>Last</button>
-                            <button className="btn btn-sm btn-outline-dark" onClick={(e) => { e.preventDefault(); setCurrentPage(currentPage => currentPage + 1) }} disabled={currentPage >= totalPages}>Next</button>
-                        </div>
-                    </div>
-                </>
-            }
+                <div style={{ width: '400px' }}>
+                    <button className='btn btn-sm btn-outline-dark me-1' onClick={(e) => { e.preventDefault(); setCurrentPage(currentPage => currentPage - 1) }} disabled={currentPage <= 1}>Previous</button>
+                    <button className='btn btn-sm btn-outline-dark me-1' onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>First</button>
+                    <button className='btn btn-sm btn-outline-dark me-1' onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>Last</button>
+                    <button className="btn btn-sm btn-outline-dark" onClick={(e) => { e.preventDefault(); setCurrentPage(currentPage => currentPage + 1) }} disabled={currentPage >= totalPages}>Next</button>
+                </div>
+            </div>
+
+            {/* <GlobalFilter setSearch={setSearch} filter={globalFilter} setFilter={setGlobalFilter} /> */}
+
         </div>
     )
 }
