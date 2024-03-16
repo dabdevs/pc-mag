@@ -5,10 +5,8 @@ import Filter from './computer/Filter';
 
 export default function Sidebar() {
     return (
-        <div id="sidebar" className="col-sm-3 col-lg-2 d-none d-md-block">
-            <div className="position-sticky card p-3">
-                <Filter />
-            </div>
+        <div id="sidebar" className="col-sm-3 col-lg-2 px-4 d-none d-md-block">
+            <Filter />
         </div>
     )
 }
