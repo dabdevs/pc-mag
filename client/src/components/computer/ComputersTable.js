@@ -48,7 +48,6 @@ export default function ComputersTable() {
     return (
         <div className='card'>
             <div className='card-header'>
-                <label htmlFor='filter'>Filter by column</label>
                 <Filter currentPage={currentPage} setCurrentPage={setCurrentPage} source='admin'/>
             </div>
 
@@ -119,7 +118,7 @@ export default function ComputersTable() {
                 }
             </div>
 
-            <div className='card-footer d-flex gap-1'>
+            {loading? null : <div className='card-footer d-flex gap-1'>
                 <div>
                     Page{' '}
                     <strong>
@@ -169,7 +168,7 @@ export default function ComputersTable() {
                     <button className='btn btn-sm btn-outline-dark me-1' onClick={() => setCurrentPage(totalPages)} disabled={currentPage >= totalPages}>Last</button>
                     <button className="btn btn-sm btn-outline-dark" onClick={(e) => { e.preventDefault(); setCurrentPage(currentPage => currentPage + 1) }} disabled={currentPage >= totalPages}>Next</button>
                 </div>
-            </div>
+            </div>}
         </div>
     )
 }

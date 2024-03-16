@@ -77,7 +77,10 @@ DB.on('connecting', function () {
     // console.log(data)
 
     // data.map(computer => {
+    //     console.log('Processor', computer.processor)
     //     delete computer._id
+    //     const processors = ['Intel i3', 'Intel i5', 'Intel i7', 'Intel i9']
+    //     computer.processor = computer.processor === 'Intel' ? processors[(Math.floor(Math.random() * processors.length))] : computer.processor
     //     const options = {
     //         upsert: true, 
     //         new: true,
@@ -98,7 +101,6 @@ DB.on('connecting', function () {
     //             console.error('Error occurred:', error);
     //         });
     // })
-
 }).once('open', function () {
     console.log('Database connection opened!');
 }).on('reconnected', function () {

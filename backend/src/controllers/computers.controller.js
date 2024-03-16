@@ -14,7 +14,7 @@ module.exports.getAll = async (req, res) => {
         console.log(req.body, req.query)
         
         // Filters
-        const { category, search, formFactor, ram, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = process.env.RESULTS_ROWS_COUNT, orderBy } = req.query
+        const { category, search, formFactor, ram, os, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = process.env.RESULTS_ROWS_COUNT, orderBy } = req.query
         console.log('Limit', limit)
         if (category) {
             conditions.category = category
@@ -31,6 +31,10 @@ module.exports.getAll = async (req, res) => {
 
         if (ram && ram.length > 0) {
             conditions.ram = { '$in': ram }
+        }
+
+        if (os && os.length > 0) {
+            conditions.os = { '$in': os }
         }
 
         if (processor && processor.length > 0) {
