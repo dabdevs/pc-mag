@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useProductsContext } from '../context/ProductsContext';
+import { useComputersContext } from '../context/ComputersContext';
 import { useSearchParams } from 'react-router-dom';
 
 export default function Sidebar({ page, category }) {
-    const { setFiltered, filtered } = useProductsContext()
+    const { setFiltered, filtered } = useComputersContext()
     const [formFactor, setFormFactor] = useState([]);
     const [ram, setRam] = useState([]);
     const [processor, setProcessor] = useState([]);
@@ -47,7 +47,7 @@ export default function Sidebar({ page, category }) {
                 break;
             default:
                 break;
-        }   
+        }
     }
 
     const clearFilters = async () => {
@@ -74,11 +74,11 @@ export default function Sidebar({ page, category }) {
             console.log(err)
         }
     }
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError('')
-        
+
         if (parseInt(minPrice) >= parseInt(maxPrice)) {
             setError('Max. price must be greater than min. price')
             return
@@ -92,7 +92,7 @@ export default function Sidebar({ page, category }) {
         if (minPrice) filters.minPrice = minPrice
         if (maxPrice) filters.maxPrice = maxPrice
         if (page) filters.page = page
-        
+
         setSearchParams(filters)
         setFiltered(true)
     }
@@ -100,7 +100,7 @@ export default function Sidebar({ page, category }) {
     return (
         <div id="sidebar" className="col-sm-3 col-lg-2 d-none d-md-block">
             <div className="position-sticky card p-3">
-                <h5 className="border-bottom py-2">Filter Products</h5>
+                <h5 className="border-bottom py-2">Filter Computers</h5>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="filterPrice" className="form-label">By Price</label>
@@ -112,7 +112,7 @@ export default function Sidebar({ page, category }) {
 
                             <div>
                                 <label htmlFor="maxPrice" className="form-label"><small>Max. Price</small></label>
-                                <input value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} id="maxPrice" type="number" className="form-control" min={100}/>
+                                <input value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} id="maxPrice" type="number" className="form-control" min={100} />
                             </div>
                         </div>
                     </div>

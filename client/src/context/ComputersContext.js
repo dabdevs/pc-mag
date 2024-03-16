@@ -1,41 +1,39 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { getProducts } from "../api/products";
-import { useSearchParams } from "react-router-dom";
+import { getComputers } from "../api/computers";
 
-const ProductsContext = createContext({})
+const ComputersContext = createContext({})
 
-export function useProductsContext() {
-    return useContext(ProductsContext);
+export function useComputersContext() {
+    return useContext(ComputersContext);
 }
 
-export const ProductsContextProvider = ({ children }) => {
-    const [products, setProducts] = useState([])
+export const ComputersContextProvider = ({ children }) => {
+    const [computers, setComputers] = useState([])
     const [sort, setSort] = useState('')
-    const [unfilteredProducts, setUnfilteredProducts] = useState([])
+    //const [unfilteredComputers, setUnfilteredComputers] = useState([])
     const [search, setSearch] = useState()
     //const { keyword } = useLocation()
-    //const [searchParams, setSearchParams] = useSearchParams()
     //const category = searchParams.get('category')
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(null)
     const [currentPage, setCurrentPage] = useState(null)
-    const [productsCount, setProductsCount] = useState(0)
+    const [computersCount, setComputersCount] = useState(0)
     const [filtered, setFiltered] = useState(false)
     const [filters, setFilters] = useState([])
     const [loading, setLoading] = useState(false)
     const [filtersCleared, setFiltersCleared] = useState(false)
 
     useEffect(() => {
-        console.log('Products context')
+        console.log('Computers context')
         setLoading(true)
         //setSearchParams({ page })
-        getProducts(page, sort)
-            .then(({ products, count, totalPages, currentPage }) => {
-                setProducts(products)
-                setUnfilteredProducts(products)
-                setProductsCount(count)
-                setTotalPages(totalPages)
-                setCurrentPage(currentPage)
+        getComputers(page, sort)
+            .then(({ computers, count, totalPages, currentPage }) => {
+                setComputers(computers)
+                // setUnfilteredComputers(computers)
+                // setComputersCount(count)
+                // setTotalPages(totalPages)
+                // setCurrentPage(currentPage)
                 setLoading(false)
             })
             .catch(err => {
@@ -52,10 +50,10 @@ export const ProductsContextProvider = ({ children }) => {
         setFiltered(true)
         setLoading(true)
 
-        getProducts(page)
-            .then(({ products, count, totalPages, currentPage }) => {
-                setProducts(products)
-                setProductsCount(count)
+        getComputers(page)
+            .then(({ computers, count, totalPages, currentPage }) => {
+                setComputers(computers)
+                setComputersCount(count)
                 setTotalPages(totalPages)
                 setCurrentPage(currentPage)
                 setLoading(false)
@@ -70,10 +68,10 @@ export const ProductsContextProvider = ({ children }) => {
         console.log('sorting')
         setSort(sort)
 
-        getProducts(page, sort)
-            .then(({ products, count, totalPages, currentPage }) => {
-                setProducts(products)
-                setProductsCount(count)
+        getComputers(page, sort)
+            .then(({ computers, count, totalPages, currentPage }) => {
+                setComputers(computers)
+                setComputersCount(count)
                 setTotalPages(totalPages)
                 setCurrentPage(currentPage)
                 setLoading(false)
@@ -101,15 +99,15 @@ export const ProductsContextProvider = ({ children }) => {
 
     //     document.getElementById('sort').value = ''
 
-    //     getProducts(category)
-    //         .then(data => setProducts(data))
+    //     getComputers(category)
+    //         .then(data => setComputers(data))
     //         .catch(err => console.error(err));
     // }
 
     return (
-        <ProductsContext.Provider value={{
-            products,
-            setProducts,
+        <ComputersContext.Provider value={{
+            computers,
+            setComputers,
             search,
             setSearch,
             filtered,
@@ -124,14 +122,14 @@ export const ProductsContextProvider = ({ children }) => {
             handleSortBy,
             prevBtnClasses,
             nextBtnClasses,
-            productsCount,
+            computersCount,
             page,
             setPage
         }}
         >
             {children}
-        </ProductsContext.Provider>
+        </ComputersContext.Provider>
     )
 }
 
-export default ProductsContext;
+export default ComputersContext;

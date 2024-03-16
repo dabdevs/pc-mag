@@ -2,7 +2,7 @@ import React from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuthContext } from '../context/AuthContext'
 import Layout from '../components/Layout'
-import { SiProducthunt } from "react-icons/si";
+import { FaComputer } from "react-icons/fa6";
 
 export default function Dashboard({children}) {
   const { token } = useAuthContext()
@@ -11,10 +11,10 @@ export default function Dashboard({children}) {
     <Layout classes={'p-3'}>
       <section className='col-sm-10 mx-auto'>
         <div className='row'>
-            <div onClick={() => window.location.href = '/admin/products'} className='card col-sm-2 p-2 d-flex flex-column align-items-center' role='button'>
-              <SiProducthunt style={{ fontSize: '50px' }} />
+            <div onClick={() => window.location.href = '/admin/computers'} className='card col-sm-2 p-2 d-flex flex-column align-items-center' role='button'>
+            <FaComputer style={{ fontSize: '50px' }} />
               
-              <h6 className='mt-3'>Products</h6>
+              <h6 className='mt-3'>Computers</h6>
             </div>
         </div>
 

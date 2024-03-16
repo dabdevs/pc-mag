@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function ShowProduct() {
+export default function ShowComputer() {
     return (
         <div>
-            <h1>Show Product</h1>
+            <h1>Show Computer</h1>
         </div>
     )
 }

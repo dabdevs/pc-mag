@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb')
-const Product = require('../models/Product');
+const Computer = require('../models/Computer');
 const S3Service = require('../services/s3');
 const s3 = new S3Service()
 
@@ -24,19 +24,19 @@ module.exports.upload = async (req, res) => {
         resizedImages.map(path => uploadedUrls.push(path))
 
         switch (collection) {
-            case 'products':
-                const checkProduct = await Product.find({ _id: new ObjectId(id) })
-                console.log('Check product: ', checkProduct)
+            case 'computers':
+                const checkComputer = await Computer.find({ _id: new ObjectId(id) })
+                console.log('Check computer: ', checkComputer)
                 
-                Product.findOneAndUpdate(new ObjectId(id), { $push: { images: uploadedUrls } }, { new: true })
-                    .then(updatedProduct => {
-                        if (!updatedProduct) {
+                Computer.findOneAndUpdate(new ObjectId(id), { $push: { images: uploadedUrls } }, { new: true })
+                    .then(updatedComputer => {
+                        if (!updatedComputer) {
                             throw (error)
                         } 
-                        res.json({ success: 'Images uploaded successfully', product: updatedProduct });
+                        res.json({ success: 'Images uploaded successfully', computer: updatedComputer });
                     })
                     .catch(error => {
-                        console.error('Error updating product:', error);
+                        console.error('Error updating computer:', error);
                         throw (error)
                     });
                 break;

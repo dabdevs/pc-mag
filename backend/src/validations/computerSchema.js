@@ -1,6 +1,6 @@
 const yup = require('yup')
 
-const productSchema = yup.object({
+const computerSchema = yup.object({
     name: yup.string().required("Name is required").min(10).max(150),
     description: yup.string().optional(),
     price: yup.number().integer().required(),
@@ -16,7 +16,7 @@ const productSchema = yup.object({
     createdOn: yup.date().default(() => new Date())
 });
 
-module.exports = productSchema
+module.exports = computerSchema
 
 
 

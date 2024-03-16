@@ -1,9 +1,9 @@
 import React, { useRef } from 'react'
-import { useProductsContext } from '../context/ProductsContext'
+import { useComputersContext } from '../context/ComputersContext'
 
 export default function Menu({ formFactor }) {
     const sortRef = useRef(null)
-    const { handleSortBy, setLoading } = useProductsContext()
+    const { handleSortBy, setLoading } = useComputersContext()
 
     const handleChange = async (sort) => {
         setLoading(true)

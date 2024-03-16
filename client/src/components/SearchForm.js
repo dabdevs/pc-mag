@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { useProductsContext } from '../context/ProductsContext';
+import { useComputersContext } from '../context/ComputersContext';
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { FaHourglassEnd } from 'react-icons/fa';
 
 export default function SearchForm() {
     const [search, setSearch] = useState('')
-    const { handleSearch } = useProductsContext()
+    const { handleSearch } = useComputersContext()
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
     const disabled = search === ''
@@ -13,7 +13,7 @@ export default function SearchForm() {
     const handleSubmit = (e) => {
         e.preventDefault()
         const formFactor = searchParams.get('formFactor')
-        const params = {search}
+        const params = { search }
 
         if (formFactor) params.formFactor = formFactor
         setSearchParams(params)

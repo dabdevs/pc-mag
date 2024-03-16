@@ -1,12 +1,12 @@
 import { format } from 'date-fns'
-import DeleteButton from './DeleteButton'
-import EditButton from './EditButton'
+import DeleteButton from '../DeleteButton'
+import EditButton from '../EditButton'
 
 export const COLUMNS = [
     {
         Header: 'Id',
         Footer: 'Id',
-        accessor: 'id'
+        accessor: '_id'
     },
     {
         Header: 'Name',

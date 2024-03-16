@@ -10,13 +10,13 @@ const CLEAR_CART = 'CLEAR_CART';
 const cartReducer = (state, action) => {
     switch (action.type) {
         case ADD_TO_CART:
-            const updatedCart = [...state, action.product]
+            const updatedCart = [...state, action.computer]
             localStorage.setItem('cartItems', JSON.stringify(updatedCart))
             return updatedCart;
         case REMOVE_FROM_CART:
-            const newCart = state.filter(item => item._id !== action.productId)
+            const newCart = state.filter(item => item._id !== action.computerId)
             localStorage.setItem('cartItems', JSON.stringify(newCart))
-            return state.filter(item => item._id !== action.productId);
+            return state.filter(item => item._id !== action.computerId);
         case CLEAR_CART:
             localStorage.removeItem('cartItems')
             return [];
@@ -37,12 +37,12 @@ export const ShoppingCartProvider = ({ children }) => {
 
     const [cartItems, dispatch] = useReducer(cartReducer, initialState);
 
-    const addToCart = product => {
-        dispatch({ type: ADD_TO_CART, product });
+    const addToCart = computer => {
+        dispatch({ type: ADD_TO_CART, computer });
     };
 
-    const removeFromCart = productId => {
-        dispatch({ type: REMOVE_FROM_CART, productId });
+    const removeFromCart = computerId => {
+        dispatch({ type: REMOVE_FROM_CART, computerId });
     };
 
     const clearCart = () => {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { upload } from '../api/uploader'
 
-export default function ImageUploader({ collection, id, setAlert, setImages, setProducts, imagesCount }) {
+export default function ImageUploader({ collection, id, setAlert, setImages, setComputers, imagesCount }) {
     const [uploading, setUploading] = useState(false);
     const [btnUploadDisabled, setBtnUploadDisabled] = useState(true)
     const [inputValue, setInputValue] = useState('')
@@ -13,31 +13,31 @@ export default function ImageUploader({ collection, id, setAlert, setImages, set
             formData.append('id', id)
             formData.append('collection', collection)
 
-            const data = JSON.parse(localStorage.getItem('productFormData'))
+            const data = JSON.parse(localStorage.getItem('computerFormData'))
 
-            if (imagesCount + formData.getAll('images').length > data.imagesPerProduct) {
-                setAlert({ message: `Upload up to ${data.imagesPerProduct} images`, class: 'danger' })
+            if (imagesCount + formData.getAll('images').length > data.imagesPerComputer) {
+                setAlert({ message: `Upload up to ${data.imagesPerComputer} images`, class: 'danger' })
                 setUploading(false)
                 setInputValue('')
-                setBtnUploadDisabled(true) 
+                setBtnUploadDisabled(true)
                 return
             }
 
-            const { product } = await upload(formData)
+            const { computer } = await upload(formData)
 
-            setProducts(prevProducts => {
-                return prevProducts.map(prod => prod._id === product._id ? product : prod);
+            setComputers(prevComputers => {
+                return prevComputers.map(prod => prod._id === computer._id ? computer : prod);
             });
-            setImages(product.images)
+            setImages(computer.images)
             setAlert({ message: 'Images uploaded successfully', class: 'success' })
             setUploading(false)
             setInputValue('')
-            setBtnUploadDisabled(true) 
+            setBtnUploadDisabled(true)
         } catch (err) {
             setInputValue('')
             setAlert({ message: err.response.data.error, class: 'danger' })
             setUploading(false)
-            setBtnUploadDisabled(true) 
+            setBtnUploadDisabled(true)
         }
     }
 

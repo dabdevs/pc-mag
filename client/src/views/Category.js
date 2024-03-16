@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { useProductsContext } from '../context/ProductsContext'
+import { useComputersContext } from '../context/ComputersContext'
 import Layout from '../components/Layout'
 
 export default function Category() {
   const { category } = useParams()
-  const { setCategory } = useProductsContext()
+  const { setCategory } = useComputersContext()
 
   useEffect(() => {
     setCategory(category)
   }, [])
-  
+
   return (
     <div>
-    category
+      category
     </div>
   )
 }

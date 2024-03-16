@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import ProductCard from '../../ProductCard'
+import ComputerCard from '../../computer/ComputerCard'
 import LazyLoad from 'react-lazyload'
 import { Link } from 'react-router-dom'
-import { useProductsContext } from '../../../context/ProductsContext'
+import { useComputersContext } from '../../../context/ComputersContext'
 
 export default function List() {
     const [content, setContent] = useState(null)
-    const { products, search, page, setPage, prevBtnClasses, nextBtnClasses, currentPage, productsCount } = useProductsContext()
+    const { computers, search, page, setPage, prevBtnClasses, nextBtnClasses, currentPage, computersCount } = useComputersContext()
 
     useEffect(() => {
-        console.log('Reloading List', 'page:', page, products)
-        createContent(products)
-    }, [products, page])
+        console.log('Reloading List', 'page:', page, computers)
+        createContent(computers)
+    }, [computers, page])
 
-    const createContent = (products) => {
+    const createContent = (computers) => {
         const _jsx = <div>
             <b>{search}</b>
-            {productsCount > 0 && <p className='m-0'>{productsCount} item{productsCount > 1 ? 's' : ''} </p>}
+            {computersCount > 0 && <p className='m-0'>{computersCount} item{computersCount > 1 ? 's' : ''} </p>}
 
             {/* <div className='row-cols-2 gx-4 gx-lg-5'>
                 <div className='col'>
@@ -32,12 +32,12 @@ export default function List() {
             */}
 
             {
-                products.length > 0 &&
+                computers.length > 0 &&
                 (<div>
                     <div className='row gx-3 gx-lg-4 row-cols-xs-1 row-cols-md-2 row-cols-lg-4'>
-                        {products?.map(product =>
-                            <LazyLoad key={`ll-${product._id}`} offset={100}>
-                                <ProductCard key={`pc-${product._id}`} id={product._id} product={product} />
+                        {computers?.map(computer =>
+                            <LazyLoad key={`ll-${computer._id}`} offset={100}>
+                                <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />
                             </LazyLoad>
                         )}
                     </div>
@@ -83,5 +83,5 @@ export default function List() {
         setContent(_jsx)
     }
 
-    return products.length > 0 ? content : <p className='mx-auto lead my-5 text-center'>No products found <i className="bi bi-emoji-frown"></i></p>
+    return computers.length > 0 ? content : <p className='mx-auto lead my-5 text-center'>No computers found <i className="bi bi-emoji-frown"></i></p>
 }

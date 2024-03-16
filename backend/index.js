@@ -10,6 +10,8 @@ const mongoose = require('mongoose')
 const sessionSecretKey = crypto.randomBytes(64).toString('hex');
 require('dotenv').config()
 const PORT = process.env.PORT
+const Computer = require('../backend/src/models/Computer')
+const data = require('./MOCK_DATA.json')
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }))
@@ -38,7 +40,7 @@ app.get('/api/flash-messages', (req, res) => {
 const routes = require('./src/routes/index');
 const User = require('./src/models/User');
 
-app.get('/health-check', (req, res) => {res.send('OK')})
+app.get('/health-check', (req, res) => { res.send('OK') })
 app.use('/api', routes);
 
 app.use(ErrorMiddleware);
@@ -74,12 +76,27 @@ DB.on('connecting', function () {
 
     // console.log(data)
 
-    // data.map(product => {
-    //     Product.create({
-    //         ...product,
-    //         name: `${product.brand} ${product.formFactor} ${product.os} ${product.processor} ${product.ram} ${product.disk} ${product.diskType} ${product.display}"`,
-    //         description: `${product.brand} ${product.formFactor} ${product.os} ${product.processor} ${product.ram} ${product.disk} ${product.diskType} ${product.display} Sed ante. Vivamus tortor. Duis mattis egestas metus`,
-    //     }).then(() => console.log('product created'))
+    // data.map(computer => {
+    //     delete computer._id
+    //     const options = {
+    //         upsert: true, 
+    //         new: true,
+    //         useFindAndModify: false,
+    //     }
+
+    //     computer.name = `${computer.brand} ${computer.formFactor} ${computer.os} ${computer.processor} ${computer.ram} ${computer.disk} ${computer.diskType} ${computer.display}"`
+
+    //     Computer.findOneAndUpdate({name: computer.name}, computer, options)
+    //         .then((result) => {
+    //             if (result) {
+    //                 console.log('Document updated:', result);
+    //             } else {
+    //                 console.log('New document created.');
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error occurred:', error);
+    //         });
     // })
 
 }).once('open', function () {

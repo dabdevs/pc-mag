@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { create, update, deleteImage } from '../api/products';
+import { create, update, deleteImage } from '../api/computers';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import ImageUploader from '../components/ImageUploader';
@@ -28,7 +28,7 @@ const schema = yup
     })
     .required()
 
-export default function ProductForm({ product, setProducts, closeForm, data }) {
+export default function ComputerForm({ computer, setComputers, closeForm, data }) {
     const initialState = {
         _id: '',
         name: '',
@@ -47,26 +47,26 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
         images: []
     }
 
-    const [form, setForm] = useState(product || initialState)
+    const [form, setForm] = useState(computer || initialState)
     const [alert, setAlert] = useState({})
     const [images, setImages] = useState(form.images)
     const loadedForm = form
-  
+
     const {
         register,
         handleSubmit,
         formState: { errors }
     } = useForm({ resolver: yupResolver(schema) })
 
-    const handleCreate = (product) => {
-        console.log('Creating', product)
-        create(product).then(({ product }) => {
-            console.log('product created')
-            setForm(product)
-            setProducts(prevProducts => {
-                return [product, ...prevProducts]
+    const handleCreate = (computer) => {
+        console.log('Creating', computer)
+        create(computer).then(({ computer }) => {
+            console.log('computer created')
+            setForm(computer)
+            setComputers(prevComputers => {
+                return [computer, ...prevComputers]
             });
-            setAlert({ message: 'Product created successfully', class: 'success' })
+            setAlert({ message: 'Computer created successfully', class: 'success' })
         }).catch(err => {
             if (err.response) {
                 setAlert({ message: err.response.data.message, class: 'danger' })
@@ -74,7 +74,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
         })
     }
 
-    const handleEdit = (product) => {
+    const handleEdit = (computer) => {
         console.log('Editing')
 
         if (loadedForm !== form) {
@@ -82,45 +82,47 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
         } else {
             console.log('form not edited')
         }
-        product._id = form._id
-        update(product).then(({ product }) => {
-            setProducts(prevProducts => {
-                return prevProducts.map(prod => prod._id === product._id ? product : prod);
+        computer._id = form._id
+        update(computer).then(({ computer }) => {
+            setComputers(prevComputers => {
+                return prevComputers.map(prod => prod._id === computer._id ? computer : prod);
             });
-            setForm(product)
-            setAlert({ message: 'Product updated successfully', class: 'success' })
+            setForm(computer)
+            setAlert({ message: 'Computer updated successfully', class: 'success' })
         }).catch(err => {
             setAlert({ message: 'An error ocurred', class: 'danger' })
         })
     }
 
-    const removeImage = async (productId, url) => {
-        if (confirm('Are you sure you want to delete this image?')) {
-            deleteImage(productId, url).then(({ product }) => {
-                console.log('Updated images', data.product)
-                setImages(product.images)
-                setProducts(prevProducts => {
-                    return prevProducts.map(prod => {
-                        if (prod._id === product._id) {
-                            console.log('updated images', product.images)
-                            prod.images = product.images
-                        }
-                        return prod
-                    });
+    const removeImage = async (computerId, url) => {
+        // if (confirm('Are you sure you want to delete this image?')) {
+
+        // }
+
+        deleteImage(computerId, url).then(({ computer }) => {
+            console.log('Updated images', data.computer)
+            setImages(computer.images)
+            setComputers(prevComputers => {
+                return prevComputers.map(prod => {
+                    if (prod._id === computer._id) {
+                        console.log('updated images', computer.images)
+                        prod.images = computer.images
+                    }
+                    return prod
                 });
-            })
+            });
+        })
             .then(() => setAlert({ class: 'success', message: 'Image deleted successfully' }))
             .catch(({ response }) => {
                 console.log(response.data.message)
                 setAlert({ class: 'danger', message: response.data.message })
             })
-        }
     }
 
     return (
         <div>
             <Row>
-                <h1 className='display-4 fw-bolder'>{form._id ? form.name : 'New Product'}</h1>
+                <h1 className='display-4 fw-bolder'>{form._id ? form.name : 'New Computer'}</h1>
             </Row>
             {form?._id && <input type='hidden' value={form?._id} name='_id' />}
             <Row>
@@ -352,11 +354,11 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
 
             {alert?.message && <div className={`alert alert-${alert.class}`}>{alert.message}</div>}
 
-            {form._id && product ? images.length < data.imagesPerProduct && <Row>
+            {form._id && computer ? images.length < data.imagesPerComputer && <Row>
                 <>
-                    <Col xs={10}><h4>Upload up to {data.imagesPerProduct} images</h4></Col>
+                    <Col xs={10}><h4>Upload up to {data.imagesPerComputer} images</h4></Col>
                     <Col xs={6}>
-                        <ImageUploader imagesCount={images.length} collection='products' id={form._id} setImages={setImages} setAlert={setAlert} setProducts={setProducts} />
+                        <ImageUploader imagesCount={images.length} collection='computers' id={form._id} setImages={setImages} setAlert={setAlert} setComputers={setComputers} />
                     </Col>
                 </>
             </Row> : null}
@@ -366,7 +368,7 @@ export default function ProductForm({ product, setProducts, closeForm, data }) {
                     <Button onClick={() => { setForm(initialState); closeForm(); }} type='button' variant="danger">
                         Close
                     </Button>
-                    <Button onClick={product?._id ? handleSubmit(handleEdit) : handleSubmit(handleCreate)} type='button' variant="primary">
+                    <Button onClick={computer?._id ? handleSubmit(handleEdit) : handleSubmit(handleCreate)} type='button' variant="primary">
                         Save Changes
                     </Button>
                 </Col>

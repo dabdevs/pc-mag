@@ -30,7 +30,7 @@ export default function CartItems() {
             <table className='w-100'>
                 <thead className='border'>
                     <tr>
-                        <th>Product</th>
+                        <th>Computer</th>
                         <th>OS | Processor</th>
                         <th>Price</th>
                     </tr>

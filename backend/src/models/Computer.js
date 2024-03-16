@@ -10,19 +10,21 @@ const computerSchema = new mongoose.Schema({
     brand: {
         type: String,
         required: true,
-        maxLength: 50
+        maxLength: 100
+    },
+    model: {
+        type: String
+    },
+    formFactor: {
+        type: String,
+        required: true,
     },
     description: {
         type: String,
         maxLength: 256
     },
-    category: {
-        type: String,
-        required: true
-    },
     images: {
-        type: [String],
-        required: true
+        type: [String]
     },
     price: {
         type: Number,
@@ -52,23 +54,23 @@ const computerSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    formFactor: {
-        type: String,
-        required: true,
-    },
     quantity: {
         type: Number,
         required: true
     },
     rating: {
         type: Number,
-    },
-    availability: {
-        type: Boolean,
-        required: false
+    }, 
+    status: {
+        type: String,
+        enum: ['Pending', 'Published', 'Unpublished'],
+        default: 'Pending'
+    }, 
+    datePublished: {
+        type: Date,
     }
 }, { timestamps: true })
 
-const computer = mongoose.model('computer', computerSchema)
+const Computer = mongoose.model('computer', computerSchema)
 
-module.exports = computer;
+module.exports = Computer;

@@ -1,14 +1,14 @@
-import { ProductsContextProvider } from './context/ProductsContext';
+import { ComputersContextProvider } from './context/ComputersContext';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Index from './views/Index';
-import Product from './views/Product';
+import Computer from './views/Computer';
 import { ShoppingCartProvider } from './context/ShoppingCartContext';
 import CheckoutResponse from './components/Checkout/CheckoutResponse';
 import ImageUploader from './components/ImageUploader';
 import Login from './views/Login';
 import { AuthContextProvider } from './context/AuthContext';
 import Dashboard from './views/Dashboard';
-import Products from './views/admin/Products';
+import Computers from './views/admin/Computers';
 
 function App() {
   const router = createBrowserRouter([
@@ -21,8 +21,8 @@ function App() {
       element: <Index />
     },
     {
-      path: "/products/:productId/:productName",
-      element: <Product />
+      path: "/computers/:computerId/:computerName",
+      element: <Computer />
     },
     {
       path: "/checkout/:response",
@@ -41,8 +41,8 @@ function App() {
       element: <Dashboard />
     },
     {
-      path: "/admin/products",
-      element: <Products />
+      path: "/admin/computers",
+      element: <Computers />
     },
     {
       path: "*",
@@ -53,11 +53,11 @@ function App() {
   return (
     <AuthContextProvider>
       <div className="App">
-        <ProductsContextProvider>
+        <ComputersContextProvider>
           <ShoppingCartProvider>
             <RouterProvider router={router} />
           </ShoppingCartProvider>
-        </ProductsContextProvider>
+        </ComputersContextProvider>
       </div>
     </AuthContextProvider>
   );
