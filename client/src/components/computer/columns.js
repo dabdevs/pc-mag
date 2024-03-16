@@ -167,11 +167,6 @@ export const GROUPED_COLUMNS = [
                 accessor: 'price'
             },
             {
-                Header: 'Rating',
-                Footer: 'Rating',
-                accessor: 'rating'
-            },
-            {
                 Header: 'Status',
                 Footer: 'Status',
                 accessor: 'status'
