@@ -5,7 +5,7 @@ import { getComputers } from '../../api/computers'
 import { useSearchParams } from 'react-router-dom'
 import Filter from './Filter'
 
-export default function ComputersTable() {
+export default function ComputersTable({setSelectedComputer}) {
     const columns = useMemo(() => GROUPED_COLUMNS, [])
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -19,7 +19,7 @@ export default function ComputersTable() {
     useEffect(() => {
         setLoading(true)
         getComputers(currentPage, '', limit)
-            .then(({ computers, totalPages, currentPage, rowsCount }) => {
+            .then(({ computers, totalPages, rowsCount }) => {
                 setData(computers)
                 setLoading(false)
                 setTotalPages(totalPages)
@@ -44,6 +44,12 @@ export default function ComputersTable() {
         manualPagination: true,
         pageCount: 0,
     }, useGlobalFilter, useSortBy, usePagination, useRowSelect)
+
+    function nextPage(e) {
+        e.preventDefault(); 
+        setCurrentPage(currentPage => currentPage + 1)
+        setSearchParams({page: currentPage + 1})
+    }
 
     return (
         <div className='card'>
@@ -166,7 +172,7 @@ export default function ComputersTable() {
                     <button className='btn btn-sm btn-outline-dark me-1' onClick={(e) => { e.preventDefault(); setCurrentPage(currentPage => currentPage - 1) }} disabled={currentPage <= 1}>Previous</button>
                     <button className='btn btn-sm btn-outline-dark me-1' onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>First</button>
                     <button className='btn btn-sm btn-outline-dark me-1' onClick={() => setCurrentPage(totalPages)} disabled={currentPage >= totalPages}>Last</button>
-                    <button className="btn btn-sm btn-outline-dark" onClick={(e) => { e.preventDefault(); setCurrentPage(currentPage => currentPage + 1) }} disabled={currentPage >= totalPages}>Next</button>
+                    <button className="btn btn-sm btn-outline-dark" onClick={nextPage}e disabled={currentPage >= totalPages}>Next</button>
                 </div>
             </div>}
         </div>

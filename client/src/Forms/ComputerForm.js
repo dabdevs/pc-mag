@@ -28,7 +28,7 @@ const schema = yup
     })
     .required()
 
-export default function ComputerForm({ computer, setComputers, closeForm, data }) {
+export default function ComputerForm({ computer, setComputers, closeForm, data, createItem, editItem }) {
     const initialState = {
         _id: '',
         name: '',

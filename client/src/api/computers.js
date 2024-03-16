@@ -2,7 +2,8 @@ import axios from "axios"
 
 const baseUrl = 'http://localhost:3000';
 
-export const getComputers = async (page = 1, sort = '', limit=null) => {
+export const getComputers = async (page, sort = '', limit=null) => {
+    console.log('page', page)
     try {
         let url = `${baseUrl}/api/computers${window.location.search}`
 
@@ -14,7 +15,7 @@ export const getComputers = async (page = 1, sort = '', limit=null) => {
             url += url.includes('?') ? `&limit=${limit}` : `?limit=${limit}`
         }
 
-        if (!url.includes(`page=${page}`)) url += url.includes('?') ? `&page=${page}` : `?page=${page}`
+        //if (!url.includes(`page=${page}`)) url += url.includes('?') ? `&page=${page}` : `?page=${page}`
 
         console.log('URL', url)
 

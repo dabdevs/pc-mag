@@ -184,17 +184,18 @@ export default function Computers() {
 
                 {
                     selectedComputer
-                    && action !== 'delete'
-                    && <ComputerForm data={formData} setComputers={setComputers} closeForm={closeForm} computer={selectedComputer} />
+                    && <ComputerForm data={formData} setComputers={setComputers} createItem={createItem} editItem={editItem} closeForm={closeForm} computer={selectedComputer} />
                 }
 
-                {
+                <ComputersTable setSelectedComputer={setSelectedComputer} />
+
+                {/* {
                     !['create', 'edit'].includes(action) && <ComputersTable />
-                }
+                } */}
 
-                {openModal && <ModalComponent handleConfirm={deleteComputer} action={action} title={modalTitle} setOpenModal={setOpenModal}>
+                {/* {openModal && <ModalComponent handleConfirm={deleteComputer} action={action} title={modalTitle} setOpenModal={setOpenModal}>
                     {action === 'delete' ? <p>Are you sure you want to confirm this action?</p> : <ComputerForm data={formData} computer={selectedComputer} />}
-                </ModalComponent>}
+                </ModalComponent>} */}
 
             </section>
         </Dashboard>
