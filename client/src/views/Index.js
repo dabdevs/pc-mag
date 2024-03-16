@@ -31,7 +31,7 @@ export default function Index() {
                 </section>
 
                 <div className='row py-lg-4'>
-                    <Sidebar formFactor={formFactor} page={page} />
+                    <Sidebar page={page} />
 
                     <div className="col-sm-9 col-lg-10 ms-sm-auto p-4" >
                         <Menu formFactor={formFactor} />

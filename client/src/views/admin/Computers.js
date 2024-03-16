@@ -178,11 +178,6 @@ export default function Computers() {
         console.log('Keyword', e.target.value)
     }
 
-    // useEffect(() => {
-    //     console.log('Computers changed', computers)
-    //     createContent()
-    // }, [computers])
-
     return (
         <Dashboard>
             <section className='p-0 my-2 col-sm-12' style={{ minHeight: '80vh' }}>

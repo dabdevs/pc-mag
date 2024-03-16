@@ -164,7 +164,8 @@ export const GROUPED_COLUMNS = [
             {
                 Header: 'Price',
                 Footer: 'Price',
-                accessor: 'price'
+                accessor: 'price',
+                Cell: ({ row }) => `$${(row.original.price / 100).toFixed(2)}`
             },
             {
                 Header: 'Status',

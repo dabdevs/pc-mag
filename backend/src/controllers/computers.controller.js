@@ -66,7 +66,7 @@ module.exports.getAll = async (req, res) => {
         // Get collection
         const computers = await Computer.find(conditions)
             .limit(limit * 1)
-            .skip((page - 1) * limit)
+            .skip((Number(page) - 1) * limit)
             .sort(sort)
 
         // Getting the numbers of computers stored in database
@@ -76,7 +76,7 @@ module.exports.getAll = async (req, res) => {
             computers,
             rowsCount,
             totalPages: Math.ceil(rowsCount / limit),
-            currentPage: page
+            currentPage: Number(page)
         })
     } catch (err) {
         console.error('Error fetching data:', err);

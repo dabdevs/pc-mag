@@ -3,7 +3,6 @@ import TrashModal from "./DeleteModal";
 import { FaTrashAlt } from "react-icons/fa";
 
 const DeleteButton = ({ id }) => {
-    console.log('trashbutton',id)
     const [isModalOpened, setIsModalOpened] = useState(false);
 
     const deleteItem = async () => {
