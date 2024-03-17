@@ -176,8 +176,8 @@ export const GROUPED_COLUMNS = [
                 Header: 'Action',
                 Footer: 'Action',
                 Cell: ({ row }) => <div onClick={(event) => event.stopPropagation()} className='d-flex'>
-                    <EditButton id={row.original.id} />
-                    <DeleteButton id={row.original.id} />
+                    <EditButton id={row.original._id} />
+                    <DeleteButton id={row.original._id} />
                 </div>
             }
         ]

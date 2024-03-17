@@ -74,8 +74,7 @@ DB.on('connecting', function () {
         console.error('Error finding user:', error);
     });
 
-    // console.log(data)
-
+    // DB seeding
     // data.map(computer => {
     //     console.log('Processor', computer.processor)
     //     delete computer._id

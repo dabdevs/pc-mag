@@ -2,7 +2,7 @@ const yup = require('yup')
 
 const computerSchema = yup.object({
     name: yup.string().required("Name is required").min(10).max(150),
-    description: yup.string().optional(),
+    description: yup.string().nullable(),
     price: yup.number().integer().required(),
     images: yup.array(),
     formFactor: yup.string().required(),

@@ -12,7 +12,7 @@ module.exports.getAll = async (req, res) => {
     try {
         const conditions = {}
         console.log(req.body, req.query)
-        
+
         // Filters
         const { category, search, formFactor, ram, os, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = process.env.RESULTS_ROWS_COUNT, orderBy } = req.query
         console.log('Limit', limit)
@@ -61,10 +61,10 @@ module.exports.getAll = async (req, res) => {
             conditions.price = { $gte: parseInt(minPrice) * 100, $lte: parseInt(maxPrice) * 100 }
         }
 
-        let sort = {createdAt: -1}
+        let sort = { createdAt: -1 }
 
         if (orderBy) {
-            sort = { price: orderBy === 'lowest-price' ? 1 : -1}
+            sort = { price: orderBy === 'lowest-price' ? 1 : -1 }
         }
 
         // Get collection
@@ -75,7 +75,7 @@ module.exports.getAll = async (req, res) => {
 
         // Getting the numbers of computers stored in database
         const rowsCount = await Computer.countDocuments(conditions)
-       
+
         return res.status(200).json({
             computers,
             rowsCount,
@@ -116,9 +116,8 @@ module.exports.getOne = async (req, res) => {
 module.exports.store = async (req, res) => {
     try {
         const computerExists = await Computer.findOne({ name: req.body.name })
+        if (computerExists) return res.status(400).json({ message: 'Computer already exists' })
 
-        if (computerExists) return res.status(400).json({message: 'Computer already exists'})
-        
         const computer = await Computer.create(req.body)
         return res.status(201).json({ message: "Computer created successfully", computer })
     } catch ({ errors }) {
@@ -132,7 +131,7 @@ module.exports.store = async (req, res) => {
 
 module.exports.update = async (req, res) => {
     try {
-        delete req.body._id
+        if (req.body._id) delete req.body._id
         const computerId = req.params.id
         const computer = await Computer.findByIdAndUpdate(computerId, req.body, { new: true })
         res.json({ computer, message: "Computer updated successfully." })
@@ -182,13 +181,13 @@ module.exports.getFormData = async (req, res) => {
 module.exports.deleteImage = async (req, res) => {
     try {
         const path = req.body.path
-        
-        if (!path) throw('No image url found')
+
+        if (!path) throw ('No image url found')
 
         const deleted = await s3.deleteObject(path)
 
         if (!deleted) {
-            return res.status(400).json({ message: 'Error while deleting the file'})
+            return res.status(400).json({ message: 'Error while deleting the file' })
         }
 
         const updatedComputer = await Computer.findOneAndUpdate(new ObjectId(req.params.id), { $pull: { images: path } }, { new: true })

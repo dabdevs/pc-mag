@@ -11,7 +11,7 @@ import * as yup from "yup"
 
 const schema = yup
     .object({
-        name: yup.string().required("Name is required").min(10).max(150),
+        title: yup.string().required().min(10).max(150),
         description: yup.string().optional(),
         price: yup.number().integer().required(),
         images: yup.array(),
@@ -28,7 +28,7 @@ const schema = yup
     })
     .required()
 
-export default function ComputerForm({ computer, setComputers, closeForm, data, createItem, editItem }) {
+export default function ComputerForm({ computer, setComputers, closeForm, data}) {
     const initialState = {
         _id: '',
         name: '',
@@ -44,39 +44,40 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
         price: '',
         display: '',
         quantity: '',
+        review: '',
+        createdBy: '',
         images: []
     }
 
+    
     const [form, setForm] = useState(computer || initialState)
     const [alert, setAlert] = useState({})
     const [images, setImages] = useState(form.images)
     const loadedForm = form
-
+    
+    console.log('form changed', form)
     const {
         register,
         handleSubmit,
         formState: { errors }
     } = useForm({ resolver: yupResolver(schema) })
 
-    const handleCreate = (computer) => {
-        console.log('Creating', computer)
-        create(computer).then(({ computer }) => {
-            console.log('computer created')
+    const handleCreate = () => {
+        console.log('Form', form)
+        create(form).then(({ computer }) => {
             setForm(computer)
             setComputers(prevComputers => {
                 return [computer, ...prevComputers]
             });
             setAlert({ message: 'Computer created successfully', class: 'success' })
-        }).catch(err => {
-            if (err.response) {
-                setAlert({ message: err.response.data.message, class: 'danger' })
+        }).catch(error => {
+            if (error && error?.response.status === 422) {
+                setAlert({ message: error?.response.data.error.errors[0], class: 'danger' })
             }
         })
     }
 
     const handleEdit = (computer) => {
-        console.log('Editing')
-
         if (loadedForm !== form) {
             console.log('form edited')
         } else {
@@ -89,8 +90,10 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
             });
             setForm(computer)
             setAlert({ message: 'Computer updated successfully', class: 'success' })
-        }).catch(err => {
-            setAlert({ message: 'An error ocurred', class: 'danger' })
+        }).catch(error => {
+            if (error?.response.status === 422) {
+                setAlert({ message: error.response.data.error.errors[0], class: 'danger' })
+            }
         })
     }
 
@@ -124,18 +127,20 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
             <Row>
                 <h1 className='display-4 fw-bolder'>{form._id ? form.name : 'New Computer'}</h1>
             </Row>
-            {form?._id && <input type='hidden' value={form?._id} name='_id' />}
+            {/* {form?._id && <input type='hidden' value={form?._id} name='_id' />} */}
             <Row>
+                <Col xs={12}>
+                    {alert?.message && <div className={`alert alert-${alert.class}`}>{alert.message}</div>}
+                </Col>
                 <Form.Group className="mb-3">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                         name='name'
-                        defaultValue={form?.name}
+                        value={form?.name ? form.name : ''}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
                         type="text"
                         placeholder="ex: Macbook Pro 2022 Retina Display"
                         autoFocus
-                        {...register("name")}
                     />
                     <small className='text-danger'>{errors?.name?.message}</small>
                 </Form.Group>
@@ -145,12 +150,10 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
                         className='form-control'
                         id='description'
                         name='description'
-                        defaultValue={form?.description}
+                        value={form?.description ? form.description : ''}
                         onChange={(e) => setForm({ ...form, description: e.target.value })}
-
                         rows={3}
                         placeholder="ex: The Macbook Pro 2022 Retina Display is the one of the best computers you can buy..."
-                        {...register("description")}
                     />
                     <small className='text-danger'>{errors.description?.message}</small>
                 </Form.Group>
@@ -219,10 +222,13 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
                         onChange={(e) => setForm({ ...form, ram: e.target.value })}
                     >
                         <option value=''>Select an option</option>
-                        <option value={'4 GB'}>4 GB</option>
-                        <option value={'8 GB'}>8 GB</option>
-                        <option value={'16 GB'}>16 GB</option>
-                        <option value={'32 GB'}>32 GB</option>
+                        <option value={'512MB'}>512MB</option>
+                        <option value={'1GB'}>1GB</option>
+                        <option value={'2GB'}>2GB</option>
+                        <option value={'4GB'}>4GB</option>
+                        <option value={'8GB'}>8GB</option>
+                        <option value={'16GB'}>16GB</option>
+                        <option value={'32GB'}>32GB</option>
                     </Form.Select>
                     <small className='text-danger'>{errors.ram?.message}</small>
                 </Col>
@@ -254,10 +260,11 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
                             onChange={(e) => setForm({ ...form, disk: e.target.value })}
                         >
                             <option value=''>Select an option</option>
-                            <option value={'128 GB'}>128 GB</option>
-                            <option value={'256 GB'}>256 GB</option>
-                            <option value={'500 GB'}>500 GB</option>
-                            <option value={'1 TB'}>1 TB</option>
+                            <option value={'128GB'}>128GB</option>
+                            <option value={'256GB'}>256GB</option>
+                            <option value={'500GB'}>500GB</option>
+                            <option value={'1TB'}>1TB</option>
+                            <option value={'2TB'}>2TB</option>
                         </Form.Select>
                         <small className='text-danger'>{errors.disk?.message}</small>
                     </Form.Group>
@@ -265,7 +272,7 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
             </Row>
 
             <Row>
-                <Col xs={2}>
+                <Col xs={3}>
                     <Form.Group className="mb-3">
                         <Form.Label>Processor</Form.Label>
                         <Form.Select
@@ -286,7 +293,7 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
                         <Form.Label>Display</Form.Label>
                         <Form.Control
                             name='display'
-                            value={form?.display}
+                            value={form?.display ? form.display : ''}
                             type='number'
                             min={10}
                             max={30}
@@ -299,46 +306,30 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
                 </Col>
                 <Col xs={2}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Price <small>(In cents)</small> </Form.Label>
+                        <Form.Label>Price <small>(in scents)</small> </Form.Label>
                         <Form.Control
                             name='price'
-                            value={form?.price}
+                            value={form?.price ? form.price : ''}
                             type='number'
                             placeholder='ex: 1599.99'
                             {...register("price")}
-                            onChange={(e) => setForm({ ...form, price: e.target.value.replace(/[^0-9]/g, '') })}
+                            onChange={(e) => setForm({ ...form, price: e.target.value })}
                         />
                         <small className='text-danger'>{errors.price?.message}</small>
                     </Form.Group>
                 </Col>
                 <Col xs={2}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Available</Form.Label>
+                        <Form.Label>Quantity</Form.Label>
                         <Form.Control
                             name='quantity'
-                            value={form?.quantity}
+                            value={form?.quantity ? form.quantity : ''}
                             type='number'
                             placeholder='ex: 10'
                             {...register("quantity")}
                             onChange={(e) => setForm({ ...form, quantity: e.target.value })}
                         />
                         <small className='text-danger'>{errors.quantity?.message}</small>
-                    </Form.Group>
-                </Col>
-                <Col xs={2}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Category</Form.Label>
-                        <Form.Select
-                            name='category'
-                            value={form?.category}
-                            type='text'
-                            {...register("category")}
-                            onChange={(e) => setForm({ ...form, category: e.target.value })}
-                        >
-                            <option value=''>Select an option</option>
-                            {data?.categories?.map((category, i) => <option key={i} value={category.name}>{category.name}</option>)}
-                        </Form.Select>
-                        <small className='text-danger'>{errors.category?.message}</small>
                     </Form.Group>
                 </Col>
             </Row>
@@ -351,8 +342,6 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
                     </Col>
                 ))}
             </Row> : null}
-
-            {alert?.message && <div className={`alert alert-${alert.class}`}>{alert.message}</div>}
 
             {form._id && computer ? images.length < data.imagesPerComputer && <Row>
                 <>
@@ -368,7 +357,7 @@ export default function ComputerForm({ computer, setComputers, closeForm, data, 
                     <Button onClick={() => { setForm(initialState); closeForm(); }} type='button' variant="danger">
                         Close
                     </Button>
-                    <Button onClick={computer?._id ? handleSubmit(handleEdit) : handleSubmit(handleCreate)} type='button' variant="primary">
+                    <Button onClick={(e) => { form?._id ? handleSubmit(handleEdit(form)) : handleSubmit(handleCreate())}} type='button' variant="primary">
                         Save Changes
                     </Button>
                 </Col>
