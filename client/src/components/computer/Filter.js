@@ -406,7 +406,7 @@ export default function Filter({ source, currentPage, setCurrentPage }) {
                     <Button disabled={disabled} type="submit" className="btn btn-dark w-100">
                         <i className="bi bi-funnel"></i> Filter
                     </Button>
-                    {source === 'admin' && <Button onClick={clearFilters} type="button" className="btn btn-danger w-100">
+                    {source === 'admin' && <Button onClick={clearFilters} type="button" className="btn btn-danger w-100" disabled={disabled}>
                         <FaTrashAlt /> Clear filters
                     </Button>}
                 </Col>

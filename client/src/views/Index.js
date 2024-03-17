@@ -8,6 +8,7 @@ import ComputerCard from '../components/computer/ComputerCard'
 import Menu from '../components/Menu'
 import LazyLoad from 'react-lazyload'
 import List from '../components/computer/front/List'
+import ComputersTable from '../components/computer/ComputersTable'
 
 export default function Index() {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -38,7 +39,7 @@ export default function Index() {
 
                         {loading ?
                             <b>Loading...</b> :
-                            <List />
+                            <ComputersTable display={'cards'} />
                         }
                     </div >
                 </div>

@@ -187,7 +187,7 @@ export default function Computers() {
                     && <ComputerForm data={formData} setComputers={setComputers} closeForm={closeForm} computer={selectedComputer} />
                 }
 
-                {selectedComputer === null && <ComputersTable setSelectedComputer={setSelectedComputer} createItem={createItem} editItem={editItem} deleteItem={deleteItem} />}
+                {selectedComputer === null && <ComputersTable display={'table'} setSelectedComputer={setSelectedComputer} createItem={createItem} editItem={editItem} deleteItem={deleteItem} />}
 
                 {/* {
                     !['create', 'edit'].includes(action) && <ComputersTable />

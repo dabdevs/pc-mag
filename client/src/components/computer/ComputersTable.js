@@ -8,8 +8,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { FaPlus } from "react-icons/fa";
 import Filter from './Filter'
+import ComputerCard from './ComputerCard'
+import LazyLoad from 'react-lazyload'
 
-export default function ComputersTable({ setSelectedComputer, createItem, editItem, deleteItem }) {
+export default function ComputersTable({ setSelectedComputer, createItem, display }) {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -154,20 +156,20 @@ export default function ComputersTable({ setSelectedComputer, createItem, editIt
 
     return (
         <>
-            <Row>
+            {display === 'table' && <Row>
                 <Col xs={9}>
                     <h1 className="display-4 fw-bolder">Computers</h1>
                 </Col>
                 <Col xs={3} className='d-flex align-items-center'>
                     <button className='btn btn-success ms-auto' onClick={createItem}><FaPlus /> New Computer</button>
                 </Col>
-            </Row>
-            <div className='card'>
-                <div className='card-header'>
+            </Row>}
+            <div className={`${display === 'table' ? 'card' : ''}`}>
+                {display === 'table' && <div className='card-header'>
                     <Filter currentPage={currentPage} setCurrentPage={setCurrentPage} source='admin' />
-                </div>
+                </div>}
 
-                <div className='card-body p-0'>
+                <div className={`card-body p-0 ${display === 'cards' ? 'border-0' : ''}`}>
                     {loading && <b>Loading...</b>}
 
                     {!loading &&
@@ -177,59 +179,51 @@ export default function ComputersTable({ setSelectedComputer, createItem, editIt
                                 <span>{results} items</span>
                             </div>
 
-                            <table {...getTableProps()} className='w-100 table table-striped border'>
-                                <thead>
-                                    {
-                                        headerGroups.map(headerGroup => (
-                                            <tr className='border' {...headerGroup.getHeaderGroupProps()}>
-                                                {
-                                                    headerGroup.headers.map(column => (
-                                                        <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                                            {column.render('Header')}
-                                                            <span>
-                                                                {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
-                                                            </span>
-                                                        </th>
-                                                    ))
-                                                }
-                                            </tr>
-                                        ))
-                                    }
-                                </thead>
+                            {display === 'table' ?
+                                <table {...getTableProps()} className='w-100 table table-striped border'>
+                                    <thead>
+                                        {
+                                            headerGroups.map(headerGroup => (
+                                                <tr className='border' {...headerGroup.getHeaderGroupProps()}>
+                                                    {
+                                                        headerGroup.headers.map(column => (
+                                                            <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                                                {column.render('Header')}
+                                                                <span>
+                                                                    {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
+                                                                </span>
+                                                            </th>
+                                                        ))
+                                                    }
+                                                </tr>
+                                            ))
+                                        }
+                                    </thead>
 
-                                <tbody {...getTableBodyProps()}>
-                                    {rows.map(row => {
-                                        prepareRow(row)
-                                        return (
-                                            <tr className='border' {...row.getRowProps()}>
-                                                {
-                                                    row.cells.map(cell => {
-                                                        return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                                    })
-                                                }
-                                            </tr>
-                                        )
-                                    })}
-                                </tbody>
+                                    <tbody {...getTableBodyProps()}>
+                                        {rows.map(row => {
+                                            prepareRow(row)
+                                            return (
+                                                <tr className='border' {...row.getRowProps()}>
+                                                    {
+                                                        row.cells.map(cell => {
+                                                            return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                                        })
+                                                    }
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table> :
 
-                                {/* <tfoot>
-                        {
-                            footerGroups.map(footerGroup => (
-                                <tr className='border' {...footerGroup.getFooterGroupProps}>
-                                    {
-                                        footerGroup.headers.map(column => (
-                                            <td className='border' {...column.getFooterProps()}>
-                                                {
-                                                    column.render('Footer')
-                                                }
-                                            </td>
-                                        ))
-                                    }
-                                </tr>
-                            ))
-                        }
-                    </tfoot> */}
-                            </table>
+                                <Row className='gx-3 gx-lg-4 row-cols-xs-1 row-cols-md-2 row-cols-lg-4 pb-4'>
+                                    {data?.map(computer =>
+                                        <LazyLoad key={`ll-${computer._id}`} offset={100}>
+                                            <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />
+                                        </LazyLoad>
+                                    )}
+                                </Row>
+                            }
                         </>
                     }
                 </div>
