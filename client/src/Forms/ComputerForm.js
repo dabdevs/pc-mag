@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -49,7 +49,6 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
         images: []
     }
 
-    
     const [form, setForm] = useState(computer || initialState)
     const [alert, setAlert] = useState({})
     const [images, setImages] = useState(form.images)
@@ -97,28 +96,26 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
     }
 
     const removeImage = async (computerId, url) => {
-        // if (confirm('Are you sure you want to delete this image?')) {
-
-        // }
-
-        deleteImage(computerId, url).then(({ computer }) => {
-            console.log('Updated images', data.computer)
-            setImages(computer.images)
-            setComputers(prevComputers => {
-                return prevComputers.map(prod => {
-                    if (prod._id === computer._id) {
-                        console.log('updated images', computer.images)
-                        prod.images = computer.images
-                    }
-                    return prod
+        if (confirm('Are you sure you want to delete this image?')) {
+            deleteImage(computerId, url).then(({ computer }) => {
+                console.log('Updated images', data.computer)
+                setImages(computer.images)
+                setComputers(prevComputers => {
+                    return prevComputers.map(prod => {
+                        if (prod._id === computer._id) {
+                            console.log('updated images', computer.images)
+                            prod.images = computer.images
+                        }
+                        return prod
+                    });
                 });
-            });
-        })
-            .then(() => setAlert({ class: 'success', message: 'Image deleted successfully' }))
-            .catch(({ response }) => {
-                console.log(response.data.message)
-                setAlert({ class: 'danger', message: response.data.message })
             })
+                .then(() => setAlert({ class: 'success', message: 'Image deleted successfully' }))
+                .catch(({ response }) => {
+                    console.log(response.data.message)
+                    setAlert({ class: 'danger', message: response.data.message })
+                })
+        }
     }
 
     return (
@@ -319,16 +316,20 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
                 </Col>
                 <Col xs={2}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Quantity</Form.Label>
-                        <Form.Control
-                            name='quantity'
-                            value={form?.quantity ? form.quantity : ''}
-                            type='number'
-                            placeholder='ex: 10'
-                            {...register("quantity")}
-                            onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-                        />
-                        <small className='text-danger'>{errors.quantity?.message}</small>
+                        <Form.Label>Status</Form.Label>
+                        <Form.Select
+                            name='status'
+                            defaultChecked={form?.status}
+                            value={form?.status}
+                            {...register("status")}
+                            onChange={(e) => setForm({ ...form, status: e.target.value })}
+                        >
+                            <option value=''>Select an option</option>
+                            <option value={'Pending'}>Pending</option>
+                            <option value={'Published'}>Published</option>
+                            <option value={'Unpublished'}>Unpublished</option>
+                        </Form.Select>
+                        <small className='text-danger'>{errors.status?.message}</small>
                     </Form.Group>
                 </Col>
             </Row>
