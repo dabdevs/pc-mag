@@ -6,7 +6,6 @@ import SearchForm from '../components/SearchForm'
 import ComputerCard from '../components/computer/ComputerCard'
 import Menu from '../components/Menu'
 import LazyLoad from 'react-lazyload'
-import List from '../components/computer/front/List'
 import ComputersTable from '../components/computer/ComputersTable'
 
 export default function Index() {

@@ -38,9 +38,12 @@ export default function ComputerInfo({ computer }) {
             </div>
             <div className='text-center w-100 mb-3 justify-content-between d-flex gap-4'>
                 <small>
+                    <i className="bi bi-laptop mr-1"></i> {computer.brand}
+                </small>
+                <small>
                     <i className="bi bi-cpu mr-1"></i> {computer.ram}
                 </small>
-                <small> <i className='bi bi-hdd mr-1'></i> {computer.disk}</small>
+                <small> <i className='bi bi-hdd mr-1'></i> {computer.disk} {computer.diskType}</small>
                 <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {computer.display}"</small>
                 <small>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-windows" viewBox="0 0 16 16">

@@ -174,14 +174,14 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
 
                     {!loading &&
                         <>
-                            <Row className='px-1'>
-                                <Col xs={10} className='mt-2 px-2 d-flex flex-column'>
+                            <Row className='p-2'>
+                                <Col xs={9} className='mt-2 d-flex flex-column'>
                                     <b>{searchParams.get('search')}</b>
                                     <span>{results} items</span>
                                 </Col>
-                                <Col xs={2} className='mt-2 px-2 d-flex'>
-                                    <label htmlFor='sort' className='pt-2 w-75 text-right'>Sort by:</label>
-                                    <select id='sort' className='form-control ml-1' onChange={(e) => setSort(e.target.value)}>
+                                <Col xs={3} className='mt-2 d-flex'>
+                                    <label htmlFor='sort' className='pt-2 w-75 text-center'>Sort by:</label>
+                                    <select id='sort' className='form-control ml-1 text-center' onChange={(e) => setSort(e.target.value)}>
                                         <option value={''}>best match</option>
                                         <option value={'lowest-price'}>lowest price</option>
                                         <option value={'highest-price'}>highest price</option>

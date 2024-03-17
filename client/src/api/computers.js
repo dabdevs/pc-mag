@@ -1,9 +1,9 @@
 import axios from "axios"
+import config from '../../src/config'
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl = config.apiUrl;
 
 export const getComputers = async (page, sort = '', limit=null) => {
-    console.log('page', page)
     try {
         let url = `${baseUrl}/api/computers${window.location.search}`
 
@@ -14,8 +14,6 @@ export const getComputers = async (page, sort = '', limit=null) => {
         if (limit) {
             url += url.includes('?') ? `&limit=${limit}` : `?limit=${limit}`
         }
-
-        //if (!url.includes(`page=${page}`)) url += url.includes('?') ? `&page=${page}` : `?page=${page}`
 
         console.log('URL', url)
 
