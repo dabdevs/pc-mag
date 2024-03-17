@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Layout from '../components/Layout'
 import Sidebar from '../components/Sidebar'
-import { getComputers } from '../api/computers'
 import SearchForm from '../components/SearchForm'
-import ComputerCard from '../components/computer/ComputerCard'
 import Menu from '../components/Menu'
-import LazyLoad from 'react-lazyload'
 import ComputersTable from '../components/computer/ComputersTable'
 
 export default function Index() {

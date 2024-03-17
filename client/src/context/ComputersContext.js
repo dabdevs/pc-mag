@@ -11,11 +11,8 @@ export function useComputersContext() {
 export const ComputersContextProvider = ({ children }) => {
     const [computers, setComputers] = useState([])
     const [sort, setSort] = useState('')
-    //const [unfilteredComputers, setUnfilteredComputers] = useState([])
     const [search, setSearch] = useState('')
     const [category, setCategory] = useState('')
-    //const { keyword } = useLocation()
-    //const category = searchParams.get('category')
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(null)
     const [currentPage, setCurrentPage] = useState(null)
@@ -26,19 +23,13 @@ export const ComputersContextProvider = ({ children }) => {
     const [filtersCleared, setFiltersCleared] = useState(false)
 
     useEffect(() => {
-        console.log('Computers context', category)
         setLoading(true)
-        //setSearchParams({ page })
         switch (category) {
             case 'Computers' || '':
                 getComputers(page, sort)
                     .then(({ computers }) => {
                         setComputers(computers)
                         setCategory(window.location.href)
-                        // setUnfilteredComputers(computers)
-                        // setComputersCount(count)
-                        // setTotalPages(totalPages)
-                        // setCurrentPage(currentPage)
                         setLoading(false)
                     })
                     .catch(err => {

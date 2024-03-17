@@ -92,7 +92,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
                     Footer: 'Action',
                     Cell: ({ row }) => <div onClick={(event) => event.stopPropagation()} className='d-flex'>
                         <EditButton computer={row.original} setSelectedComputer={setSelectedComputer} />
-                        <DeleteButton computer={row.original} setSelectedComputer={setSelectedComputer} />
+                        <DeleteButton computer={row.original} setData={setData} setResults={setResults} />
                     </div>
                 }
             ]
@@ -166,7 +166,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
             </Row>}
             <div className={`${display === 'table' ? 'card' : ''}`}>
                 {display === 'table' && <div className='card-header'>
-                    <Filter  source='admin'/>
+                    <Filter source='admin'/>
                 </div>}
 
                 <div className={`card-body p-0 ${display === 'cards' ? 'border-0' : ''}`}>
@@ -248,23 +248,6 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
                     </div>
 
                     <div className='d-flex mx-3'>
-                        {/* Go to page: {' '}
-                    <input
-                        type='number'
-                        defaultValue={''}
-                        onChange={e => {
-                            const pageNumber = Number(e.target.value)
-                            if (pageNumber === 0 || pageNumber > totalPages) {
-                                setPageInput(currentPage)
-                                return
-                            }
-
-                            setCurrentPage(pageNumber)
-                        }}
-                        className='form-control form-control-sm mx-2'
-                        style={{ width: '80px' }}
-                    /> */}
-
                         Show: {'  '}
                         <select
                             className='form-control form-control-sm'

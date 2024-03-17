@@ -15,8 +15,6 @@ export const getComputers = async (page, sort = '', limit=null) => {
             url += url.includes('?') ? `&limit=${limit}` : `?limit=${limit}`
         }
 
-        console.log('URL', url)
-
         const { data } = await axios.get(url)
 
         return data

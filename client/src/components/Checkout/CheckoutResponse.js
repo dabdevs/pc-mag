@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { loadStripe } from '@stripe/stripe-js';
 import { useParams } from 'react-router-dom'
-import {
-    EmbeddedCheckoutProvider,
-    EmbeddedCheckout
-} from '@stripe/react-stripe-js';
-import {
-    BrowserRouter as Router,
-    Route,
-    Routes,
-    Navigate
-} from "react-router-dom";
 import Layout from "../Layout";
 import { useShoppingCartContext } from "../../context/ShoppingCartContext";
 import FeedBack from "../FeedBack";

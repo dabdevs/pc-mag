@@ -55,7 +55,6 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
     const [images, setImages] = useState(form.images)
     const loadedForm = form
     
-    console.log('form changed', form)
     const {
         register,
         handleSubmit,

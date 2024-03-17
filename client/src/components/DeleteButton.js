@@ -1,16 +1,28 @@
 import { useState } from "react";
 import TrashModal from "./DeleteModal";
 import { FaTrashAlt } from "react-icons/fa";
+import { destroy } from "../api/computers";
 
-const DeleteButton = ({ id }) => {
-    const [isModalOpened, setIsModalOpened] = useState(false);
+const DeleteButton = ({ computer, setData, setResults }) => {
+    const [isModalOpened, setIsModalOpened] = useState(false)
 
-    const deleteItem = async () => {
-        console.log('Deleting Item')
-        // await axios.delete(`Testing/api/resources?_id=${id}`);
+    const deleteItem = async (id) => {
+        destroy(id)
+        .then(() => {
+            setData(prevData => {
+                const newData = [...prevData]
+                newData.splice(id, 1)
+                return newData
+            })  
 
-        setIsModalOpened(false);
-    };
+            setResults(prevResults => {
+                return prevResults - 1
+            })
+        })
+        .catch(err => console.log(err))
+
+        setIsModalOpened(false)
+    }
 
     return <>
         <button className="btn btn-sm" onClick={() => setIsModalOpened(true)}>
@@ -19,7 +31,7 @@ const DeleteButton = ({ id }) => {
         <TrashModal
             show={isModalOpened}
             handleClose={() => setIsModalOpened(false)}
-            handleConfirm={() => deleteItem()}
+            handleConfirm={() => deleteItem(computer._id)}
         />
     </>;
 };
