@@ -5,6 +5,11 @@ const ImageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    product: {
+        type: String,
+        enum: ['Computers', 'Keyboards', 'Mice', 'Chargers'],
+        required: true
+    },
     primary: {
         type: Boolean,
         default: false,

@@ -62,7 +62,6 @@ class S3Service {
     
     async deleteObject(url) {
         try {
-            console.log(url)
             const params = {
                 Bucket: process.env.AWS_BUCKET,
                 Key: url.replace(process.env.AWS_BUCKET_URL, '')
