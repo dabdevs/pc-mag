@@ -15,7 +15,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [pageInput, setPageInput] = useState('')
+    const [sort, setSort] = useState('')
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState(0);
     const [limit, setLimit] = useState('');
@@ -101,7 +101,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
 
     useEffect(() => {
         setLoading(true)
-        getComputers(currentPage, '', limit)
+        getComputers(currentPage, sort, limit)
             .then(({ computers, totalPages, rowsCount }) => {
                 setData(computers)
                 setLoading(false)
@@ -112,7 +112,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
                 setLoading(false)
                 console.log(err)
             })
-    }, [currentPage, limit, searchParams])
+    }, [currentPage, limit, searchParams, sort])
 
     const {
         getTableProps,
@@ -166,7 +166,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
             </Row>}
             <div className={`${display === 'table' ? 'card' : ''}`}>
                 {display === 'table' && <div className='card-header'>
-                    <Filter currentPage={currentPage} setCurrentPage={setCurrentPage} source='admin' />
+                    <Filter  source='admin'/>
                 </div>}
 
                 <div className={`card-body p-0 ${display === 'cards' ? 'border-0' : ''}`}>
@@ -174,10 +174,20 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
 
                     {!loading &&
                         <>
-                            <div className='mt-2 px-2 d-flex flex-column'>
-                                <b>{searchParams.get('search')}</b>
-                                <span>{results} items</span>
-                            </div>
+                            <Row className='px-1'>
+                                <Col xs={10} className='mt-2 px-2 d-flex flex-column'>
+                                    <b>{searchParams.get('search')}</b>
+                                    <span>{results} items</span>
+                                </Col>
+                                <Col xs={2} className='mt-2 px-2 d-flex'>
+                                    <label htmlFor='sort' className='pt-2 w-75 text-right'>Sort by:</label>
+                                    <select id='sort' className='form-control ml-1' onChange={(e) => setSort(e.target.value)}>
+                                        <option value={''}>best match</option>
+                                        <option value={'lowest-price'}>lowest price</option>
+                                        <option value={'highest-price'}>highest price</option>
+                                    </select>
+                                </Col>
+                            </Row>
 
                             {display === 'table' ?
                                 <table {...getTableProps()} className='w-100 table table-striped border'>

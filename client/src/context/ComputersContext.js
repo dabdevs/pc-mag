@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { getComputers } from "../api/computers";
+import { getKeyboards } from "../api/keyboards";
 
 const ComputersContext = createContext({})
 
@@ -11,7 +12,8 @@ export const ComputersContextProvider = ({ children }) => {
     const [computers, setComputers] = useState([])
     const [sort, setSort] = useState('')
     //const [unfilteredComputers, setUnfilteredComputers] = useState([])
-    const [search, setSearch] = useState()
+    const [search, setSearch] = useState('')
+    const [category, setCategory] = useState('')
     //const { keyword } = useLocation()
     //const category = searchParams.get('category')
     const [page, setPage] = useState(1)
@@ -24,23 +26,34 @@ export const ComputersContextProvider = ({ children }) => {
     const [filtersCleared, setFiltersCleared] = useState(false)
 
     useEffect(() => {
-        console.log('Computers context')
+        console.log('Computers context', category)
         setLoading(true)
         //setSearchParams({ page })
-        getComputers(page, sort)
-            .then(({ computers, count, totalPages, currentPage }) => {
-                setComputers(computers)
-                // setUnfilteredComputers(computers)
-                // setComputersCount(count)
-                // setTotalPages(totalPages)
-                // setCurrentPage(currentPage)
-                setLoading(false)
-            })
-            .catch(err => {
-                console.error(err)
-                setLoading(false)
-            });
-    }, [search, page, filters])
+        switch (category) {
+            case 'Computers' || '':
+                getComputers(page, sort)
+                    .then(({ computers }) => {
+                        setComputers(computers)
+                        setCategory(window.location.href)
+                        // setUnfilteredComputers(computers)
+                        // setComputersCount(count)
+                        // setTotalPages(totalPages)
+                        // setCurrentPage(currentPage)
+                        setLoading(false)
+                    })
+                    .catch(err => {
+                        console.error(err)
+                        setLoading(false)
+                    });
+                break;
+
+            case 'Keyboards':
+                getKeyboards().then(keyboards => console.log('Keyboards:', keyboards))
+            default:
+                break;
+        }
+
+    }, [search, page, filters, category])
 
     const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
     const nextBtnClasses = totalPages === currentPage ? 'page-item disabled' : 'page-item'
@@ -65,15 +78,12 @@ export const ComputersContextProvider = ({ children }) => {
     }
 
     const handleSortBy = async (sort) => {
-        console.log('sorting')
+        console.log('sorting', sort)
         setSort(sort)
 
         getComputers(page, sort)
-            .then(({ computers, count, totalPages, currentPage }) => {
+            .then(({ computers }) => {
                 setComputers(computers)
-                setComputersCount(count)
-                setTotalPages(totalPages)
-                setCurrentPage(currentPage)
                 setLoading(false)
             })
             .catch(err => {
@@ -108,6 +118,8 @@ export const ComputersContextProvider = ({ children }) => {
         <ComputersContext.Provider value={{
             computers,
             setComputers,
+            category,
+            setCategory,
             search,
             setSearch,
             filtered,

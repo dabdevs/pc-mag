@@ -15,6 +15,10 @@ function App() {
     {
       path: "/",
       element: <Index />
+    }, 
+    {
+      path: "/:category",
+      element: <Index />
     },
     {
       path: "/search",

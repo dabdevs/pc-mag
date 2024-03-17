@@ -6,7 +6,6 @@ const { getAll, getOne, store, update, destroy, getFormData, deleteImage } = req
 const computerSchema = require('../validations/computerSchema')
 const validationMiddleware = require('../middlewares/validation.middleware')
 
-
 router.get('/formdata', getFormData)
 router.get('', getAll)
 router.get('/:id', getOne)

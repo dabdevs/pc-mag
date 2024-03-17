@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-export default function Filter({ source, currentPage, setCurrentPage }) {
+export default function Filter({ source, currentPage }) {
     const { setFiltered, filtered, setFilters } = useComputersContext()
     const [search, setSearch] = useState('')
     const [formFactor, setFormFactor] = useState([]);
@@ -82,7 +82,6 @@ export default function Filter({ source, currentPage, setCurrentPage }) {
             setDisk([])
             setFilters([])
             setSearchParams({})
-            setCurrentPage(1)
 
             const inputs = document.querySelectorAll('input');
 
@@ -406,7 +405,7 @@ export default function Filter({ source, currentPage, setCurrentPage }) {
                     <Button disabled={disabled} type="submit" className="btn btn-dark w-100">
                         <i className="bi bi-funnel"></i> Filter
                     </Button>
-                    {source === 'admin' && <Button onClick={clearFilters} type="button" className="btn btn-danger w-100" disabled={disabled}>
+                    {source === 'admin' && <Button onClick={clearFilters} type="button" className="btn btn-danger w-100" disabled={!disabled}>
                         <FaTrashAlt /> Clear filters
                     </Button>}
                 </Col>

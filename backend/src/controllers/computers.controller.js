@@ -11,11 +11,11 @@ const s3 = new S3Service()
 module.exports.getAll = async (req, res) => {
     try {
         const conditions = {}
-        console.log(req.body, req.query)
-
+        
         // Filters
         const { category, search, formFactor, ram, os, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = process.env.RESULTS_ROWS_COUNT, orderBy } = req.query
-        console.log('Limit', limit)
+        
+        console.log('orderBy', orderBy)
         if (category) {
             conditions.category = category
         }

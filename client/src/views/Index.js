@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import Layout from '../components/Layout'
 import Sidebar from '../components/Sidebar'
 import { getComputers } from '../api/computers'
@@ -11,10 +10,7 @@ import List from '../components/computer/front/List'
 import ComputersTable from '../components/computer/ComputersTable'
 
 export default function Index() {
-    const [searchParams, setSearchParams] = useSearchParams()
-    const formFactor = searchParams.get('formFactor')
     const [loading, setLoading] = useState(false)
-    const [page, setPage] = useState(1)
 
     return (
         <div>
@@ -32,10 +28,10 @@ export default function Index() {
                 </section>
 
                 <div className='row py-lg-4'>
-                    <Sidebar page={page} />
+                    <Sidebar />
 
                     <div className="col-sm-9 col-lg-10 ms-sm-auto p-4" >
-                        <Menu formFactor={formFactor} />
+                        <Menu/>
 
                         {loading ?
                             <b>Loading...</b> :
