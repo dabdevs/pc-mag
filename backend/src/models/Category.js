@@ -5,6 +5,10 @@ const CategorySchema = new mongoose.Schema({
         type: String,
         required: true,
         maxLength: 100
+    },
+    icon: {
+        type: String,
+        required: true
     }
 })
 

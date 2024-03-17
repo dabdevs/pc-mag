@@ -1,23 +1,14 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useComputersContext } from '../context/ComputersContext'
-import { Link, useSearchParams, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import parse from 'html-react-parser';
 
 export default function Menu() {
-    const sortRef = useRef(null)
-    const [searchParams, setSearchParams] = useSearchParams()
-    const { handleSortBy, setLoading, setCategory } = useComputersContext()
-    // const [category, setCategory] = useState('Computers')
+    const { setCategory } = useComputersContext()
     const data = JSON.parse(localStorage.getItem('computerFormData'))
     const { category } = useParams()
 
     useEffect(() => setCategory(category), [category])
-
-    console.log('Search params', category)
-
-    const handleChange = async (sort) => {
-        setLoading(true)
-        await handleSortBy(sort)
-    }
 
     return (
         <nav className="card bg-white navbar mb-4 navbar-expand-lg w-100 navbar-light bg-light mb-2">
@@ -31,7 +22,7 @@ export default function Menu() {
                                     aria-current="page" 
                                     to={`/${cat.name}`}
                                 > 
-                                    <i className="bi bi-laptop me-2"></i> 
+                                    {parse(cat.icon)}
                                     {cat.name}
                                 </Link>
                             </li>

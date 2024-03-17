@@ -1,12 +1,16 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Layout from '../components/Layout'
 import Sidebar from '../components/Sidebar'
 import SearchForm from '../components/SearchForm'
 import Menu from '../components/Menu'
 import ComputersTable from '../components/computer/ComputersTable'
+import { getComputerFormData } from '../api/computers'
 
 export default function Index() {
     const [loading, setLoading] = useState(false)
+    useEffect(() => {
+        getComputerFormData().catch(err => console.log(err))
+    }, [])
 
     return (
         <div>
