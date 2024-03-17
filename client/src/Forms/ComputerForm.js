@@ -344,12 +344,9 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
             </Row> : null}
 
             {form._id && computer ? images.length < data.imagesPerComputer && <Row>
-                <>
-                    <Col xs={10}><h4>Upload up to {data.imagesPerComputer} images</h4></Col>
-                    <Col xs={6}>
-                        <ImageUploader imagesCount={images.length} collection='computers' id={form._id} setImages={setImages} setAlert={setAlert} setComputers={setComputers} />
-                    </Col>
-                </>
+                <Col xs={6}>
+                    <ImageUploader maxImgUpload={data.imagesPerComputer} imagesCount={images.length} collection='computers' id={form._id} setImages={setImages} setAlert={setAlert} setComputers={setComputers} />
+                </Col>
             </Row> : null}
 
             <Row className='my-2 border-bottom py-2'>

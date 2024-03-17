@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { upload } from '../api/uploader'
 
-export default function ImageUploader({ collection, id, setAlert, setImages, setComputers, imagesCount }) {
+export default function ImageUploader({ maxImgUpload, collection, id, setAlert, setImages, setComputers, imagesCount }) {
     const [uploading, setUploading] = useState(false);
     const [btnUploadDisabled, setBtnUploadDisabled] = useState(true)
     const [inputValue, setInputValue] = useState('')
@@ -48,10 +48,11 @@ export default function ImageUploader({ collection, id, setAlert, setImages, set
     }
 
     return (
-        <div className='card w-100'>
+        <div className='w-100'>
+            <h4>Upload up to {maxImgUpload} images (jpg, jpeg)</h4>
             <form id='uploadImagesForm' encType="multipart/form-data" className='d-flex gap-3'>
                 <fieldset disabled={uploading} className='w-100 d-flex justify-content-between'>
-                    <input value={inputValue} onChange={(e) => inputFileEmpty(e)} id='images' type='file' name='images' className='form-control border-0' multiple accept="image/*" />
+                    <input value={inputValue} onChange={(e) => inputFileEmpty(e)} id='images' type='file' name='images' className='form-control border' multiple accept="image/*" />
                     <button disabled={btnUploadDisabled} onClick={() => uploadImages()} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
                 </fieldset>
             </form>
