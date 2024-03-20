@@ -35,12 +35,7 @@
     "start": "react-scripts start --port=$PORT",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "install-server": "cd backend && npm install",
-    "start-server": "cd backend && node index.js",
-    "install-client": "cd client && npm install",
-    "build-client": "cd client && npm run build",
-    "start-client": "cd client && npm run start"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

@@ -105,13 +105,8 @@ DB.on('connecting', function () {
     // })
 }).once('open', function () {
     console.log('Database connection opened!');
-
-    mongoose.connection.db.listCollections().toArray(function (err, names) {
-        console.log(names); // [{ name: 'dbname.myCollection' }]
-        module.exports.Collection = names;
-    });
 }).on('reconnected', function () {
-    console.log('Database reconnected!');
+    console.log('Database reconnected!', PORT);
 }).on('disconnected', function () {
     console.log('Database disconnected!');
     mongoose.connect(process.env.MONGO_DB_URI, { server: { auto_reconnect: true } });
