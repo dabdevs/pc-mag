@@ -4,6 +4,8 @@ import Checkout from '../../api/checkout'
 import { useState } from 'react'
 import { FaCartArrowDown } from "react-icons/fa"
 import { GiProcessor } from "react-icons/gi";
+import { BsMemory } from "react-icons/bs";
+import { RiOpenSourceLine } from "react-icons/ri";
 
 export default function ComputerInfo({ computer }) {
     const { addToCart, cartItems } = useContext(ShoppingCartContext)
@@ -42,12 +44,12 @@ export default function ComputerInfo({ computer }) {
                     <i className="bi bi-laptop mr-1"></i> {computer.brand}
                 </small>
                 <small>
-                    <i className="bi bi-cpu mr-1"></i> {computer.ram}
+                    <BsMemory className='mb-1' /> {computer.ram}
                 </small>
                 <small> <i className='bi bi-hdd mr-1'></i> {computer.disk} {computer.diskType}</small>
                 <small> <i className='bi bi-aspect-ratio mr-1'></i> {computer.display}"</small>
                 <small>
-                    <i className='bi bi-motherboard mr-1'></i> {computer.os}
+                    <RiOpenSourceLine /> {computer.os}
                 </small>
                 <small>
                     <GiProcessor /> {computer.processor}
