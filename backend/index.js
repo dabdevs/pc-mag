@@ -13,11 +13,8 @@ const PORT = process.env.PORT || 3000;
 const Computer = require('../backend/src/models/Computer')
 const data = require('./MOCK_DATA.json')
 
-const corsOptions = {
-    origin: process.env.FRONTEND_ORIGIN 
-}
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static('public'));
 
