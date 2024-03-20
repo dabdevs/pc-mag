@@ -25,7 +25,7 @@ export const ComputersContextProvider = ({ children }) => {
     useEffect(() => {
         setLoading(true)
         switch (category) {
-            case 'Computers' || '':
+            case 'computers' || '':
                 getComputers(page, sort)
                     .then(({ computers }) => {
                         setComputers(computers)
@@ -37,8 +37,7 @@ export const ComputersContextProvider = ({ children }) => {
                         setLoading(false)
                     });
                 break;
-
-            case 'Keyboards':
+            case 'keyboards':
                 getKeyboards().then(keyboards => console.log('Keyboards:', keyboards))
             default:
                 break;

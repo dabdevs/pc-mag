@@ -22,7 +22,7 @@ export default function Navbar() {
   return (
     <div className="row">
       <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <div className="container px-4 px-lg-5">
+        <div className="container">
           <a className="navbar-brand text-danger" href="/">
             <h3><strong>PC Mag</strong></h3>
           </a>
@@ -46,7 +46,7 @@ export default function Navbar() {
 
             {authUser ? <DropdownList
               btnName={authUser ? <FaUserCircle style={{ fontSize: '25px' }} /> : null}
-              linkList={[{ name: authUser?.name, href: '/admin/profile' }, { name: 'Dashboard', href: '/admin' }]}
+              linkList={[{ name: authUser?.name, href: '/admin/profile' }, { name: 'Dashboard', href: '/admin/computers' }]}
               dividerItems={[{ name: <button onClick={handleLogout} className="btn btn-danger w-100">Logout</button> }]}
             /> : null}
           </div>

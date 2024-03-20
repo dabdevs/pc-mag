@@ -18,9 +18,9 @@ export default function Menu() {
                         data?.categories.map(cat => (
                             <li className="nav-item mx-3 p-0" key={cat.name}>
                                 <Link 
-                                    className={cat.name === category || typeof (category) === 'undefined' && cat.name === 'Computers' ? 'text-danger nav-link text-decoration-underline' : 'nav-link'} 
+                                    className={cat.name.toLowerCase() === category || typeof (category) === 'undefined' && cat.name === 'Computers' ? 'text-danger nav-link text-decoration-underline' : 'nav-link'} 
                                     aria-current="page" 
-                                    to={`/${cat.name}`}
+                                    to={`/${cat.name.toLowerCase()}`}
                                 > 
                                     {parse(cat.icon)}
                                     {cat.name}

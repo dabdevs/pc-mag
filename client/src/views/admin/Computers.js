@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Dashboard from '../Dashboard'
 import { destroy, getComputerFormData } from '../../api/computers'
 import ComputerForm from '../../Forms/ComputerForm'
 import ComputersTable from '../../components/computer/ComputersTable'
+import { useParams } from 'react-router-dom'
 
-export default function Computers() {
-    const [computers, setComputers] = useState([])
+export default function Computers () {
     const [loading, setLoading] = useState(false)
     const [search, setSearch] = useState('')
     const [selectedComputer, setSelectedComputer] = useState(null)
@@ -13,8 +12,10 @@ export default function Computers() {
     const [modalTitle, setModalTitle] = useState('')
     const [action, setAction] = useState('')
     const [formData, setFormData] = useState([])
+    const [computers, setComputers] = useState([])
 
     useEffect(() => {
+        console.log('Admin Computers')
         getComputerFormData().then(data => setFormData(data)).catch(err => console.log(err))
         setLoading(true)
     }, [])
@@ -39,11 +40,11 @@ export default function Computers() {
     const deleteComputer = () => {
         destroy(selectedComputer._id).then(({ _id }) => {
             setOpenModal(false)
-            setComputers(prevComputers => {
-                return prevComputers.filter((prod) =>
-                    prod._id !== _id
-                );
-            });
+            // setComputers(prevComputers => {
+            //     return prevComputers.filter((prod) =>
+            //         prod._id !== _id
+            //     );
+            // });
             alert('Computer deleted successfully')
         }).catch(err => console.log(err))
     }
@@ -53,22 +54,15 @@ export default function Computers() {
         setAction('')
     }
 
-    const handleSearch = async (e) => {
-        setSearch(e.target.value)
-        console.log('Keyword', e.target.value)
-    }
-
     return (
-        <Dashboard>
-            <section className='p-0 my-2 col-sm-12' style={{ minHeight: '80vh' }}>
-                {
-                    selectedComputer
-                    && <ComputerForm data={formData} setComputers={setComputers} closeForm={closeForm} computer={selectedComputer} />
-                }
+        <section className='p-0 my-2 col-sm-12' style={{ minHeight: '80vh' }}>
+            {
+                selectedComputer
+                && <ComputerForm data={formData} setComputers={setComputers} closeForm={closeForm} computer={selectedComputer} />
+            }
 
-                {selectedComputer === null && <ComputersTable display={'table'} setSelectedComputer={setSelectedComputer} createItem={createItem} editItem={editItem} deleteItem={deleteItem} />}
-            </section>
-        </Dashboard>
+            {selectedComputer === null && <ComputersTable display={'table'} setSelectedComputer={setSelectedComputer} createItem={createItem} editItem={editItem} deleteItem={deleteItem} />}
+        </section>
     );
 }
 

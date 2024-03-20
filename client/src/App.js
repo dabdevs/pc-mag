@@ -7,21 +7,18 @@ import CheckoutResponse from './components/Checkout/CheckoutResponse';
 import ImageUploader from './components/ImageUploader';
 import Login from './views/Login';
 import { AuthContextProvider } from './context/AuthContext';
-import Dashboard from './views/Dashboard';
+import Dashboard from './views/admin/Dashboard';
 import Computers from './views/admin/Computers';
+import Profile from './components/Profile';
+import Keyboards from './views/admin/Keyboards';
+import Chargers from './views/admin/Chargers';
+import Mice from './views/admin/Mice';
+import NotFound from './views/NotFound';
 
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <Index />
-    }, 
-    {
-      path: "/:category",
-      element: <Index />
-    },
-    {
-      path: "/search",
+      path: "/:category?",
       element: <Index />
     },
     {
@@ -42,15 +39,45 @@ function App() {
     },
     {
       path: "/admin",
-      element: <Dashboard />
+      element: <Dashboard />,
+      children: [
+        {
+          path: "",
+          element: <Computers />
+        },
+        {
+          path: "computers",
+          element: <Computers />
+        },
+        {
+          path: "keyboards",
+          element: <Keyboards />,
+          loader: null
+        },
+        {
+          path: "mice",
+          element: <Mice />,
+          loader: null
+        },
+        {
+          path: "chargers",
+          element: <Chargers />,
+          loader: null
+        },
+        {
+          path: "profile",
+          element: <Profile />,
+          loader: null
+        },
+      ]
     },
-    {
-      path: "/admin/computers",
-      element: <Computers />
-    },
+    // {
+    //   path: "/admin/computers",
+    //   element: <Computers />
+    // },
     {
       path: "*",
-      element: <p>404 page not found</p>
+      element: <NotFound />
     }
   ])
 

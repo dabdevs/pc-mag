@@ -3,6 +3,7 @@ import ShoppingCartContext from '../../context/ShoppingCartContext'
 import Checkout from '../../api/checkout'
 import { useState } from 'react'
 import { FaCartArrowDown } from "react-icons/fa"
+import { GiProcessor } from "react-icons/gi";
 
 export default function ComputerInfo({ computer }) {
     const { addToCart, cartItems } = useContext(ShoppingCartContext)
@@ -44,11 +45,12 @@ export default function ComputerInfo({ computer }) {
                     <i className="bi bi-cpu mr-1"></i> {computer.ram}
                 </small>
                 <small> <i className='bi bi-hdd mr-1'></i> {computer.disk} {computer.diskType}</small>
-                <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {computer.display}"</small>
+                <small> <i className='bi bi-aspect-ratio mr-1'></i> {computer.display}"</small>
                 <small>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-windows" viewBox="0 0 16 16">
-                        <path d="M6.555 1.375 0 2.237v5.45h6.555V1.375zM0 13.795l6.555.933V8.313H0v5.482zm7.278-5.4.026 6.378L16 16V8.395H7.278zM16 0 7.33 1.244v6.414H16V0z" />
-                    </svg> {computer.os} | {computer.processor}
+                    <i className='bi bi-motherboard mr-1'></i> {computer.os}
+                </small>
+                <small>
+                    <GiProcessor /> {computer.processor}
                 </small>
             </div>
             <div className="d-xs-grid d-flex gap-3">
