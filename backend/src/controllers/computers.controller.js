@@ -15,7 +15,6 @@ module.exports.getAll = async (req, res) => {
         // Filters
         const { category, search, formFactor, ram, os, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = process.env.RESULTS_ROWS_COUNT, orderBy } = req.query
         
-        console.log('orderBy', orderBy)
         if (category) {
             conditions.category = category
         }
@@ -76,6 +75,7 @@ module.exports.getAll = async (req, res) => {
         // Getting the numbers of computers stored in database
         const rowsCount = await Computer.countDocuments(conditions)
 
+        console.log('Computers', computers)
         return res.status(200).json({
             computers,
             rowsCount,
