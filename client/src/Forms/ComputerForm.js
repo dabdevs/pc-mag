@@ -96,7 +96,7 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
     }
 
     const removeImage = async (computerId, url) => {
-        if (confirm('Are you sure you want to delete this image?')) {
+        if (window.confirm('Are you sure you want to delete this image?')) {
             deleteImage(computerId, url).then(({ computer }) => {
                 console.log('Updated images', data.computer)
                 setImages(computer.images)
