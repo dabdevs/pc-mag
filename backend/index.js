@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose')
 const sessionSecretKey = crypto.randomBytes(64).toString('hex');
 require('dotenv').config()
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000;
 const Computer = require('../backend/src/models/Computer')
 const data = require('./MOCK_DATA.json')
 
