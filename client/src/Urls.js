@@ -1,1 +1,0 @@
-export const baseUrl = 'https://pc-mag-backend-testing.onrender.com'
