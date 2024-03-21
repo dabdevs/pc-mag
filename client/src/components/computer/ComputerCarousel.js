@@ -3,13 +3,13 @@ import Carousel from 'react-bootstrap/Carousel';
 
 export default function ComputerCarousel({ computer }) {
   return (
-    <div className='col-md-6'>
-      <Carousel className='w-100'>
+    <div className='col-md-6 h-100'>
+      <Carousel className='h-100'>
         {computer.images.length > 0 ? computer.images.map((img, i) => (
           <Carousel.Item interval={1500} key={i}>
             <img
-              style={{ height: '500px' }}
-              className="w-100"
+              style={{ height: '400px' }}
+              className="img-responsive"
               src={img}
               alt="computer image"
             />
@@ -17,8 +17,7 @@ export default function ComputerCarousel({ computer }) {
         )) : 
           <Carousel.Item interval={1500} >
             <img
-              style={{ height: '500px' }}
-              className="w-100"
+              className="h-100"
               src={'https://placehold.co/1000x800'}
               alt="computer image"
             />

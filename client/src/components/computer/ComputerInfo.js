@@ -34,12 +34,12 @@ export default function ComputerInfo({ computer }) {
     }
 
     return (
-        <div className="col-md-6">
+        <div className="col-md-6 mb-5">
             <h1 className="display-5 fw-bolder">{computer.name}</h1>
             <div className="fs-5 mb-5">
                 <b className='display-4 text-danger'>$ {(computer.price / 100).toFixed(2)}</b>
             </div>
-            <div className='text-center w-100 mb-3 justify-content-between d-flex gap-4'>
+            <div className='text-center w-100 mb-3 justify-content-between d-flex gap-2'>
                 <small>
                     <i className="bi bi-laptop mr-1"></i> {computer.brand}
                 </small>

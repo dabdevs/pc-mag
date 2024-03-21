@@ -1,2 +1,5 @@
 **/*.env
 **/node_modules/
+
+# Ignore config.json file
+config.json

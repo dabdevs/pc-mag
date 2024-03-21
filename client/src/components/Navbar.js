@@ -21,7 +21,7 @@ export default function Navbar() {
 
   return (
     <div className="row">
-      <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom px-2">
         <div className="container">
           <a className="navbar-brand text-danger" href="/">
             <h3><strong>PC Mag</strong></h3>
