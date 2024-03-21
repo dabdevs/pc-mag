@@ -8,8 +8,14 @@ import { getComputerFormData } from '../api/computers'
 
 export default function Index() {
     const [loading, setLoading] = useState(false)
+    const [computerFormData, setComputerFormData] = useState(false)
+
     useEffect(() => {
-        getComputerFormData().catch(err => console.log(err))
+        getComputerFormData().then((data) => {
+            console.log('data')
+            localStorage.setItem('computerFormData', JSON.stringify(data))
+            setComputerFormData(data)
+        }).catch(err => console.log(err))
     }, [])
 
     return (
@@ -31,7 +37,7 @@ export default function Index() {
                     <Sidebar />
 
                     <div className="col-sm-9 col-lg-10 ms-sm-auto p-4" >
-                        <Menu/>
+                        <Menu data={computerFormData}/>
 
                         {loading ?
                             <b>Loading...</b> :
