@@ -6,7 +6,7 @@ export default function ComputerCard({ computer }) {
     return (
         <div className="my-2 computer-card" role='button' onClick={() => navigate(`/computers/${computer._id}/${computer.name.split(' ').join(' - ')}`)}>
             <div className="card h-100">
-                <img className="card-img-top" height={170} src={computer?.images[0] ? computer.images[0] : '../../img/default-computer-img.jpg'} alt={'Computer image'} />
+                <img className="card-img-top" height={150} src={computer?.images[0] ? computer.images[0] : '../../img/default-computer-img.jpg'} alt={'Computer image'} />
 
                 <div className="card-body pt-2 pb-0 px-2">
                     <div className="h-100 d-flex align-content-between flex-wrap">
@@ -16,7 +16,10 @@ export default function ComputerCard({ computer }) {
                             <small>
                                 <i className="bi bi-cpu mr-1"></i> {computer.ram}
                             </small>
-                            <small> <i className='bi bi-hdd mr-1'></i> {computer.disk} {computer.diskType}</small>
+                            <small> 
+                                <i className='bi bi-hdd mr-1'></i> 
+                                {computer.disk}
+                            </small>
                             <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {computer.display}"</small>
                         </div>
 

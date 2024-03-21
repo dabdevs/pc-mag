@@ -1,12 +1,11 @@
 import React from 'react'
 import Navbar from './Navbar'
-import CartItems from './CartItems/CartItems'
 
-export default function Layout({ children, classes }) {
+export default function Layout({ children }) {
   return (
     <>
       <Navbar />
-      <main className={classes}>
+      <main>
         {children}
       </main>
     </>

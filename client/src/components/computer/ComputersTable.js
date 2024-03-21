@@ -174,14 +174,14 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
 
                     {!loading &&
                         <>
-                            <Row className='p-2'>
-                                <Col xs={9} className='mt-2 d-flex flex-column'>
+                            <Row className='pb-2'>
+                                <Col xs={8} sm={10} className='mt-2 d-flex flex-column'>
                                     <b>{searchParams.get('search')}</b>
                                     <span>{results} items</span>
                                 </Col>
-                                <Col xs={3} className='mt-2 d-flex'>
-                                    <label htmlFor='sort' className='pt-2 w-75 text-center'>Sort by:</label>
+                                <Col xs={4} sm={2} className='mt-2 d-flex'>
                                     <select id='sort' className='form-control ml-1 text-center' onChange={(e) => setSort(e.target.value)}>
+                                        <option value={''}>Sort By</option>
                                         <option value={''}>best match</option>
                                         <option value={'lowest-price'}>lowest price</option>
                                         <option value={'highest-price'}>highest price</option>
@@ -226,7 +226,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
                                     </tbody>
                                 </table> :
 
-                                <Row className='gx-3 gx-lg-4 row-cols-xs-1 row-cols-md-2 row-cols-lg-4 pb-4'>
+                                <Row className='gx-1 gx-lg-4 row-cols-2 row-cols-lg-4 pb-4'>
                                     {data?.map(computer =>
                                         <LazyLoad key={`ll-${computer._id}`} offset={100}>
                                             <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />

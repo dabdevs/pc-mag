@@ -21,7 +21,7 @@ export default function Index() {
     return (
         <div>
             <Layout>
-                <section className="py-3 banner">
+                <section className="py-3 banner" style={{ overflow: 'hidden' }}>
                     <div className="container px-4 px-lg-5 my-5">
                         <div className="text-center text-white row">
                             <h1 className="display-4 text-shadow fw-bolder mb-0">Shop Computers & Accesories</h1>
