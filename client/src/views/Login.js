@@ -41,6 +41,9 @@ export default function Login() {
                         <div className='row p-2'>
                             <p className='m-0'><small className='text-info'>Test Email: admin@pcmag.com</small></p> 
                             <p className='m-0'><small className='text-info'>Test Password: admin</small></p>
+                            <p className='m-0'><small className='text-info'>Test Credit Card Number: 4242 4242 4242 4242</small></p>
+                            <p className='m-0'><small className='text-info'>Test Credit Card Exp. Date: Any future date</small></p>
+                            <p className='m-0'><small className='text-info'>Test Credit Card CVC: 123</small></p>
                         </div>
                         <div className='row p-2'>
                             <label htmlFor='email'>Email:</label>

@@ -14,8 +14,7 @@ module.exports.getAll = async (req, res) => {
         
         // Filters
         const { category, search, formFactor, ram, os, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = process.env.RESULTS_ROWS_COUNT, orderBy } = req.query
-        
-        console.log('orderBy', orderBy)
+
         if (category) {
             conditions.category = category
         }
