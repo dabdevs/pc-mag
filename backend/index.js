@@ -50,12 +50,12 @@ mongoose.connect(process.env.MONGO_DB_URI);
 
 const DB = mongoose.connection;
 
-DB.on('connecting', function () {
+DB.on('connecting', () => {
     console.log('connecting to Database...');
-}).on('error', function (error) {
-    console.error('Error in Database connection: ' + error);
+}).on('error', (error) => {
+    console.error('Error in Database connection: ', error);
     mongoose.disconnect();
-}).on('connected', async function () {
+}).on('connected', async () => {
     console.log('Database connected!');
 
     // Create admin user if not exists (Delete later)
@@ -100,11 +100,11 @@ DB.on('connecting', function () {
     //             console.error('Error occurred:', error);
     //         });
     // })
-}).once('open', function () {
+}).once('open', () => {
     console.log('Database connection opened!');
-}).on('reconnected', function () {
+}).on('reconnected', () => {
     console.log('Database reconnected!');
-}).on('disconnected', function () {
+}).on('disconnected', () => {
     console.log('Database disconnected!');
     mongoose.connect(process.env.MONGO_DB_URI, { server: { auto_reconnect: true } });
 });
