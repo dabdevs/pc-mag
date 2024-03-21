@@ -1,5 +1,5 @@
 import { ComputersContextProvider } from './context/ComputersContext';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Index from './views/Index';
 import Computer from './views/Computer';
 import { ShoppingCartProvider } from './context/ShoppingCartContext';
@@ -43,7 +43,7 @@ function App() {
       children: [
         {
           path: "",
-          element: <Computers />
+          element: <Navigate to={'computers'} />
         },
         {
           path: "computers",
