@@ -307,6 +307,7 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
                             name='price'
                             value={form?.price ? form.price : ''}
                             type='number'
+                            min={'1'}
                             placeholder='ex: 1599.99'
                             {...register("price")}
                             onChange={(e) => setForm({ ...form, price: e.target.value })}
@@ -315,6 +316,20 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
                     </Form.Group>
                 </Col>
                 <Col xs={2}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Quantity </Form.Label>
+                        <Form.Control
+                            name='quantity'
+                            min={'1'}
+                            value={form?.quantity ? form.quantity : ''}
+                            type='number'
+                            {...register("quantity")}
+                            onChange={(e) => setForm({ ...form, quantity: e.target.value })}
+                        />
+                        <small className='text-danger'>{errors.quantity?.message}</small>
+                    </Form.Group>
+                </Col>
+                {form._id ? <Col xs={2}>
                     <Form.Group className="mb-3">
                         <Form.Label>Status</Form.Label>
                         <Form.Select
@@ -331,7 +346,7 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
                         </Form.Select>
                         <small className='text-danger'>{errors.status?.message}</small>
                     </Form.Group>
-                </Col>
+                </Col> : null}
             </Row>
 
             {images ? <Row>
