@@ -2,4 +2,4 @@
 **/node_modules/
 
 # Ignore config.json file
-src/client/config.json
+client/src/config.json

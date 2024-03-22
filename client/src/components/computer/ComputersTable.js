@@ -20,6 +20,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
     const [results, setResults] = useState(0);
     const [limit, setLimit] = useState('');
     const [searchParams, setSearchParams] = useSearchParams()
+    const search = searchParams.get('search')
     const columns = useMemo(() => [
         {
             Header: 'Brand',
@@ -166,112 +167,126 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
             </Row>}
             <div className={`${display === 'table' ? 'card' : ''}`}>
                 {display === 'table' && <div className='card-header'>
-                    <Filter source='admin'/>
+                    <Filter source='admin' />
                 </div>}
 
                 <div className={`card-body p-0 ${display === 'cards' ? 'border-0' : ''}`}>
-                    {loading && <b>Loading...</b>}
+                    {
+                        loading ? <b>Loading...</b> :
 
-                    {!loading &&
-                        <>
-                            <Row className='pb-2'>
-                                <Col xs={8} sm={10} className='mt-2 d-flex flex-column'>
-                                    <b>{searchParams.get('search')}</b>
-                                    <span>{results} items</span>
-                                </Col>
-                                <Col xs={4} sm={2} className='mt-2 d-flex'>
-                                    <select id='sort' className='form-control ml-1 text-center' onChange={(e) => setSort(e.target.value)}>
-                                        <option value={''}>Sort By</option>
-                                        <option value={''}>best match</option>
-                                        <option value={'lowest-price'}>lowest price</option>
-                                        <option value={'highest-price'}>highest price</option>
-                                    </select>
-                                </Col>
-                            </Row>
+                            results > 0 ?
+                                <div>
+                                    <Row className='pb-2'>
+                                        <Col xs={8} sm={10} className='mt-2 d-flex flex-column'>
+                                            <b>{search}</b>
+                                            <span>{results} items</span>
+                                        </Col>
+                                        <Col xs={4} sm={2} className='mt-2 d-flex'>
+                                            <select id='sort' className='form-control ml-1 text-center' onChange={(e) => setSort(e.target.value)}>
+                                                <option value={''}>Sort By</option>
+                                                <option value={''}>best match</option>
+                                                <option value={'lowest-price'}>lowest price</option>
+                                                <option value={'highest-price'}>highest price</option>
+                                            </select>
+                                        </Col>
+                                    </Row>
 
-                            {display === 'table' ?
-                                <table {...getTableProps()} className='w-100 table table-striped border'>
-                                    <thead>
-                                        {
-                                            headerGroups.map(headerGroup => (
-                                                <tr className='border' {...headerGroup.getHeaderGroupProps()}>
+                                    {
+                                        display === 'table' ?
+                                            <table {...getTableProps()} className='w-100 table table-striped border'>
+                                                <thead>
                                                     {
-                                                        headerGroup.headers.map(column => (
-                                                            <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                                                {column.render('Header')}
-                                                                <span>
-                                                                    {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
-                                                                </span>
-                                                            </th>
+                                                        headerGroups.map(headerGroup => (
+                                                            <tr className='border' {...headerGroup.getHeaderGroupProps()}>
+                                                                {
+                                                                    headerGroup.headers.map(column => (
+                                                                        <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                                                            {column.render('Header')}
+                                                                            <span>
+                                                                                {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
+                                                                            </span>
+                                                                        </th>
+                                                                    ))
+                                                                }
+                                                            </tr>
                                                         ))
                                                     }
-                                                </tr>
-                                            ))
-                                        }
-                                    </thead>
+                                                </thead>
 
-                                    <tbody {...getTableBodyProps()}>
-                                        {rows.map(row => {
-                                            prepareRow(row)
-                                            return (
-                                                <tr className='border' {...row.getRowProps()}>
-                                                    {
-                                                        row.cells.map(cell => {
-                                                            return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                                        })
-                                                    }
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </table> :
+                                                <tbody {...getTableBodyProps()}>
+                                                    {rows.map(row => {
+                                                        prepareRow(row)
+                                                        return (
+                                                            <tr className='border' {...row.getRowProps()}>
+                                                                {
+                                                                    row.cells.map(cell => {
+                                                                        return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                                                    })
+                                                                }
+                                                            </tr>
+                                                        )
+                                                    })}
+                                                </tbody>
+                                            </table> :
+                                            <Row className='gx-1 gx-lg-4 row-cols-2 row-cols-lg-4 pb-4'>
+                                                {data?.map(computer =>
+                                                    <LazyLoad key={`ll-${computer._id}`} offset={100}>
+                                                        <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />
+                                                    </LazyLoad>
+                                                )}
+                                            </Row>
+                                    }
 
-                                <Row className='gx-1 gx-lg-4 row-cols-2 row-cols-lg-4 pb-4'>
-                                    {data?.map(computer =>
-                                        <LazyLoad key={`ll-${computer._id}`} offset={100}>
-                                            <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />
-                                        </LazyLoad>
-                                    )}
-                                </Row>
-                            }
-                        </>
+                                </div> :
+                                <div className='text-center p-5 h6'>
+                                    <p className='display-6'>{search}</p>
+                                    No results
+                                </div>
+
                     }
                 </div>
 
-                {loading ? null : <div className='card-footer d-flex gap-1'>
-                    <div>
-                        Page{' '}
-                        <strong>
-                            {currentPage} of {totalPages}
-                        </strong>
-                        {' '}
-                    </div>
+                {
+                    !loading && results > 0 ?
+                        <div className='card-footer row'>
+                            <div className='col-sm-12 col-md-6'>
+                                <div className='d-flex justify-content-between'>
+                                    <div>
+                                        Page{' '}
+                                        <strong>
+                                            {currentPage} of {totalPages}
+                                        </strong>
+                                        {' '}
+                                    </div>
 
-                    <div className='d-flex mx-3'>
-                        Show: {'  '}
-                        <select
-                            className='form-control form-control-sm'
-                            value={limit}
-                            onChange={e => setLimit(Number(e.target.value))}
-                            style={{ width: '50px' }}
-                        >
-                            {
-                                [10, 25, 50].map(pageSize => (
-                                    <option key={pageSize} value={pageSize}>
-                                        {pageSize}
-                                    </option>
-                                ))
-                            }
-                        </select>
-                    </div>
+                                    <div className='d-flex gap-2'>
+                                        Show: {'  '}
+                                        <select
+                                            className='form-control form-control-sm'
+                                            value={limit}
+                                            onChange={e => setLimit(Number(e.target.value))}
+                                            style={{ width: '50px' }}
+                                        >
+                                            {
+                                                [10, 25, 50].map(pageSize => (
+                                                    <option key={pageSize} value={pageSize}>
+                                                        {pageSize}
+                                                    </option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div style={{ width: '400px' }}>
-                        <button className='btn btn-sm btn-outline-dark me-1' onClick={previousPage} disabled={currentPage <= 1}>Previous</button>
-                        <button className='btn btn-sm btn-outline-dark me-1' onClick={firstPage} disabled={currentPage === 1}>First</button>
-                        <button className='btn btn-sm btn-outline-dark me-1' onClick={lastPage} disabled={currentPage >= totalPages}>Last</button>
-                        <button className="btn btn-sm btn-outline-dark" onClick={nextPage} disabled={currentPage >= totalPages}>Next</button>
-                    </div>
-                </div>}
+                            <div className='d-flex col-sm-12 col-md-6'>
+                                <button className='btn btn-sm btn-outline-dark me-1' onClick={previousPage} disabled={currentPage <= 1}>Previous</button>
+                                <button className='btn btn-sm btn-outline-dark me-1' onClick={firstPage} disabled={currentPage === 1}>First</button>
+                                <button className='btn btn-sm btn-outline-dark me-1' onClick={lastPage} disabled={currentPage >= totalPages}>Last</button>
+                                <button className="btn btn-sm btn-outline-dark" onClick={nextPage} disabled={currentPage >= totalPages}>Next</button>
+                            </div>
+                        </div> : null
+                }
             </div>
         </>
     )
