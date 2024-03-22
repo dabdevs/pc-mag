@@ -14,13 +14,13 @@ export default function ComputerCard({ computer }) {
 
                         <div className='text-center w-100 justify-content-between d-flex gap-3'>
                             <small>
-                                <i className="bi bi-cpu mr-1"></i> {computer.ram}
+                                <i className="d-none d-sm-block bi bi-cpu mr-1"></i> {computer.ram}
                             </small>
                             <small> 
-                                <i className='bi bi-hdd mr-1'></i> 
+                                <i className='d-none d-sm-block bi bi-hdd mr-1'></i> 
                                 {computer.disk}
                             </small>
-                            <small> <i className='bi bi-arrows-fullscreen mr-1'></i> {computer.display}"</small>
+                            <small> <i className='d-none d-sm-block bi bi-arrows-fullscreen mr-1'></i> {computer.display}"</small>
                         </div>
 
                         <div className='text-center w-100'>
