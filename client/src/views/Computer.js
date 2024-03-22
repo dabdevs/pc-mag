@@ -26,7 +26,7 @@ export default function Computer() {
 
     return (
         <Layout>
-            {computer ? (<section className="container bg-success">
+            {computer ? (<section className="container">
                 <div className="row p-2 align-items-center" style={{ height: '400px' }}>
                     <ComputerCarousel computer={computer} />
                     <ComputerInfo computer={computer} />
