@@ -36,7 +36,7 @@ export default function ComputerCard({ computer }) {
                 </div>
             </div>
 
-            <div className="d-flex d-sm-none bg-white p-2">
+            <div className="d-flex d-sm-none bg-white border p-2">
                 <div className='w-50'>
                     <img className="w-100" height={150} src={computer?.images[0] ? computer.images[0] : '../../img/default-computer-img.jpg'} alt={'Computer image'} />
                 </div>
