@@ -38,7 +38,7 @@ export default function Navbar() {
 
               {
                 cartItems.length > 0 &&
-                <Dropdown.Menu style={{ width: '800px' }}>
+                <Dropdown.Menu>
                   <CartItems />
                 </Dropdown.Menu>
               }
