@@ -26,8 +26,8 @@ export default function Computer() {
 
     return (
         <Layout>
-            {computer ? (<section className="container" style={{ height: '400px' }}>
-                <div className="row p-2 align-items-center">
+            {computer ? (<section className="container bg-success">
+                <div className="row p-2 align-items-center" style={{ height: '400px' }}>
                     <ComputerCarousel computer={computer} />
                     <ComputerInfo computer={computer} />
                     <SimilarComputers similarComputers={similarComputers} />
