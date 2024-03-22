@@ -248,9 +248,9 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
 
                 {
                     !loading && results > 0 ?
-                        <div className='card-footer row'>
-                            <div className='col-sm-12 col-md-6'>
-                                <div className='d-flex justify-content-between'>
+                        <Row className='card-footer'>
+                            <div xs={12} className='mt-1'>
+                                <div className='d-flex gap-3'>
                                     <div>
                                         Page{' '}
                                         <strong>
@@ -279,13 +279,13 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
                                 </div>
                             </div>
 
-                            <div className='d-flex col-sm-12 col-md-6'>
+                            <div xs={12} className='d-flex mt-1'>
                                 <button className='btn btn-sm btn-outline-dark me-1' onClick={previousPage} disabled={currentPage <= 1}>Previous</button>
                                 <button className='btn btn-sm btn-outline-dark me-1' onClick={firstPage} disabled={currentPage === 1}>First</button>
                                 <button className='btn btn-sm btn-outline-dark me-1' onClick={lastPage} disabled={currentPage >= totalPages}>Last</button>
                                 <button className="btn btn-sm btn-outline-dark" onClick={nextPage} disabled={currentPage >= totalPages}>Next</button>
                             </div>
-                        </div> : null
+                        </Row> : null
                 }
             </div>
         </>
