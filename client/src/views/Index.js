@@ -33,7 +33,7 @@ export default function Index() {
                     </div>
                 </section>
 
-                <div className='row py-lg-4'>
+                <section className='row py-lg-4 background-gray'>
                     <Sidebar />
 
                     <div className="col-sm-9 col-lg-10 ms-sm-auto p-4" >
@@ -44,7 +44,7 @@ export default function Index() {
                             <ComputersTable display={'cards'} />
                         }
                     </div >
-                </div>
+                </section>
             </Layout>
         </div>
     )
