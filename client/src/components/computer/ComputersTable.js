@@ -228,7 +228,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
                                                     })}
                                                 </tbody>
                                             </table> :
-                                            <Row className='gx-1 gx-lg-4 row-cols-2 row-cols-lg-4 pb-4'>
+                                            <Row className='gx-1 gx-lg-4 row-cols-sm-2 row-cols-lg-4 pb-4'>
                                                 {data?.map(computer =>
                                                     <LazyLoad key={`ll-${computer._id}`} offset={100}>
                                                         <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />
