@@ -71,7 +71,7 @@ export default function Filter({ source, currentPage }) {
     const clearFilters = async () => {
         try {
             if (source === 'admin') setSearch('')
-            else document.getElementById('sort').value = ''
+            
             setMinPrice('')
             setMaxPrice('')
             setFormFactor([])

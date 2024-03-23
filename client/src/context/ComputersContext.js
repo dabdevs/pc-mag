@@ -22,28 +22,27 @@ export const ComputersContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(false)
     const [filtersCleared, setFiltersCleared] = useState(false)
 
-    useEffect(() => {
-        setLoading(true)
-        switch (category) {
-            case 'computers' || '':
-                getComputers(page, sort)
-                    .then(({ computers }) => {
-                        setComputers(computers)
-                        setCategory(window.location.href)
-                        setLoading(false)
-                    })
-                    .catch(err => {
-                        console.error(err)
-                        setLoading(false)
-                    });
-                break;
-            case 'keyboards':
-                getKeyboards().then(keyboards => console.log('Keyboards:', keyboards))
-            default:
-                break;
-        }
-
-    }, [search, page, filters, category])
+    // useEffect(() => {
+    //     setLoading(true)
+    //     switch (category) {
+    //         case 'computers' || '':
+    //             getComputers(page, sort)
+    //                 .then(({ computers }) => {
+    //                     setComputers(computers)
+    //                     setCategory(window.location.href)
+    //                     setLoading(false)
+    //                 })
+    //                 .catch(err => {
+    //                     console.error(err)
+    //                     setLoading(false)
+    //                 });
+    //             break;
+    //         case 'keyboards':
+    //             getKeyboards().then(keyboards => console.log('Keyboards:', keyboards))
+    //         default:
+    //             break;
+    //     }
+    // }, [search, page, filters, category])
 
     const prevBtnClasses = page === 1 ? 'page-item disabled' : 'page-item'
     const nextBtnClasses = totalPages === currentPage ? 'page-item disabled' : 'page-item'

@@ -10,6 +10,7 @@ import { FaPlus } from "react-icons/fa";
 import Filter from './Filter'
 import ComputerCard from './ComputerCard'
 import LazyLoad from 'react-lazyload'
+import { useComputersContext } from '../../context/ComputersContext'
 
 export default function ComputersTable({ setSelectedComputer, createItem, display }) {
     const [data, setData] = useState([]);
@@ -21,6 +22,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
     const [limit, setLimit] = useState('');
     const [searchParams, setSearchParams] = useSearchParams()
     const search = searchParams.get('search')
+    // const { computers, totalPages, setTotalPages, rowsCount } = useComputersContext()
     const columns = useMemo(() => [
         {
             Header: 'Brand',
@@ -102,6 +104,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
 
     useEffect(() => {
         setLoading(true)
+        console.log('reload table')
         getComputers(currentPage, sort, limit)
             .then(({ computers, totalPages, rowsCount }) => {
                 setData(computers)
@@ -113,7 +116,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
                 setLoading(false)
                 console.log(err)
             })
-    }, [currentPage, limit, searchParams, sort])
+    }, [sort, window.location.href])
 
     const {
         getTableProps,
@@ -154,7 +157,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
         setCurrentPage(totalPages)
         setSearchParams({ page: totalPages })
     }
-
+    console.log('Component reloaded')
     return (
         <>
             {display === 'table' && <Row>
@@ -242,7 +245,6 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
                                     <p className='display-6'>{search}</p>
                                     No results
                                 </div>
-
                     }
                 </div>
 
