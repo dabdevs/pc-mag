@@ -3,7 +3,7 @@ import { useShoppingCartContext } from '../../context/ShoppingCartContext'
 import './cart-items.css'
 import Checkout from '../../api/checkout'
 import { BsFillCartCheckFill } from 'react-icons/bs';
-import ComputerCard from '../computer/ComputerCard';
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function CartItems() {
     const [checkingOut, setCheckingOut] = useState(false)
@@ -27,75 +27,31 @@ export default function CartItems() {
     }
 
     return (
-        // <div className='p-0 table-responsive d-none'>
-        //     <table className='w-100'>
-        //         <thead className='border'>
-        //             <tr>
-        //                 <th>Computer</th>
-        //                 <th>OS | Processor</th>
-        //                 <th>Price</th>
-        //             </tr>
-        //         </thead>
-        //         <tbody>
-        //             {cartItems.map(item => {
-        //                 total = total + item.price / 100
-
-        //                 return (<tr key={item._id}>
-        //                     <td><img src={item.image} height={50}></img> {item.name}</td>
-        //                     <td className='hidden-xs'>{item.os} | {item.processor}</td>
-        //                     <td>$ {(item.price / 100).toFixed(2)}</td>
-        //                     <td><button className='btn btn-sm btn-danger' onClick={() => removeFromCart(item._id)}>Remove</button></td>
-        //                 </tr>)
-        //             })}
-        //             <tr>
-        //                 <td colSpan={2}><h5>Total: $ {total.toFixed(2)}</h5></td>
-        //                 <td colSpan={2}>
-        //                     {cartItems.length > 0 ? <button className="btn btn-dark d-flex btn-block mx-auto" type="button" onClick={handleCheckout}>
-        //                         {checkingOut ? <span><span class="spinner-border spinner-border-sm"></span> Checkout...</span> : <span><BsFillCartCheckFill className='mr-1' />  Checkout</span>}
-        //                     </button> : null}
-        //                 </td>
-        //             </tr>
-        //         </tbody>
-        //     </table>
-        //     <div className='d-md-none'>
-        //         {cartItems.map(item => {
-        //             return (
-        //                 <div className='d-flex p-3 item-xs' key={item._id}>
-        //                     <img src={item.image} className='w-25' height={40}></img>
-        //                     <div className='w-75 px-2'>
-        //                         <h5>{item.name}</h5>
-        //                         <h6 className='text-danger'>$ {item.price.toFixed(2)}</h6>
-        //                     </div>
-        //                 </div>
-        //             )
-        //         })}
-
-        //         <div className='py-2 d-flex justify-content-between'>
-
-        //             <h5 className='m-0'>Total: $ {total.toFixed(2)}</h5>
-
-        //             <button className="btn btn-dark pull-right" type="button" onClick={handleCheckout}>
-        //                 {checkingOut ? <span><span class="spinner-border spinner-border-sm"></span> Checkout...</span> : <span><BsFillCartCheckFill className='mr-1' />  Checkout</span>}
-        //             </button>
-        //         </div>
-        //     </div>
-        // </div>
-        <>
-        <div className='row px-1' style={{ width: '320px' }}>
+        <ul className='list-group p-0' style={{ width: '400px' }}>
             {
                 cartItems.map(item => {
                     total = total + item.price / 100
-                    return <ComputerCard className='bg-danger' key={item._id} computer={item} display='list' />
+                    return (
+                        <li className='list-item border-bottom p-2' key={`li-${item._id}`}>
+                            <div className='d-flex gap-2 justify-content-between'>
+                                <img src={item.images.length > 0 ? item.images[0] : 'https://placehold.co/50x50'} style={{ height: '50px' }} />
+                                <div className='p-1 text-truncate'>
+                                    <h6 className='text-truncate'>{item.name}</h6>
+                                    <b className='float-right'>${item.price / 100}</b>
+                                </div>
+                                <button className='btn btn-sm' onClick={() => removeFromCart(item._id)} style={{ height: '40px' }}><FaTrashAlt /></button>
+                            </div>
+                        </li>
+                    )
                 })
             }
-            <div className='py-2 d-flex justify-content-between'>
-                <h6 className='m-0'>Total: $ {total.toFixed(2)}</h6>
+            <li className='list-item p-2 d-flex justify-content-between'>
+                <h6 className='mt-2'>Total: $ {total.toFixed(2)}</h6>
 
                 <button className="btn btn-danger pull-right" type="button" onClick={handleCheckout}>
                     {checkingOut ? <span><span class="spinner-border spinner-border-sm"></span> Checkout...</span> : <span><BsFillCartCheckFill className='mr-1' />  Checkout</span>}
                 </button>
-            </div>
-        </div>
-        </>
+            </li>
+        </ul>
     )
 }

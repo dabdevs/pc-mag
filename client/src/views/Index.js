@@ -5,6 +5,7 @@ import SearchForm from '../components/SearchForm'
 import Menu from '../components/Menu'
 import ComputersTable from '../components/computer/ComputersTable'
 import { getComputerFormData } from '../api/computers'
+import Filter from '../components/computer/Filter'
 
 export default function Index() {
     const [loading, setLoading] = useState(false)
@@ -12,7 +13,6 @@ export default function Index() {
 
     useEffect(() => {
         getComputerFormData().then((data) => {
-            console.log('data')
             localStorage.setItem('computerFormData', JSON.stringify(data))
             setComputerFormData(data)
         }).catch(err => console.log(err))
@@ -33,8 +33,14 @@ export default function Index() {
                     </div>
                 </section>
 
-                <section className='row py-lg-4 background-gray'>
-                    <Sidebar />
+                <section className='row p-lg-4 background-gray'>
+                    <div className='d-none d-sm-block col-sm-3 col-lg-2 px-2'>
+                        <Filter />
+                    </div>
+
+                    <div className='d-sm-none col-sm-3 col-lg-2 p-4'>
+                        <Filter display='mobile' />
+                    </div>
 
                     <div className="col-sm-9 col-lg-10 ms-sm-auto p-4" >
                         <Menu data={computerFormData}/>
