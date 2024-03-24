@@ -402,10 +402,10 @@ export default function Filter({ source, currentPage }) {
             </Row>
             <Row>
                 <Col xs={`${source === 'admin' ? 4 : 12}`} className={`${source === 'admin' ? 'd-flex gap-2' : ''}`}>
-                    <Button disabled={disabled} type="submit" className="btn btn-dark w-100">
+                    <Button disabled={disabled} type="submit" className="btn btn-dark w-100 mb-1">
                         <i className="bi bi-funnel"></i> Filter
                     </Button>
-                    {source === 'admin' && <Button onClick={clearFilters} type="button" className="btn btn-danger w-100" disabled={disabled}>
+                    {<Button onClick={clearFilters} type="button" className="btn btn-danger w-100 mt-1" disabled={disabled}>
                         <FaTrashAlt /> Clear filters
                     </Button>}
                 </Col>

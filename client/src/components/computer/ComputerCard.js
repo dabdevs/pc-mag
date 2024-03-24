@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function ComputerCard({ computer }) {
@@ -37,12 +37,13 @@ export default function ComputerCard({ computer }) {
                 </div>
             </div>
 
+            {/* Mobile view */}
             <div className="d-flex d-sm-none bg-white border p-2">
-                <div className='w-50'>
-                    <img className="w-100" height={150} src={computer?.images[0] ? computer.images[0] : '../../img/default-computer-img.jpg'} alt={'Computer image'} />
+                <div className='w-25'>
+                    <img className="w-100 mt-4" height={80} src={computer?.images[0] ? computer.images[0] : '../../img/default-computer-img.jpg'} alt={'Computer image'} />
                 </div>
 
-                <div className="pt-2 pb-0 px-2 w-50">
+                <div className="pb-0 p-2 w-75">
                     <div className="h-100">
                         <h5 className="text-center fw-bolder text-truncate mb-3">{computer.name}</h5>
 

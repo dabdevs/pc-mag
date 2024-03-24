@@ -9,8 +9,6 @@ import Col from 'react-bootstrap/Col';
 import { FaPlus } from "react-icons/fa";
 import Filter from './Filter'
 import ComputerCard from './ComputerCard'
-import LazyLoad from 'react-lazyload'
-import { useComputersContext } from '../../context/ComputersContext'
 
 export default function ComputersTable({ setSelectedComputer, createItem, display }) {
     const [data, setData] = useState([]);
@@ -22,7 +20,6 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
     const [limit, setLimit] = useState('');
     const [searchParams, setSearchParams] = useSearchParams()
     const search = searchParams.get('search')
-    // const { computers, totalPages, setTotalPages, rowsCount } = useComputersContext()
     const columns = useMemo(() => [
         {
             Header: 'Brand',
@@ -104,7 +101,6 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
 
     useEffect(() => {
         setLoading(true)
-        console.log('reload table')
         getComputers(currentPage, sort, limit)
             .then(({ computers, totalPages, rowsCount }) => {
                 setData(computers)
@@ -157,7 +153,9 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
         setCurrentPage(totalPages)
         setSearchParams({ page: totalPages })
     }
-    console.log('Component reloaded')
+
+    if (loading) return <b>Loading...</b>
+
     return (
         <>
             {display === 'table' && <Row>
@@ -168,6 +166,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
                     <button className='btn btn-success ms-auto' onClick={createItem}><FaPlus /> New Computer</button>
                 </Col>
             </Row>}
+
             <div className={`${display === 'table' ? 'card' : ''}`}>
                 {display === 'table' && <div className='card-header'>
                     <Filter source='admin' />
@@ -175,81 +174,80 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
 
                 <div className={`card-body p-0 ${display === 'cards' ? 'border-0' : ''}`}>
                     {
-                        loading ? <b>Loading...</b> :
+                        results > 0 ?
+                            <div>
+                                <Row className='pb-2'>
+                                    <Col xs={8} sm={10} className='mt-2 d-flex flex-column'>
+                                        <b>{search}</b>
+                                        <span>{results} items</span>
+                                    </Col>
+                                    <Col xs={4} sm={2} className='mt-2 d-flex'>
+                                        <select id='sort' className='form-control ml-1 text-center' onChange={(e) => setSort(e.target.value)}>
+                                            <option value={''}>Sort By</option>
+                                            <option value={''}>best match</option>
+                                            <option value={'lowest-price'}>lowest price</option>
+                                            <option value={'highest-price'}>highest price</option>
+                                        </select>
+                                    </Col>
+                                </Row>
 
-                            results > 0 ?
-                                <div>
-                                    <Row className='pb-2'>
-                                        <Col xs={8} sm={10} className='mt-2 d-flex flex-column'>
-                                            <b>{search}</b>
-                                            <span>{results} items</span>
-                                        </Col>
-                                        <Col xs={4} sm={2} className='mt-2 d-flex'>
-                                            <select id='sort' className='form-control ml-1 text-center' onChange={(e) => setSort(e.target.value)}>
-                                                <option value={''}>Sort By</option>
-                                                <option value={''}>best match</option>
-                                                <option value={'lowest-price'}>lowest price</option>
-                                                <option value={'highest-price'}>highest price</option>
-                                            </select>
-                                        </Col>
-                                    </Row>
+                                {
+                                    display === 'table' ?
+                                        <table {...getTableProps()} className='w-100 table table-striped border'>
+                                            <thead>
+                                                {
+                                                    headerGroups.map(headerGroup => (
+                                                        <tr className='border' {...headerGroup.getHeaderGroupProps()}>
+                                                            {
+                                                                headerGroup.headers.map(column => (
+                                                                    <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                                                        {column.render('Header')}
+                                                                        <span>
+                                                                            {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
+                                                                        </span>
+                                                                    </th>
+                                                                ))
+                                                            }
+                                                        </tr>
+                                                    ))
+                                                }
+                                            </thead>
 
-                                    {
-                                        display === 'table' ?
-                                            <table {...getTableProps()} className='w-100 table table-striped border'>
-                                                <thead>
-                                                    {
-                                                        headerGroups.map(headerGroup => (
-                                                            <tr className='border' {...headerGroup.getHeaderGroupProps()}>
-                                                                {
-                                                                    headerGroup.headers.map(column => (
-                                                                        <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                                                            {column.render('Header')}
-                                                                            <span>
-                                                                                {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
-                                                                            </span>
-                                                                        </th>
-                                                                    ))
-                                                                }
-                                                            </tr>
-                                                        ))
-                                                    }
-                                                </thead>
-
-                                                <tbody {...getTableBodyProps()}>
-                                                    {rows.map(row => {
-                                                        prepareRow(row)
-                                                        return (
-                                                            <tr className='border' {...row.getRowProps()}>
-                                                                {
-                                                                    row.cells.map(cell => {
-                                                                        return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                                                    })
-                                                                }
-                                                            </tr>
-                                                        )
-                                                    })}
-                                                </tbody>
-                                            </table> :
-                                            <Row className='gx-1 gx-lg-4 row-cols-sm-2 row-cols-lg-4 pb-4'>
-                                                {data?.map(computer =>
-                                                    <LazyLoad key={`ll-${computer._id}`} offset={100}>
-                                                        <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />
-                                                    </LazyLoad>
-                                                )}
-                                            </Row>
-                                    }
-
-                                </div> :
-                                <div className='text-center p-5 h6'>
-                                    <p className='display-6'>{search}</p>
-                                    No results
-                                </div>
+                                            <tbody {...getTableBodyProps()}>
+                                                {rows.map(row => {
+                                                    prepareRow(row)
+                                                    return (
+                                                        <tr className='border' {...row.getRowProps()}>
+                                                            {
+                                                                row.cells.map(cell => {
+                                                                    return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                                                })
+                                                            }
+                                                        </tr>
+                                                    )
+                                                })}
+                                            </tbody>
+                                        </table> :
+                                        <Row className='gx-1 gx-lg-4 row-cols-sm-2 row-cols-lg-4 pb-4'>
+                                            {rows.map(row => {
+                                                prepareRow(row)
+                                                const computer = row.original
+                                                return (
+                                                    <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />
+                                                )
+                                            })}
+                                        </Row>
+                                }
+                            </div> :
+                            <div className='text-center p-5 h6'>
+                                <p className='display-6'>{search}</p>
+                                No results
+                            </div>
                     }
                 </div>
 
                 {
-                    !loading && results > 0 ?
+                    results > 0 ?
                         <Row className='card-footer'>
                             <div xs={12} className='mt-1'>
                                 <div className='d-flex gap-3'>
