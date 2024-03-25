@@ -10,7 +10,7 @@ const s3 = new S3Service()
 
 module.exports.getAll = async (req, res) => {
     try {
-        const conditions = {status: 'Published'}
+        const conditions = req.user.role.includes('admin') ? {} : {status: 'Published'}
         
         // Filters
         const { category, search, formFactor, ram, os, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = process.env.RESULTS_ROWS_COUNT, orderBy } = req.query
