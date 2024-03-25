@@ -10,7 +10,7 @@ const s3 = new S3Service()
 
 module.exports.getAll = async (req, res) => {
     try {
-        const conditions = {}
+        const conditions = {status: 'Published'}
         
         // Filters
         const { category, search, formFactor, ram, os, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = process.env.RESULTS_ROWS_COUNT, orderBy } = req.query
@@ -20,7 +20,6 @@ module.exports.getAll = async (req, res) => {
         }
 
         if (search) {
-            console.log('searching...')
             conditions.name = { '$regex': search, '$options': 'i' }
         }
 
@@ -29,23 +28,23 @@ module.exports.getAll = async (req, res) => {
         }
 
         if (ram && ram.length > 0) {
-            conditions.ram = { '$in': ram }
+            conditions.ram = Array.isArray(ram) ? { '$in': ram } : ram
         }
 
         if (os && os.length > 0) {
-            conditions.os = { '$in': os }
+            conditions.os = Array.isArray(os) ? { '$in': os } : os
         }
 
         if (processor && processor.length > 0) {
-            conditions.processor = { '$in': processor }
+            conditions.processor = Array.isArray(processor) ? { '$in': processor } : processor
         }
 
         if (diskType && diskType.length > 0) {
-            conditions.diskType = { '$in': diskType }
+            conditions.diskType = Array.isArray(diskType) ? { '$in': diskType } : diskType
         }
 
         if (disk && disk.length > 0) {
-            conditions.disk = { '$in': disk }
+            conditions.disk = Array.isArray(disk) ? { '$in': disk } : disk
         }
 
         if (maxPrice) {
@@ -66,21 +65,21 @@ module.exports.getAll = async (req, res) => {
             sort = { price: orderBy === 'lowest-price' ? 1 : -1 }
         }
 
-        // Get collection
-        const computers = await Computer.find(conditions)
-            .limit(limit * 1)
-            .skip((Number(page) - 1) * limit)
-            .sort(sort)
-
-        // Getting the numbers of computers stored in database
-        const rowsCount = await Computer.countDocuments(conditions)
-
+        const [computers, rowsCount] = await Promise.all([
+            Computer.aggregate([
+                { $match: conditions },
+                { $sort: sort },
+                { $skip: (Number(page) - 1) * limit },
+                { $limit: Number(limit) }
+            ]),
+            Computer.countDocuments(conditions)
+        ]);
         return res.status(200).json({
             computers,
             rowsCount,
             totalPages: Math.ceil(rowsCount / limit),
             currentPage: Number(page)
-        })
+        });
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
