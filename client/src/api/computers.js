@@ -3,7 +3,7 @@ import config from '../../src/config'
 
 const baseUrl = config.apiUrl;
 
-export const getComputers = async (page, sort = '', limit=null) => {
+export const getComputers = async (page, sort = '', limit=null, token=null) => {
     try {
         let url = `${baseUrl}/api/computers${window.location.search}`
 
@@ -15,7 +15,7 @@ export const getComputers = async (page, sort = '', limit=null) => {
             url += url.includes('?') ? `&limit=${limit}` : `?limit=${limit}`
         }
 
-        const { data } = await axios.get(url)
+        const { data } = await axios.get(url, { headers: { "Authorization": `Bearer ${token}` } })
 
         return data
     } catch (err) {

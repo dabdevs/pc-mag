@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import ImageUploader from '../components/ImageUploader';
 import * as yup from "yup"
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const schema = yup
     .object({
@@ -28,7 +30,7 @@ const schema = yup
     })
     .required()
 
-export default function ComputerForm({ computer, setComputers, closeForm, data}) {
+export default function ComputerForm({ computer, setComputers, setSelectedComputer, data}) {
     const initialState = {
         _id: '',
         name: '',
@@ -60,6 +62,10 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
         formState: { errors }
     } = useForm({ resolver: yupResolver(schema) })
 
+    const closeForm = () => {
+        setSelectedComputer(null)
+    }
+
     const handleCreate = () => {
         console.log('Form', form)
         create(form).then(({ computer }) => {
@@ -67,10 +73,14 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
             setComputers(prevComputers => {
                 return [computer, ...prevComputers]
             });
-            setAlert({ message: 'Computer created successfully', class: 'success' })
+            toast.success("Computer created successfully", {
+                position: "bottom-right"
+            });
         }).catch(error => {
             if (error && error?.response.status === 422) {
-                setAlert({ message: error?.response.data.error.errors[0], class: 'danger' })
+                toast.error(error?.response.data.error.errors[0], {
+                    position: "bottom-right"
+                });
             }
         })
     }
@@ -87,10 +97,14 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
                 return prevComputers.map(prod => prod._id === computer._id ? computer : prod);
             });
             setForm(computer)
-            setAlert({ message: 'Computer updated successfully', class: 'success' })
+            toast.success("Computer updated successfully", {
+                position: "bottom-right"
+            });
         }).catch(error => {
             if (error?.response.status === 422) {
-                setAlert({ message: error.response.data.error.errors[0], class: 'danger' })
+                toast.error(error.response.data.error.errors[0], {
+                    position: "bottom-right"
+                });
             }
         })
     }
@@ -98,7 +112,6 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
     const removeImage = async (computerId, url) => {
         if (window.confirm('Are you sure you want to delete this image?')) {
             deleteImage(computerId, url).then(({ computer }) => {
-                console.log('Updated images', data.computer)
                 setImages(computer.images)
                 setComputers(prevComputers => {
                     return prevComputers.map(prod => {
@@ -110,10 +123,16 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
                     });
                 });
             })
-                .then(() => setAlert({ class: 'success', message: 'Image deleted successfully' }))
+                .then(() => {
+                    toast.success("Computer updated successfully", {
+                        position: "bottom-right"
+                    });
+                })
                 .catch(({ response }) => {
                     console.log(response.data.message)
-                    setAlert({ class: 'danger', message: response.data.message })
+                    toast.error(response.data.message, {
+                        position: "bottom-right"
+                    });
                 })
         }
     }
@@ -126,6 +145,7 @@ export default function ComputerForm({ computer, setComputers, closeForm, data})
             {/* {form?._id && <input type='hidden' value={form?._id} name='_id' />} */}
             <Row>
                 <Col xs={12}>
+                    <ToastContainer />
                     {alert?.message && <div className={`alert alert-${alert.class}`}>{alert.message}</div>}
                 </Col>
                 <Form.Group className="mb-3">
