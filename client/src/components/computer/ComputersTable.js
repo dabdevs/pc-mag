@@ -9,8 +9,9 @@ import Col from 'react-bootstrap/Col';
 import { FaPlus } from "react-icons/fa";
 import Filter from './Filter'
 import ComputerCard from './ComputerCard'
+import { useAuthContext } from '../../context/AuthContext'
 
-export default function ComputersTable({ setSelectedComputer, createItem, display }) {
+export default function ComputersTable({ setSelectedComputer, display }) {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -19,6 +20,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
     const [results, setResults] = useState(0);
     const [limit, setLimit] = useState('');
     const [searchParams, setSearchParams] = useSearchParams()
+    const {token} = useAuthContext()
     const search = searchParams.get('search')
     const columns = useMemo(() => [
         {
@@ -101,7 +103,7 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
 
     useEffect(() => {
         setLoading(true)
-        getComputers(currentPage, sort, limit)
+        getComputers(currentPage, sort, limit, token)
             .then(({ computers, totalPages, rowsCount }) => {
                 setData(computers)
                 setLoading(false)
@@ -127,6 +129,10 @@ export default function ComputersTable({ setSelectedComputer, createItem, displa
         manualPagination: true,
         pageCount: 0,
     }, useGlobalFilter, useSortBy, usePagination, useRowSelect)
+
+    const createItem = () => {
+        setSelectedComputer({ images: [] })
+    }
 
     function nextPage(e) {
         e.preventDefault();
