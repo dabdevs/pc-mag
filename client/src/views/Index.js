@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import Layout from '../components/Layout'
-import Sidebar from '../components/Sidebar'
 import SearchForm from '../components/SearchForm'
 import Menu from '../components/Menu'
 import ComputersTable from '../components/computer/ComputersTable'

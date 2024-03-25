@@ -74,12 +74,14 @@ DB.on('connecting', () => {
         console.error('Error finding user:', error);
     });
 
-    // DB seeding
+    //DB seeding
     // data.map(computer => {
     //     console.log('Processor', computer.processor)
     //     delete computer._id
     //     const processors = ['Intel i3', 'Intel i5', 'Intel i7', 'Intel i9']
     //     computer.processor = computer.processor === 'Intel' ? processors[(Math.floor(Math.random() * processors.length))] : computer.processor
+    //     const statuses = ['Pending', 'Published', 'Unpublished']
+    //     computer.status = statuses[(Math.floor(Math.random() * statuses.length))]
     //     const options = {
     //         upsert: true, 
     //         new: true,
