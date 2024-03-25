@@ -66,21 +66,21 @@ module.exports.getAll = async (req, res) => {
             sort = { price: orderBy === 'lowest-price' ? 1 : -1 }
         }
 
-        // Get collection
-        const computers = await Computer.find(conditions)
-            .limit(limit * 1)
-            .skip((Number(page) - 1) * limit)
-            .sort(sort)
-
-        // Getting the numbers of computers stored in database
-        const rowsCount = await Computer.countDocuments(conditions)
-
+        const [computers, rowsCount] = await Promise.all([
+            Computer.aggregate([
+                { $match: conditions },
+                { $sort: sort },
+                { $skip: (Number(page) - 1) * limit },
+                { $limit: limit }
+            ]),
+            Computer.countDocuments(conditions)
+        ]);
         return res.status(200).json({
             computers,
             rowsCount,
             totalPages: Math.ceil(rowsCount / limit),
             currentPage: Number(page)
-        })
+        });
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
