@@ -2,12 +2,14 @@ import { useState } from "react";
 import TrashModal from "./DeleteModal";
 import { FaTrashAlt } from "react-icons/fa";
 import { destroy } from "../api/computers";
+import { useAuthContext } from "../context/AuthContext";
 
 const DeleteButton = ({ computer, setData, setResults }) => {
     const [isModalOpened, setIsModalOpened] = useState(false)
+    const {token} = useAuthContext()
 
     const deleteItem = async (id) => {
-        destroy(id)
+        destroy(id, token)
         .then(() => {
             setData(prevData => {
                 const newData = [...prevData]

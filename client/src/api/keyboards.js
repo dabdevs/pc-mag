@@ -1,6 +1,8 @@
 import axios from "axios"
 
-const baseUrl = 'http://localhost:3000';
+import config from '../config.json'
+
+const baseUrl = config.apiUrl;
 
 export const getKeyboards = async (page, sort = '', limit = null) => {
     console.log('Get Keyboards')

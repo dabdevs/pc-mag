@@ -10,9 +10,8 @@ const s3 = new S3Service()
 
 module.exports.getAll = async (req, res) => {
     try {
-        //const conditions = req.user.role.includes('admin') ? {} : {status: 'Published'}
         const conditions = {status: 'Published'}
-        
+
         // Filters
         const { category, search, formFactor, ram, os, processor, disk, diskType, minPrice, maxPrice, page = 1, limit = process.env.RESULTS_ROWS_COUNT, orderBy } = req.query
 
@@ -109,90 +108,5 @@ module.exports.getOne = async (req, res) => {
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).json({ err: 'Internal Server Error' });
-    }
-}
-
-module.exports.store = async (req, res) => {
-    try {
-        const computerExists = await Computer.findOne({ name: req.body.name })
-        if (computerExists) return res.status(400).json({ message: 'Computer already exists' })
-
-        const computer = await Computer.create(req.body)
-        return res.status(201).json({ message: "Computer created successfully", computer })
-    } catch ({ errors }) {
-        if (errors) {
-            console.log(errors)
-            return res.status(422).json({ errors, message: "Unprocessable Entity" });
-        }
-        return res.status(500).send("Internal server error")
-    }
-}
-
-module.exports.update = async (req, res) => {
-    try {
-        if (req.body._id) delete req.body._id
-        const computerId = req.params.id
-        const computer = await Computer.findByIdAndUpdate(computerId, req.body, { new: true })
-        res.json({ computer, message: "Computer updated successfully." })
-    } catch ({ errors }) {
-        if (errors) {
-            console.log(errors)
-            res.status(422).json({ errors, message: "Unprocessable Entity" });
-        }
-        res.status(500).send("Internal server error")
-    }
-}
-
-module.exports.destroy = async (req, res) => {
-    try {
-        const computerId = req.params.id
-        const computer = await Computer.findOne({ _id: new ObjectId(computerId) })
-
-        if (computer) {
-            computer.images.map(img => {
-                s3.deleteObject(img).catch(err => console.log(err))
-            })
-        }
-
-        const response = await Computer.deleteOne({ _id: computer._id })
-        res.json({ _id: computerId, success: response.deletedCount })
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({ err: 'Internal Server Error' });
-    }
-}
-
-module.exports.getFormData = async (req, res) => {
-    try {
-        const processors = await Processor.find({})
-        const operativeSystems = await OperativeSystem.find({})
-        const categories = await Category.find({})
-        const brands = await Brand.find({})
-        const imagesPerComputer = process.env.IMAGES_PER_PRODUCT
-
-        res.json({ processors, operativeSystems, categories, brands, imagesPerComputer })
-    } catch (err) {
-        console.error('Error fetching data:', err);
-        res.status(500).json({ err: 'Internal Server Error' });
-    }
-}
-
-module.exports.deleteImage = async (req, res) => {
-    try {
-        const path = req.body.path
-
-        if (!path) throw ('No image url found')
-
-        const deleted = await s3.deleteObject(path)
-
-        if (!deleted) {
-            return res.status(400).json({ message: 'Error while deleting the file' })
-        }
-
-        const updatedComputer = await Computer.findOneAndUpdate(new ObjectId(req.params.id), { $pull: { images: path } }, { new: true })
-        res.status(200).json({ message: 'Image deleted successfully', computer: updatedComputer })
-    } catch (err) {
-        console.error('Error fetching data:', err);
-        res.status(500).json({ message: 'Internal Server Error' });
     }
 }

@@ -1,8 +1,11 @@
 import axios from 'axios'
+import config from '../config.json'
+
+const baseUrl = config.apiUrl;
 
 export const register = async (email, password, name, role) => {
     try {
-        const url = 'http://localhost:3000/api/auth/register'
+        const url = `${baseUrl}/api/auth/register`
         const {data} = await axios.post(url, { email, password, name, role })
         return data
     } catch (error) {
@@ -12,7 +15,7 @@ export const register = async (email, password, name, role) => {
 
 export const login = async (email, password) => {
     try {
-        const url = 'http://localhost:3000/api/auth/login'
+        const url = `${baseUrl}/api/auth/login`
         const {data} = await axios.post(url, { email, password })
         
         return data
@@ -23,7 +26,7 @@ export const login = async (email, password) => {
 
 export const logout = async () => {
     try {
-        const url = 'http://localhost:3000/api/auth/logout'
+        const url = `${baseUrl}/api/auth/logout`
         const { data } = await axios.post(url, {})
 
         return data

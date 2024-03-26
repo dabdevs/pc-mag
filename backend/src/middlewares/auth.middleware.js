@@ -4,7 +4,8 @@ const User = require('../models/User')
 
 const authenticateToken = async (req, res, next) => {
     const token = req.header('Authorization');
-    const authToken = token.includes('Bearer') ? token.replace('Bearer ', '') : token
+    console.log(token)
+    const authToken = token?.includes('Bearer') ? token?.replace('Bearer ', '') : token
     
     if (!authToken) return res.status(401).send('Access denied.');
 
