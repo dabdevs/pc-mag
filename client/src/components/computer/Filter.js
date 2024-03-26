@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 export default function Filter({ source, currentPage }) {
     const { setFiltered, filtered, setFilters } = useComputersContext()
@@ -19,17 +20,18 @@ export default function Filter({ source, currentPage }) {
     const [minPrice, setMinPrice] = useState('')
     const [maxPrice, setMaxPrice] = useState('')
     const [error, setError] = useState('')
+    const [showFilter, setShowFilter] = useState(true)
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const disabled = formFactor.length === 0 && 
-                    ram.length === 0 && 
-                    processor.length === 0 && 
-                    maxPrice === '' && 
-                    minPrice === '' && 
-                    search === '' && 
-                    diskType.length === 0 && 
-                    disk.length === 0 &&
-                    os.length === 0
+    const disabled = formFactor.length === 0 &&
+        ram.length === 0 &&
+        processor.length === 0 &&
+        maxPrice === '' &&
+        minPrice === '' &&
+        search === '' &&
+        diskType.length === 0 &&
+        disk.length === 0 &&
+        os.length === 0
 
     useEffect(() => {
         if (!filtered) clearFilters()
@@ -71,7 +73,7 @@ export default function Filter({ source, currentPage }) {
     const clearFilters = async () => {
         try {
             if (source === 'admin') setSearch('')
-            
+
             setMinPrice('')
             setMaxPrice('')
             setFormFactor([])
@@ -125,289 +127,297 @@ export default function Filter({ source, currentPage }) {
 
     return (
         <Form id="filter" onSubmit={handleSubmit}>
-            {source === 'admin' ? <Row className='mb-2'>
-                <Col>
-                    <Form.Label className='fw-bold'>Search</Form.Label>
-                    <Form.Control
-                        id='search'
-                        defaultValue={''}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className='form-control search-input w-100'
-                        placeholder='Ex.: Dell'
-                    />
-                </Col>
-            </Row> : null }
+            {
+                source === 'admin' ?
+                    <Row className='mb-2'>
+                        <Col>
+                            <Form.Label className='fw-bold'>Search</Form.Label>
+                            <Form.Control
+                                id='search'
+                                defaultValue={''}
+                                onChange={(e) => setSearch(e.target.value)}
+                                className='form-control search-input w-100'
+                                placeholder='Ex.: Dell'
+                            />
+                        </Col>
+                    </Row>
+                    : null
+            }
 
-            <Row className="align-items-center mb-2" style={{ height: `${source === 'admin' ? '250px' : 'auto'}`}}>
-                <h5 className="border-bottom py-2">Filters</h5>
-                <Col className='h-100 py-2' xs={`${source === 'admin' ? '' : 12}`}>
-                    <Form.Label className='fw-bold'>Form Factor</Form.Label>
-                    <Form.Check
-                        id='Laptop'
-                        name='formFactor'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'Laptop'}
-                        label="Laptop"
-                    />
-                    <Form.Check
-                        id='Desktop'
-                        name='formFactor'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'Desktop'}
-                        label="Desktop"
-                    />
-                    <Form.Check
-                        id='All-In-One'
-                        name='formFactor'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'All-In-One'}
-                        label="All-In-One"
-                    />
-                </Col>
+            <Row className="align-items-center mb-2" style={{ height: `${source === 'admin' ? '250px' : 'auto'}` }}>
+                <h5 role='button' className="border-bottom py-2" onClick={() => setShowFilter(!showFilter)}>
+                    Filters <span className='d-sm-none'>{showFilter ? <FaChevronUp /> : <FaChevronDown />}</span>
+                </h5>
+                <Col xs={12} className={`${showFilter ? 'd-none d-sm-block' : 'd-block'}`}>
+                    <Col className='h-100' xs={`${source === 'admin' ? '' : 12}`}>
+                        <Form.Label className='fw-bold'>Form Factor</Form.Label>
+                        <Form.Check
+                            id='Laptop'
+                            name='formFactor'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'Laptop'}
+                            label="Laptop"
+                        />
+                        <Form.Check
+                            id='Desktop'
+                            name='formFactor'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'Desktop'}
+                            label="Desktop"
+                        />
+                        <Form.Check
+                            id='All-In-One'
+                            name='formFactor'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'All-In-One'}
+                            label="All-In-One"
+                        />
+                    </Col>
 
-                <Col className='h-100 py-2' xs={`${source === 'admin' ? '' : 12}`}>
-                    <Form.Label className='fw-bold'>Operative System</Form.Label>
-                    <Form.Check
-                        id='Windows'
-                        name='os'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'Windows'}
-                        label="Windows"
-                    />
-                    <Form.Check
-                        id='MacOS'
-                        name='os'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'macOS'}
-                        label="MacOS"
-                    />
-                    <Form.Check
-                        id='Linux'
-                        name='os'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'Linux'}
-                        label="Linux"
-                    />
-                    <Form.Check
-                        id='Ubuntu'
-                        name='os'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'Ubuntu'}
-                        label="Ubuntu"
-                    />
-                    <Form.Check
-                        id='Solaris'
-                        name='os'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'Solaris'}
-                        label="Solaris"
-                    />
-                </Col>
+                    <Col className='h-100' xs={`${source === 'admin' ? '' : 12}`}>
+                        <Form.Label className='fw-bold'>Operative System</Form.Label>
+                        <Form.Check
+                            id='Windows'
+                            name='os'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'Windows'}
+                            label="Windows"
+                        />
+                        <Form.Check
+                            id='MacOS'
+                            name='os'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'macOS'}
+                            label="MacOS"
+                        />
+                        <Form.Check
+                            id='Linux'
+                            name='os'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'Linux'}
+                            label="Linux"
+                        />
+                        <Form.Check
+                            id='Ubuntu'
+                            name='os'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'Ubuntu'}
+                            label="Ubuntu"
+                        />
+                        <Form.Check
+                            id='Solaris'
+                            name='os'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'Solaris'}
+                            label="Solaris"
+                        />
+                    </Col>
 
-                <Col className='h-100 py-2' xs={`${source === 'admin' ? '' : 12}`}>
-                    <Form.Label className='fw-bold'>Processor</Form.Label>
-                    <div className='d-flex gap-2'>
-                        <div>
-                            <Form.Check
-                                id='Intel i3'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'Intel i3'}
-                                label="Intel i3"
-                            />
-                            <Form.Check
-                                id='Intel i5'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'Intel i5'}
-                                label="Intel i5"
-                            />
-                            <Form.Check
-                                id='Intel i7'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'Intel i7'}
-                                label="Intel i7"
-                            />
-                            <Form.Check
-                                id='Intel i9'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'Intel i9'}
-                                label="Intel i9"
-                            />
-                            <Form.Check
-                                id='Apple (A-Series)'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'Apple (A-Series)'}
-                                label="Apple (A-Series)"
-                            />
+                    <Col className='h-100' xs={`${source === 'admin' ? '' : 12}`}>
+                        <Form.Label className='fw-bold'>Processor</Form.Label>
+                        <div className='d-flex gap-2'>
+                            <div>
+                                <Form.Check
+                                    id='Intel i3'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'Intel i3'}
+                                    label="Intel i3"
+                                />
+                                <Form.Check
+                                    id='Intel i5'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'Intel i5'}
+                                    label="Intel i5"
+                                />
+                                <Form.Check
+                                    id='Intel i7'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'Intel i7'}
+                                    label="Intel i7"
+                                />
+                                <Form.Check
+                                    id='Intel i9'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'Intel i9'}
+                                    label="Intel i9"
+                                />
+                                <Form.Check
+                                    id='Apple (A-Series)'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'Apple (A-Series)'}
+                                    label="Apple (A-Series)"
+                                />
+                            </div>
+                            <div>
+                                <Form.Check
+                                    id='ARM'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'ARM'}
+                                    label="ARM"
+                                />
+                                <Form.Check
+                                    id='MediaTek'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'MediaTek'}
+                                    label="MediaTek"
+                                />
+                                <Form.Check
+                                    id='AMD'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'AMD'}
+                                    label="AMD"
+                                />
+                                <Form.Check
+                                    id='Qualcomm'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'Qualcomm'}
+                                    label="Qualcomm"
+                                />
+                                <Form.Check
+                                    id='Huawei (Kirin)'
+                                    name='processor'
+                                    onChange={setFormFilters}
+                                    type='checkbox'
+                                    value={'Huawei (Kirin)'}
+                                    label="Huawei (Kirin)"
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <Form.Check
-                                id='ARM'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'ARM'}
-                                label="ARM"
-                            />
-                            <Form.Check
-                                id='MediaTek'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'MediaTek'}
-                                label="MediaTek"
-                            />
-                            <Form.Check
-                                id='AMD'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'AMD'}
-                                label="AMD"
-                            />
-                            <Form.Check
-                                id='Qualcomm'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'Qualcomm'}
-                                label="Qualcomm"
-                            />
-                            <Form.Check
-                                id='Huawei (Kirin)'
-                                name='processor'
-                                onChange={setFormFilters}
-                                type='checkbox'
-                                value={'Huawei (Kirin)'}
-                                label="Huawei (Kirin)"
-                            />
-                        </div>
-                    </div>
-                </Col>
+                    </Col>
 
-                <Col className='h-100 py-2' xs={`${source === 'admin' ? '' : 12}`}>
-                    <Form.Label className='fw-bold'>Ram</Form.Label>
-                    <Form.Check
-                        id='4GB'
-                        name='ram'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'4GB'}
-                        label="4GB"
-                    />
-                    <Form.Check
-                        id='8GB'
-                        name='ram'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'8GB'}
-                        label="8GB"
-                    />
-                    <Form.Check
-                        id='16GB'
-                        name='ram'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'16GB'}
-                        label="16GB"
-                    />
-                    <Form.Check
-                        id='32GB'
-                        name='ram'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'32GB'}
-                        label="32GB"
-                    />
-                </Col>
-                <Col className='h-100 py-2' xs={`${source === 'admin' ? '' : 12}`}>
-                    <Form.Label className='fw-bold'>Disk Type</Form.Label>
-                    <Form.Check
-                        id='HDD'
-                        name='diskType'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'HDD'}
-                        label="HDD"
-                    />
-                    <Form.Check
-                        id='SSD'
-                        name='diskType'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'SSD'}
-                        label="SSD"
-                    />
-                </Col>
-                <Col className='h-100 py-2' xs={`${source === 'admin' ? '' : 12}`}>
-                    <Form.Label className='fw-bold'>Disk Capacity</Form.Label>
-                    <Form.Check
-                        id='128GB'
-                        name='disk'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'128GB'}
-                        label="128GB"
-                    />
-                    <Form.Check
-                        id='256GB'
-                        name='disk'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'256GB'}
-                        label="256GB"
-                    />
-                    <Form.Check
-                        id='500GB'
-                        name='disk'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'500GB'}
-                        label="500GB"
-                    />
-                    <Form.Check
-                        id='1TB'
-                        name='disk'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'1TB'}
-                        label="1TB"
-                    />
-                    <Form.Check
-                        id='2TB'
-                        name='disk'
-                        onChange={setFormFilters}
-                        type='checkbox'
-                        value={'2TB'}
-                        label="2TB"
-                    />
-                </Col>
-            </Row>
-            <Row>
-                <Col xs={`${source === 'admin' ? 4 : 12}`} className={`${source === 'admin' ? 'd-flex gap-2' : ''}`}>
-                    <Button disabled={disabled} type="submit" className="btn btn-dark w-100 my-1">
-                        <i className="bi bi-funnel"></i> Filter
-                    </Button>
-                    {<Button onClick={clearFilters} type="button" className="btn btn-danger w-100 my-1" disabled={disabled}>
-                        <FaTrashAlt /> Clear filters
-                    </Button>}
+                    <Col className='h-100' xs={`${source === 'admin' ? '' : 12}`}>
+                        <Form.Label className='fw-bold'>Ram</Form.Label>
+                        <Form.Check
+                            id='4GB'
+                            name='ram'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'4GB'}
+                            label="4GB"
+                        />
+                        <Form.Check
+                            id='8GB'
+                            name='ram'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'8GB'}
+                            label="8GB"
+                        />
+                        <Form.Check
+                            id='16GB'
+                            name='ram'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'16GB'}
+                            label="16GB"
+                        />
+                        <Form.Check
+                            id='32GB'
+                            name='ram'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'32GB'}
+                            label="32GB"
+                        />
+                    </Col>
+
+                    <Col className='h-100' xs={`${source === 'admin' ? '' : 12}`}>
+                        <Form.Label className='fw-bold'>Disk Type</Form.Label>
+                        <Form.Check
+                            id='HDD'
+                            name='diskType'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'HDD'}
+                            label="HDD"
+                        />
+                        <Form.Check
+                            id='SSD'
+                            name='diskType'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'SSD'}
+                            label="SSD"
+                        />
+                    </Col>
+
+                    <Col className='h-100' xs={`${source === 'admin' ? '' : 12}`}>
+                        <Form.Label className='fw-bold'>Disk Capacity</Form.Label>
+                        <Form.Check
+                            id='128GB'
+                            name='disk'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'128GB'}
+                            label="128GB"
+                        />
+                        <Form.Check
+                            id='256GB'
+                            name='disk'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'256GB'}
+                            label="256GB"
+                        />
+                        <Form.Check
+                            id='500GB'
+                            name='disk'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'500GB'}
+                            label="500GB"
+                        />
+                        <Form.Check
+                            id='1TB'
+                            name='disk'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'1TB'}
+                            label="1TB"
+                        />
+                        <Form.Check
+                            id='2TB'
+                            name='disk'
+                            onChange={setFormFilters}
+                            type='checkbox'
+                            value={'2TB'}
+                            label="2TB"
+                        />
+                    </Col>
+                    <Col xs={`${source === 'admin' ? 4 : 12}`} className={`${source === 'admin' ? 'd-flex gap-2' : ''}`}>
+                        <Button disabled={disabled} type="submit" className="btn btn-dark w-100 my-1">
+                            <i className="bi bi-funnel"></i> Filter
+                        </Button>
+                        {<Button onClick={clearFilters} type="button" className="btn btn-danger w-100 my-1" disabled={disabled}>
+                            <FaTrashAlt /> Clear filters
+                        </Button>}
+                    </Col>
                 </Col>
             </Row>
         </Form>
