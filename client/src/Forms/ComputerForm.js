@@ -10,6 +10,7 @@ import ImageUploader from '../components/ImageUploader';
 import * as yup from "yup"
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { useAuthContext } from '../context/AuthContext';
 
 const schema = yup
     .object({
@@ -55,6 +56,7 @@ export default function ComputerForm({ computer, setComputers, setSelectedComput
     const [alert, setAlert] = useState({})
     const [images, setImages] = useState(form.images)
     const loadedForm = form
+    const {token} = useAuthContext()
     
     const {
         register,
@@ -67,8 +69,7 @@ export default function ComputerForm({ computer, setComputers, setSelectedComput
     }
 
     const handleCreate = () => {
-        console.log('Form', form)
-        create(form).then(({ computer }) => {
+        create(form, token).then(({ computer }) => {
             setForm(computer)
             setComputers(prevComputers => {
                 return [computer, ...prevComputers]
@@ -92,7 +93,7 @@ export default function ComputerForm({ computer, setComputers, setSelectedComput
             console.log('form not edited')
         }
         computer._id = form._id
-        update(computer).then(({ computer }) => {
+        update(computer, token).then(({ computer }) => {
             setComputers(prevComputers => {
                 return prevComputers.map(prod => prod._id === computer._id ? computer : prod);
             });
@@ -111,7 +112,7 @@ export default function ComputerForm({ computer, setComputers, setSelectedComput
 
     const removeImage = async (computerId, url) => {
         if (window.confirm('Are you sure you want to delete this image?')) {
-            deleteImage(computerId, url).then(({ computer }) => {
+            deleteImage(computerId, url, token).then(({ computer }) => {
                 setImages(computer.images)
                 setComputers(prevComputers => {
                     return prevComputers.map(prod => {
@@ -142,7 +143,6 @@ export default function ComputerForm({ computer, setComputers, setSelectedComput
             <Row>
                 <h1 className='display-4 fw-bolder'>{form._id ? form.name : 'New Computer'}</h1>
             </Row>
-            {/* {form?._id && <input type='hidden' value={form?._id} name='_id' />} */}
             <Row>
                 <Col xs={12}>
                     <ToastContainer />

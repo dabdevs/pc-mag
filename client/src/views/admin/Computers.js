@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { destroy, getComputerFormData } from '../../api/computers'
 import ComputerForm from '../../Forms/ComputerForm'
 import ComputersTable from '../../components/computer/ComputersTable'
+import { useAuthContext } from '../../context/AuthContext'
 
 export default function Computers () {
     const [selectedComputer, setSelectedComputer] = useState(null)
     const [formData, setFormData] = useState([])
     const [computers, setComputers] = useState([])
+    const {token} = useAuthContext()
 
     useEffect(() => {
-        getComputerFormData().then(data => setFormData(data)).catch(err => console.log(err))
+        getComputerFormData(token).then(data => setFormData(data)).catch(err => console.log(err))
     }, [])
 
     return (

@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { upload } from '../api/uploader'
+import { useAuthContext } from '../context/AuthContext';
+import { toast, ToastContainer } from 'react-toastify';
 
-export default function ImageUploader({ maxImgUpload, collection, id, setAlert, setImages, setComputers, imagesCount }) {
+export default function ImageUploader({ maxImgUpload, collection, id, setImages, setComputers, imagesCount }) {
     const [uploading, setUploading] = useState(false);
     const [btnUploadDisabled, setBtnUploadDisabled] = useState(true)
     const [inputValue, setInputValue] = useState('')
+    const {token} = useAuthContext()
 
     const uploadImages = async () => {
         try {
@@ -16,26 +19,32 @@ export default function ImageUploader({ maxImgUpload, collection, id, setAlert, 
             const data = JSON.parse(localStorage.getItem('computerFormData'))
 
             if (imagesCount + formData.getAll('images').length > data.imagesPerComputer) {
-                setAlert({ message: `Upload up to ${data.imagesPerComputer} images`, class: 'danger' })
                 setUploading(false)
+                toast.error(`Upload up to ${data.imagesPerComputer} images`, {
+                    position: "bottom-right"
+                });
                 setInputValue('')
                 setBtnUploadDisabled(true)
                 return
             }
 
-            const { computer } = await upload(formData)
+            const { computer } = await upload(formData, token)
 
             setComputers(prevComputers => {
                 return prevComputers.map(prod => prod._id === computer._id ? computer : prod);
             });
             setImages(computer.images)
-            setAlert({ message: 'Images uploaded successfully', class: 'success' })
             setUploading(false)
+            toast.success('Images uploaded successfully', {
+                position: "bottom-right"
+            });
             setInputValue('')
             setBtnUploadDisabled(true)
         } catch (err) {
             setInputValue('')
-            setAlert({ message: err.response.data.error, class: 'danger' })
+            toast.error(err.response.data.error, {
+                position: "bottom-right"
+            });
             setUploading(false)
             setBtnUploadDisabled(true)
         }
@@ -55,6 +64,7 @@ export default function ImageUploader({ maxImgUpload, collection, id, setAlert, 
                     <input value={inputValue} onChange={(e) => inputFileEmpty(e)} id='images' type='file' name='images' className='form-control border' multiple accept="image/*" />
                     <button disabled={btnUploadDisabled} onClick={() => uploadImages()} type="button" className='btn btn-primary'>{uploading ? 'Uploading...' : 'Upload'}</button>
                 </fieldset>
+                <ToastContainer />
             </form>
         </div>
     )

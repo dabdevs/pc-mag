@@ -3,9 +3,9 @@ import config from '../../src/config'
 
 const baseUrl = config.apiUrl;
 
-export const getComputers = async (page, sort = '', limit=null, token=null) => {
+export const getComputers = async (page, sort = '', limit=null, token='') => {
     try {
-        let url = `${baseUrl}/api/computers${window.location.search}`
+        let url = `${baseUrl}/api/${token ? 'dashboard/' : ''}computers${window.location.search}`
 
         if (sort) {
             url += url.includes('?') ? `&orderBy=${sort}` : `?orderBy=${sort}`
@@ -24,11 +24,10 @@ export const getComputers = async (page, sort = '', limit=null, token=null) => {
     }
 }
 
-export const create = async (computer) => {
+export const create = async (computer, token) => {
     try {
-        console.log(computer)
-        const url = `${baseUrl}/api/computers`
-        const { data } = await axios.post(url, computer)
+        const url = `${baseUrl}/api/dashboard/computers`
+        const { data } = await axios.post(url, computer, { headers: { "Authorization": `Bearer ${token}` } })
 
         return data
     } catch (err) {
@@ -37,11 +36,10 @@ export const create = async (computer) => {
     }
 }
 
-export const update = async (computer) => {
-    console.log('UPATING FROM API', computer)
+export const update = async (computer, token) => {
     try {
-        const url = `${baseUrl}/api/computers/${computer._id}`
-        const { data } = await axios.put(url, computer)
+        const url = `${baseUrl}/api/dashboard/computers/${computer._id}`
+        const { data } = await axios.put(url, computer, { headers: { "Authorization": `Bearer ${token}` } })
 
         return data
     } catch (err) {
@@ -50,11 +48,11 @@ export const update = async (computer) => {
     }
 }
 
-export const destroy = async (id) => {
+export const destroy = async (id, token) => {
     try {
-        const url = `${baseUrl}/api/computers/${id}`
+        const url = `${baseUrl}/api/dashboard/computers/${id}`
 
-        const { data } = await axios.delete(url)
+        const { data } = await axios.delete(url, { headers: { "Authorization": `Bearer ${token}` } })
 
         return data
     } catch (err) {
@@ -86,16 +84,16 @@ export const getByName = async (computers, name) => {
     }
 }
 
-export const getComputerFormData = async () => {
+export const getComputerFormData = async (token) => {
     try {
-        let url = `${baseUrl}/api/computers/formdata`
+        let url = `${baseUrl}/api/dashboard/computers/formdata`
 
         const computerFormData = localStorage.getItem('computerFormData')
 
         if (computerFormData) {
             return Promise.resolve(JSON.parse(computerFormData))
         } else {
-            const { data } = await axios.get(url)
+            const { data } = await axios.get(url, { headers: { "Authorization": `Bearer ${token}` } })
             localStorage.setItem('computerFormData', JSON.stringify(data))
             return data
         }
@@ -105,10 +103,10 @@ export const getComputerFormData = async () => {
     }
 }
 
-export const deleteImage = async (computerId, path) => {
+export const deleteImage = async (computerId, path, token) => {
     try {
-        const url = `${baseUrl}/api/computers/${computerId}/delete-image`
-        const { data } = await axios.post(url, { path })
+        const url = `${baseUrl}/api/dashboard/computers/delete-image/${computerId}`
+        const { data } = await axios.post(url, { path }, { headers: { "Authorization": `Bearer ${token}` } })
 
         return data
     } catch (err) {
