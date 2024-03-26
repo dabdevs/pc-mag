@@ -86,7 +86,7 @@ class StripeService {
                         },
                     },
                 ],
-                success_url: `${process.env.FRONTEND_ORIGIN}/api/checkout/success?id={CHECKOUT_SESSION_ID}`,
+                success_url: `${process.env.FRONTEND_ORIGIN}/checkout/success?id={CHECKOUT_SESSION_ID}`,
                 cancel_url: `${process.env.FRONTEND_ORIGIN}/checkout/failure`
             })
 
