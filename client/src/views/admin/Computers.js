@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { destroy, getComputerFormData } from '../../api/computers'
+import { getComputerFormData } from '../../api/computers'
 import ComputerForm from '../../Forms/ComputerForm'
 import ComputersTable from '../../components/computer/ComputersTable'
 import { useAuthContext } from '../../context/AuthContext'

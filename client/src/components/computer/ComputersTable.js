@@ -20,7 +20,7 @@ export default function ComputersTable({ setSelectedComputer, display }) {
     const [results, setResults] = useState(0);
     const [limit, setLimit] = useState('');
     const [searchParams, setSearchParams] = useSearchParams()
-    const {token} = useAuthContext()
+    const { token } = useAuthContext()
     const search = searchParams.get('search')
     const columns = useMemo(() => [
         {
@@ -160,8 +160,6 @@ export default function ComputersTable({ setSelectedComputer, display }) {
         setSearchParams({ page: totalPages })
     }
 
-    if (loading) return <b>Loading...</b>
-
     return (
         <>
             {display === 'table' && <Row>
@@ -178,120 +176,125 @@ export default function ComputersTable({ setSelectedComputer, display }) {
                     <Filter source='admin' />
                 </div>}
 
-                <div className={`card-body p-0 ${display === 'cards' ? 'border-0' : ''}`}>
-                    {
-                        results > 0 ?
-                            <div>
-                                <Row className='pb-2'>
-                                    <Col xs={8} sm={10} className='mt-2 d-flex flex-column'>
-                                        <b>{search}</b>
-                                        <span>{results} items</span>
-                                    </Col>
-                                    <Col xs={4} sm={2} className='mt-2 d-flex'>
-                                        <select id='sort' className='form-control ml-1 text-center' onChange={(e) => setSort(e.target.value)}>
-                                            <option value={''}>Sort By</option>
-                                            <option value={''}>best match</option>
-                                            <option value={'lowest-price'}>lowest price</option>
-                                            <option value={'highest-price'}>highest price</option>
-                                        </select>
-                                    </Col>
-                                </Row>
-
-                                {
-                                    display === 'table' ?
-                                        <table {...getTableProps()} className='w-100 table table-striped border'>
-                                            <thead>
-                                                {
-                                                    headerGroups.map(headerGroup => (
-                                                        <tr className='border' {...headerGroup.getHeaderGroupProps()}>
-                                                            {
-                                                                headerGroup.headers.map(column => (
-                                                                    <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                                                        {column.render('Header')}
-                                                                        <span>
-                                                                            {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
-                                                                        </span>
-                                                                    </th>
-                                                                ))
-                                                            }
-                                                        </tr>
-                                                    ))
-                                                }
-                                            </thead>
-
-                                            <tbody {...getTableBodyProps()}>
-                                                {rows.map(row => {
-                                                    prepareRow(row)
-                                                    return (
-                                                        <tr className='border' {...row.getRowProps()}>
-                                                            {
-                                                                row.cells.map(cell => {
-                                                                    return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                                                })
-                                                            }
-                                                        </tr>
-                                                    )
-                                                })}
-                                            </tbody>
-                                        </table> :
-                                        <Row className='gx-1 gx-lg-4 row-cols-sm-2 row-cols-lg-4 pb-4'>
-                                            {rows.map(row => {
-                                                prepareRow(row)
-                                                const computer = row.original
-                                                return (
-                                                    <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />
-                                                )
-                                            })}
-                                        </Row>
-                                }
-                            </div> :
-                            <div className='text-center p-5 h6'>
-                                <p className='display-6'>{search}</p>
-                                No results
-                            </div>
-                    }
-                </div>
-
                 {
-                    results > 0 ?
-                        <Row className='card-footer'>
-                            <div xs={12} className='mt-1'>
-                                <div className='d-flex gap-3'>
-                                    <div>
-                                        Page{' '}
-                                        <strong>
-                                            {currentPage} of {totalPages}
-                                        </strong>
-                                        {' '}
-                                    </div>
+                    loading ? <b>Loading...</b> :
+                        (results > 0 ?
+                            <>
+                                <div className={`p-0 ${display === 'cards' ? 'border-0' : ''}`}>
+                                    {
+                                        results > 0 ?
+                                            <div>
+                                                <Row className='pb-1'>
+                                                    <Col xs={8} sm={10} className='mt-2 d-flex flex-column'>
+                                                        <b>{search}</b>
+                                                        <span>{results} items</span>
+                                                    </Col>
+                                                    <Col xs={4} sm={2} className='mt-2 d-flex'>
+                                                        <select id='sort' className='form-control ml-1 text-center' onChange={(e) => setSort(e.target.value)}>
+                                                            <option value={''}>Sort By</option>
+                                                            <option value={''}>best match</option>
+                                                            <option value={'lowest-price'}>lowest price</option>
+                                                            <option value={'highest-price'}>highest price</option>
+                                                        </select>
+                                                    </Col>
+                                                </Row>
 
-                                    <div className='d-flex gap-2'>
-                                        Show: {'  '}
-                                        <select
-                                            className='form-control form-control-sm'
-                                            value={limit}
-                                            onChange={e => setLimit(Number(e.target.value))}
-                                            style={{ width: '50px' }}
-                                        >
-                                            {
-                                                [10, 25, 50].map(pageSize => (
-                                                    <option key={pageSize} value={pageSize}>
-                                                        {pageSize}
-                                                    </option>
-                                                ))
-                                            }
-                                        </select>
-                                    </div>
+                                                {
+                                                    display === 'table' ?
+                                                        <table {...getTableProps()} className='w-100 table table-striped border'>
+                                                            <thead>
+                                                                {
+                                                                    headerGroups.map(headerGroup => (
+                                                                        <tr className='border' {...headerGroup.getHeaderGroupProps()}>
+                                                                            {
+                                                                                headerGroup.headers.map(column => (
+                                                                                    <th className='border text-center' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                                                                        {column.render('Header')}
+                                                                                        <span>
+                                                                                            {column.isSorted ? (column.isSortedDesc ? ' ⟰' : ' ⟱') : ''}
+                                                                                        </span>
+                                                                                    </th>
+                                                                                ))
+                                                                            }
+                                                                        </tr>
+                                                                    ))
+                                                                }
+                                                            </thead>
+
+                                                            <tbody {...getTableBodyProps()}>
+                                                                {rows.map(row => {
+                                                                    prepareRow(row)
+                                                                    return (
+                                                                        <tr className='border' {...row.getRowProps()}>
+                                                                            {
+                                                                                row.cells.map(cell => {
+                                                                                    return <td className='border' {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                                                                })
+                                                                            }
+                                                                        </tr>
+                                                                    )
+                                                                })}
+                                                            </tbody>
+                                                        </table> :
+                                                        <Row className='gx-1 gx-lg-4 row-cols-sm-2 row-cols-lg-4 pb-4'>
+                                                            {rows.map(row => {
+                                                                prepareRow(row)
+                                                                const computer = row.original
+                                                                return (
+                                                                    <ComputerCard key={`pc-${computer._id}`} id={computer._id} computer={computer} />
+                                                                )
+                                                            })}
+                                                        </Row>
+                                                }
+                                            </div> :
+                                            <div className='text-center p-5 h6'>
+                                                <p className='display-6'>{search}</p>
+                                                No results found
+                                            </div>
+                                    }
                                 </div>
-                            </div>
+                                <Row className='p-2'>
+                                    <div xs={12} className='mt-1'>
+                                        <div className='d-flex gap-3'>
+                                            <div>
+                                                Page{' '}
+                                                <strong>
+                                                    {currentPage} of {totalPages}
+                                                </strong>
+                                                {' '}
+                                            </div>
 
-                            <div xs={12} className='d-flex mt-1'>
-                                <button className='btn btn-sm btn-outline-dark me-1' onClick={previousPage} disabled={currentPage <= 1}>Previous</button>
-                                <button className='btn btn-sm btn-outline-dark me-1' onClick={firstPage} disabled={currentPage === 1}>First</button>
-                                <button className='btn btn-sm btn-outline-dark me-1' onClick={lastPage} disabled={currentPage >= totalPages}>Last</button>
-                                <button className="btn btn-sm btn-outline-dark" onClick={nextPage} disabled={currentPage >= totalPages}>Next</button>
-                            </div>
-                        </Row> : null
+                                            <div className='d-flex gap-2'>
+                                                Show: {'  '}
+                                                <select
+                                                    className='form-control form-control-sm'
+                                                    value={limit}
+                                                    onChange={e => setLimit(Number(e.target.value))}
+                                                    style={{ width: '50px' }}
+                                                >
+                                                    {
+                                                        [10, 25, 50].map(pageSize => (
+                                                            <option key={pageSize} value={pageSize}>
+                                                                {pageSize}
+                                                            </option>
+                                                        ))
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div xs={12} className='d-flex mt-1'>
+                                        <button className='btn btn-sm btn-outline-dark me-1' onClick={previousPage} disabled={currentPage <= 1}>Previous</button>
+                                        <button className='btn btn-sm btn-outline-dark me-1' onClick={firstPage} disabled={currentPage === 1}>First</button>
+                                        <button className='btn btn-sm btn-outline-dark me-1' onClick={lastPage} disabled={currentPage >= totalPages}>Last</button>
+                                        <button className="btn btn-sm btn-outline-dark" onClick={nextPage} disabled={currentPage >= totalPages}>Next</button>
+                                    </div>
+                                </Row>
+                            </> : <div className='text-center p-5 h6'>
+                                <p className='display-6'>{search}</p>
+                                No results found
+                            </div>)
                 }
             </div>
         </>
